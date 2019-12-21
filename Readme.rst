@@ -4,7 +4,7 @@
 
 .. |Python36| image:: https://img.shields.io/badge/python-3.6-blue.svg
 .. _Python36: https://badge.fury.io/py/scikit-uplift
-.. _RetailHero example notebook: https://github.com/maks-sh/scikit-uplift/notebooks/retailhero.ipynb
+.. _RetailHero example notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 
 scikit-uplift
 ===============
