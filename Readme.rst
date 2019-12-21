@@ -9,7 +9,7 @@
 scikit-uplift
 ===============
 
-**scikit-uplift** is a Python module for classic approaches for uplift modelling built on top of scikit-learn .
+**scikit-uplift** is a Python module for classic approaches for uplift modelling built on top of scikit-learn.
 
 Quick Start
 -----------
