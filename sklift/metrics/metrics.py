@@ -1,4 +1,6 @@
 import numpy as np
+from sklearn.utils.extmath import stable_cumsum
+from sklearn.metrics import auc
 
 
 def uplift_curve(y_true, uplift, treatment):

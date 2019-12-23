@@ -4,7 +4,7 @@
 
 .. |Python36| image:: https://img.shields.io/badge/python-3.6-blue.svg
 .. _Python36: https://badge.fury.io/py/scikit-uplift
-.. _RetailHero example notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
+.. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 
 scikit-uplift
 ===============
@@ -14,33 +14,61 @@ scikit-uplift
 Quick Start
 -----------
 
+See the `RetailHero tutorial notebook`_ for details.
+
+**Train and predict uplift model**
+
 .. code-block:: python
 
+    # import approaches
     from sklift.models import SoloModel, ClassTransformation, TwoModels
-    from catboost import CatBoostClassifier # Any estimator adheres to scikit-learn conventions.
+    # import any estimator adheres to scikit-learn conventions.
+    from catboost import CatBoostClassifier
 
+    # define approach
     sm = SoloModel(CatBoostClassifier(verbose=100, random_state=777))
-    sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={'plot': True})
+    # fit model
+    sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})
+
+    # predict uplift
     uplift_sm = sm.predict(X_val)
 
-    cm = ClassTransformation(CatBoostClassifier(verbose=100, random_state=777))
-    cm = cm.fit(X_train, y_train, treat_train, estimator_fit_params={'plot': True})
-    uplift_cm = cm.predict(X_val)
+**Evaluate your uplift model**
 
-    tm = TwoModels(
-        estimator_trmnt=CatBoostClassifier(verbose=100, random_state=777),
-        estimator_ctrl=CatBoostClassifier(verbose=100, random_state=777),
-        method='vanilla'
-    )
-    tm = tm.fit(
-        X_train, y_train, treat_train,
-        estimator_trmnt_fit_params={'plot': True},
-        estimator_ctrl_fit_params={'plot': True}
-    )
-    uplift_tm = tm.predict(X_val)
+.. code-block:: python
 
+    # import metrics to evaluate your model
+    from sklift.metrics import auqc, auuc, uplift_at_k
 
-See the `RetailHero example notebook`_ for details.
+    # Uplift@30%
+    sm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_sm, treatment=treat_val, k=0.3)
+    # Area Under Qini Curve
+    sm_auqc = auqc(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+    # Area Under Uplift Curve
+    sm_auuc = auuc(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+
+**Vizualize the results**
+
+.. code-block:: python
+
+    # import vizualisation tools
+    from sklift.viz import plot_uplift_probs, plot_uplift_qini_curves
+
+    # get conditional probabilities of performing a target action
+    # with interaction for each object
+    sm_trmnt_proba = sm.trmnt_proba_
+    # get conditional probabilities of performing a target action
+    # without interaction for each object
+    sm_ctrl_proba = sm.ctrl_proba_
+
+    # draw probability distributions and their difference (uplift)
+    plot_uplift_probs(trmnt_proba=sm_trmnt_proba, ctrl_proba=sm_ctrl_proba);
+
+    # draw probability distributions and their difference (uplift)
+    plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
+
+.. figure:: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/imgs/readme_img1.png
+    :alt: Probabilities Histogram, Uplift anf Qini curves
 
 
 
