@@ -75,5 +75,9 @@ setup(
     url=URL,
     packages=find_packages(exclude=["tests", "docs", "images"]),
     install_requires=REQUIRED,
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Operating System :: OS Independent",
+    ],
     cmdclass={"upload": UploadCommand},
 )

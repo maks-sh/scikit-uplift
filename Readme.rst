@@ -64,7 +64,7 @@ See the `RetailHero tutorial notebook`_ for details.
     # draw probability distributions and their difference (uplift)
     plot_uplift_probs(trmnt_proba=sm_trmnt_proba, ctrl_proba=sm_ctrl_proba);
 
-    # draw probability distributions and their difference (uplift)
+    # draw Uplift and Qini curves
     plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
 
 .. figure:: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/imgs/readme_img1.png
@@ -90,9 +90,9 @@ You can check the latest sources with the command::
 
     git clone https://github.com/maks-sh/scikit-uplift/scikit-uplift.git
 
-And install by the following command::
+And **install** by the following command::
 
-    pip install -e .
+    pip install scikit-uplift
 
 
 ===============
