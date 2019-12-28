@@ -3,9 +3,23 @@ import numpy as np
 from ..metrics import uplift_curve, auuc, qini_curve, auqc
 
 
-def plot_uplift_probs(trmnt_proba, ctrl_proba, log=None, bins=100):
+def plot_uplift_probs(trmnt_proba, ctrl_proba, log=False, bins=100):
+    """Plot histograms of treatment, control and uplift scores.
+
+    Args:
+        trmnt_proba (1d array-like): Scores for all observations if they are treatment.
+        ctrl_proba (1d array-like): Scores for all observations if they are control.
+        log (bool, default False): Logarithm of source samples.
+        bins (integer or sequence, default 100): Number of histogram bins to be used.
+            If an integer is given, bins + 1 bin edges are calculated and returned.
+            If bins is a sequence, gives bin edges, including left edge of first bin and right edge of last bin.
+            In this case, bins is returned unmodified.
+
+    Returns:
+        Object that stores computed values.
+    """
     # ToDo: Добавить квантиль как параметр
-    if log is not None:
+    if log:
         trmnt_proba = np.log(trmnt_proba + 1)
         ctrl_proba = np.log(ctrl_proba + 1)
 
@@ -30,6 +44,18 @@ def plot_uplift_probs(trmnt_proba, ctrl_proba, log=None, bins=100):
 
 
 def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=False):
+    """Plot Uplift and Qini curves.
+
+    Args:
+        y_true (1d array-like): Ground truth (correct) labels.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+        random (bool, default True): Draw a random curve.
+        perfect (bool, default False): Draw a perfect curve.
+
+    Returns:
+        Object that stores computed values.
+    """
     x_up, y_up = uplift_curve(y_true, uplift, treatment)
     x_qi, y_qi = qini_curve(y_true, uplift, treatment)
 
