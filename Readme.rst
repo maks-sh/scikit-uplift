@@ -1,15 +1,27 @@
 .. -*- mode: rst -*-
 
-|Python36|_
+|Python36|_ |PyPi|_
 
 .. |Python36| image:: https://img.shields.io/badge/python-3.6-blue.svg
 .. _Python36: https://badge.fury.io/py/scikit-uplift
+
+.. |PyPi| image:: https://badge.fury.io/py/scikit-uplift.svg
+.. _PyPi: https://badge.fury.io/py/scikit-uplift
+
 .. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 
 scikit-uplift
 ===============
 
 **scikit-uplift** is a Python module for classic approaches for uplift modelling built on top of scikit-learn.
+
+Installation
+-------------
+
+**Install** the package by the following command::
+
+    pip install scikit-uplift
+
 
 Quick Start
 -----------
@@ -67,7 +79,7 @@ See the `RetailHero tutorial notebook`_ for details.
     # draw Uplift and Qini curves
     plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
 
-.. figure:: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/imgs/readme_img1.png
+.. figure:: https://github.com/maks-sh/scikit-uplift/raw/master/notebooks/imgs/readme_img1.png
     :alt: Probabilities Histogram, Uplift anf Qini curves
 
 
@@ -82,17 +94,6 @@ Important links
 
 - Official source code repo: https://github.com/maks-sh/scikit-uplift/
 - Issue tracker: https://github.com/maks-sh/scikit-uplift/issues
-
-Installation and source code
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can check the latest sources with the command::
-
-    git clone https://github.com/maks-sh/scikit-uplift/scikit-uplift.git
-
-And **install** by the following command::
-
-    pip install scikit-uplift
 
 
 ===============
