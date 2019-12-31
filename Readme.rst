@@ -1,6 +1,6 @@
 .. -*- mode: rst -*-
 
-|Python36|_ |PyPi|_
+|Python36|_ |PyPi|_ |Docs|_
 
 .. |Python36| image:: https://img.shields.io/badge/python-3.6-blue.svg
 .. _Python36: https://badge.fury.io/py/scikit-uplift
@@ -8,7 +8,11 @@
 .. |PyPi| image:: https://badge.fury.io/py/scikit-uplift.svg
 .. _PyPi: https://badge.fury.io/py/scikit-uplift
 
+.. |Docs| image:: https://readthedocs.org/projects/scikit-uplift/badge/?version=latest
+.. _Docs: https://scikit-uplift.readthedocs.io/en/latest/
+
 .. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
+.. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
 
 scikit-uplift
 ===============
@@ -22,6 +26,10 @@ Installation
 
     pip install scikit-uplift
 
+Documentation
+--------------
+
+The full documentation is available at `scikit-uplift.readthedocs.io`_.
 
 Quick Start
 -----------
