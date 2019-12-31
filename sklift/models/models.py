@@ -14,18 +14,12 @@ class SoloModel(BaseEstimator):
 
     Return delta of predictions for each example.
 
-    Parameters
-    ----------
-    :param estimator: estimator object implementing 'fit'
-        The object to use to fit the data.
+    Args:
+        estimator (estimator object implementing 'fit'): The object to use to fit the data.
 
-    Attributes
-    ----------
-    :attrib trmnt_proba_: array-like, shape (n_samples, )
-        Probabilities of predictions on samples when treatment
-
-    :attrib ctrl_proba_: array-like, shape (n_samples, )
-        Probabilities of predictions on samples when control
+    Attributes:
+        trmnt_proba_ (array-like, shape (n_samples, )): Probabilities of predictions on samples when treatment.
+        ctrl_proba_ (array-like, shape (n_samples, )): Probabilities of predictions on samples when control.
     """
 
     def __init__(self, estimator):
@@ -40,21 +34,20 @@ class SoloModel(BaseEstimator):
         """
         Fit the model according to the given training data.
 
-        Parameters
-        ----------
-        :param X: array-like, shape (n_samples, n_features)
-            Training vector, where n_samples is the number of samples and
-            n_features is the number of features.
-        :param y: array-like, shape (n_samples,)
-            Target vector relative to X.
-        :param treatment: array-like, shape (n_samples,)
-            Binary treatment vector relative to X.
-        :param estimator_fit_params:  dict, optional
-            Parameters to pass to the fit method of the estimator.
+        For each test example calculate predictions on new set twice: by the first and second models.
+        After that calculate uplift as a delta between these predictions.
 
-        Returns
-        -------
-        :return self: object
+        Return delta of predictions for each example.
+
+        Args:
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples and
+                n_features is the number of features.
+            y (array-like, shape (n_samples,)): Target vector relative to X.
+            treatment (array-like, shape (n_samples,)): Binary treatment vector relative to X.
+            estimator_fit_params (dict, optional): Parameters to pass to the fit method of the estimator.
+
+        Returns:
+            object: self
         """
 
         check_consistent_length(X, y, treatment)
@@ -77,15 +70,12 @@ class SoloModel(BaseEstimator):
         """
         Perform uplift on samples in X.
 
-        Parameters
-        ----------
-        :param X: array-like, shape (n_samples, n_features)
-            Training vector, where n_samples is the number of samples and
-            n_features is the number of features.
+        Args:
+            X (array-like, shape (n_samples, n_features)) - Training vector, where n_samples is the number of samples
+            and n_features is the number of features.
 
         Returns
-        -------
-        :return uplift: array, shape (n_samples,)
+            array (shape (n_samples,)): uplift
         """
         if isinstance(X, np.ndarray):
             self.trmnt_proba_ = self.estimator.predict_proba(np.column_stack((X, np.ones(X.shape[0]))))[:, 1]
@@ -104,17 +94,18 @@ class ClassTransformation(BaseEstimator):
     """
     Redefine target variable, which indicates that treatment make some impact on target or
     did target is negative without treatment.
-    Z = Y * W + (1 - Y)(1 - W)
-    Uplift ~ 2P(Z == 1) - 1
 
-    Return only uplift predictions
+    Z = Y * W + (1 - Y)(1 - W),
 
-    Parameters
-    ----------
-    :param estimator: estimator object implementing 'fit'
-        The object to use to fit the data.
+    where Y - target, W - communication flag.
+
+    Then, Uplift ~ 2 * (Z == 1) - 1
+
+    Returns only uplift predictions
+
+    Args:
+        estimator (estimator object implementing 'fit'): The object to use to fit the data.
     """
-
     def __init__(self, estimator):
         self.estimator = estimator
         # check_estimator(estimator)
@@ -123,21 +114,15 @@ class ClassTransformation(BaseEstimator):
         """
         Fit the model according to the given training data.
 
-        Parameters
-        ----------
-        :param X: array-like, shape (n_samples, n_features)
-            Training vector, where n_samples is the number of samples and
-            n_features is the number of features.
-        :param y: array-like, shape (n_samples,)
-            Target vector relative to X.
-        :param treatment: array-like, shape (n_samples,)
-            Binary treatment vector relative to X.
-        :param estimator_fit_params:  dict, optional
-            Parameters to pass to the fit method of the estimator.
+        Args:
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples and
+                n_features is the number of features.
+            y (array-like, shape (n_samples,)): Target vector relative to X.
+            treatment (array-like, shape (n_samples,)): Binary treatment vector relative to X.
+            estimator_fit_params (dict, optional): Parameters to pass to the fit method of the estimator.
 
-        Returns
-        -------
-        :return self: object
+        Returns:
+            object: self
         """
 
         # TODO: check the treatment is binary
@@ -156,32 +141,32 @@ class ClassTransformation(BaseEstimator):
         return self
 
     def predict(self, X):
+        """
+        Perform uplift on samples in X.
+
+        Args:
+            X (array-like, shape (n_samples, n_features)) - Training vector, where n_samples is the number of samples
+                and n_features is the number of features.
+
+        Returns
+            array (shape (n_samples,)): uplift
+        """
         uplift = 2 * self.estimator.predict_proba(X)[:, 1] - 1
         return uplift
 
 
 class TwoModels(BaseEstimator):
     """
+    Fit two separate models: on treatment data and on control data.
 
-    Parameters
-    ----------
-    :param estimator_trmnt: estimator object implementing 'fit'
-        The object to use to fit the treatment data.
-    :param estimator_ctrl: estimator object implementing 'fit'
-        The object to use to fit the control data.
-    :param method: string, default: 'vanila'
-        This parameter can be:
-            - vanila
-            - ddr_control
-            - ddr_treatment
+    Args:
+        estimator_trmnt (estimator object implementing 'fit'): The object to use to fit the treatment data.
+        estimator_ctrl (estimator object implementing 'fit'): The object to use to fit the control data.
+        method (string, ‘vanila’, ’ddr_control’ or ‘ddr_treatment’, default='vanila'): Specifies the approach.
 
-    Attributes
-    ----------
-    :attrib trmnt_proba_: array-like, shape (n_samples, )
-        Probabilities of predictions on samples when treatment
-
-    :attrib ctrl_proba_: array-like, shape (n_samples, )
-        Probabilities of predictions on samples when control
+    Attributes:
+        trmnt_proba_ (array-like, shape (n_samples, )): Probabilities of predictions on samples when treatment.
+        ctrl_proba_ (array-like, shape (n_samples, )): Probabilities of predictions on samples when control.
     """
 
     def __init__(self, estimator_trmnt, estimator_ctrl, method='vanilla'):
@@ -203,23 +188,20 @@ class TwoModels(BaseEstimator):
         """
         Fit the model according to the given training data.
 
-        Parameters
-        ----------
-        :param X: array-like, shape (n_samples, n_features)
-            Training vector, where n_samples is the number of samples and
-            n_features is the number of features.
-        :param y: array-like, shape (n_samples,)
-            Target vector relative to X.
-        :param treatment: array-like, shape (n_samples,)
-            Binary treatment vector relative to X.
-        :param estimator_trmnt_fit_params:  dict, optional
-            Parameters to pass to the fit method of the treatment estimator.
-        :param estimator_ctrl_fit_params:  dict, optional
-            Parameters to pass to the fit method of the control estimator.
+        For each test example calculate predictions on new set twice: by the first and second models.
+        After that calculate uplift as a delta between these predictions.
 
-        Returns
-        -------
-        :return self: object
+        Return delta of predictions for each example.
+
+        Args:
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples and
+                n_features is the number of features.
+            y (array-like, shape (n_samples,)): Target vector relative to X.
+            treatment (array-like, shape (n_samples,)): Binary treatment vector relative to X.
+            estimator_fit_params (dict, optional): Parameters to pass to the fit method of the estimator.
+
+        Returns:
+            object: self
         """
         # TODO: check the treatment is binary
         check_consistent_length(X, y, treatment)
@@ -278,15 +260,12 @@ class TwoModels(BaseEstimator):
         """
         Perform uplift on samples in X.
 
-        Parameters
-        ----------
-        :param X: array-like, shape (n_samples, n_features)
-            Training vector, where n_samples is the number of samples and
-            n_features is the number of features.
+        Args:
+            X (array-like, shape (n_samples, n_features)) - Training vector, where n_samples is the number of samples
+            and n_features is the number of features.
 
         Returns
-        -------
-        :return uplift: array, shape (n_samples,)
+            array (shape (n_samples,)): uplift
         """
 
         if self.method == 'ddr_control':

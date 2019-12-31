@@ -1,26 +1,6 @@
 .. -*- mode: rst -*-
 
-|Python36|_ |PyPi|_
-
-.. |Python36| image:: https://img.shields.io/badge/python-3.6-blue.svg
-.. _Python36: https://badge.fury.io/py/scikit-uplift
-
-.. |PyPi| image:: https://badge.fury.io/py/scikit-uplift.svg
-.. _PyPi: https://badge.fury.io/py/scikit-uplift
-
 .. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
-
-scikit-uplift
-===============
-
-**scikit-uplift** is a Python module for classic approaches for uplift modelling built on top of scikit-learn.
-
-Installation
--------------
-
-**Install** the package by the following command::
-
-    pip install scikit-uplift
 
 
 Quick Start
@@ -28,7 +8,7 @@ Quick Start
 
 See the `RetailHero tutorial notebook`_ for details.
 
-**Train and predict uplift model**
+**Train and predict your uplift model**
 
 .. code-block:: python
 
@@ -81,40 +61,3 @@ See the `RetailHero tutorial notebook`_ for details.
 
 .. figure:: https://github.com/maks-sh/scikit-uplift/raw/master/notebooks/imgs/readme_img1.png
     :alt: Probabilities Histogram, Uplift anf Qini curves
-
-
-
-Development
------------
-
-We welcome new contributors of all experience levels.
-
-Important links
-~~~~~~~~~~~~~~~
-
-- Official source code repo: https://github.com/maks-sh/scikit-uplift/
-- Issue tracker: https://github.com/maks-sh/scikit-uplift/issues
-
-
-===============
-
-Papers and materials
----------------------
-1. Gutierrez, P., & Gérardy, J. Y.
-	Causal Inference and Uplift Modelling: A Review of the Literature. In International Conference on 	Predictive Applications and APIs (pp. 1-13).
-
-2. Artem Betlei, Criteo Research; Eustache Diemert, Criteo Research; Massih-Reza Amini, Univ. Grenoble Alpes
-	Dependent and Shared Data Representations improve Uplift Prediction in Imbalanced Treatment Conditions
-	FAIM'18 Workshop on CausalML
-
-3. Eustache Diemert, Artem Betlei, Christophe Renaudin, and Massih-Reza Amini. 2018.
-    A Large Scale Benchmark for Uplift Modeling.
-    In Proceedings of AdKDD & TargetAd (ADKDD’18). ACM, New York, NY, USA, 6 pages.
-
-4. Athey, Susan, and Imbens, Guido. 2015.
-    Machine learning methods for estimating heterogeneous causal effects.
-    Preprint, arXiv:1504.01132. Google Scholar
-
-5. Oscar Mesalles Naranjo. 2012.
-    Testing a New Metric for Uplift Models.
-    Dissertation Presented for the Degree of MSc in Statistics and Operational Research.
