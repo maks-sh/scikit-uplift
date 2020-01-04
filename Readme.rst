@@ -16,7 +16,11 @@
 
 .. raw:: html
 
-    <img src="./docs/_static/sklift-logo.png" alt="sklift-logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
+    <p align="center">
+        <a href="https://pypi.org/project/scikit-uplift/">
+            <img src="./docs/_static/sklift-logo.png" alt="sklift-logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
+        </a>
+    </p>
 
 
 scikit-uplift
