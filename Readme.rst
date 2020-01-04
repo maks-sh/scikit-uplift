@@ -14,6 +14,9 @@
 .. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
 
+.. figure:: ./docs/_static/sklift-logo.png
+    :alt: sklift-logo
+
 scikit-uplift
 ===============
 
