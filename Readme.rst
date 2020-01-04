@@ -14,11 +14,11 @@
 .. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
 
-.. class:: center
-.. figure:: ./docs/_static/sklift-logo.png
-    :alt: sklift-logo
+.. image:: ./docs/_static/sklift-logo.png
+    :align: center
     :width: 256px
     :height: 256px
+    :alt: sklift-logo
 
 scikit-uplift
 ===============
@@ -101,8 +101,8 @@ See the `RetailHero tutorial notebook`_ for details.
     # draw Uplift and Qini curves
     plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
 
-.. class:: center
-.. figure:: https://github.com/maks-sh/scikit-uplift/raw/master/notebooks/imgs/readme_img1.png
+.. image:: https://github.com/maks-sh/scikit-uplift/raw/master/notebooks/imgs/readme_img1.png
+    :align: center
     :alt: Probabilities Histogram, Uplift anf Qini curves
 
 
