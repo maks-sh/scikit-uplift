@@ -14,11 +14,10 @@
 .. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
 
-.. image:: ./docs/_static/sklift-logo.png
-    :align: center
-    :width: 256px
-    :height: 256px
-    :alt: sklift-logo
+.. raw:: html
+
+    <img src="./docs/_static/sklift-logo.png" alt="sklift-logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
+
 
 scikit-uplift
 ===============
