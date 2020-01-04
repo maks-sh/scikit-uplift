@@ -12,7 +12,6 @@ Welcome to scikit-uplift's documentation!
    models
    metrics
    viz
-   contributing
 
 
 Indices and tables
