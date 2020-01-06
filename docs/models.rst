@@ -23,6 +23,9 @@ we get the required uplift.
 1.2 Class Transformation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. warning::
+    This approach is only suitable for classification problem
+
 Quite an interesting and mathematically confirmed approach to the construction of the model, presented back in 2012.
 The method is to predict a slightly changed target:
 
@@ -103,8 +106,8 @@ interpolated as probabilities. Calibration of model probabilities is well descri
 2.1 Two independent models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. attention::
-    In sklift this approach corresponds to the **TwoModels** class and the `vanilla` method.
+.. hint::
+    In sklift this approach corresponds to the `TwoModels` class and the **vanilla** method.
 
 As the name implies, the approach is to model the conditional probabilities of the treatment and control groups
 separately. The articles argue that this approach is rather weak, since both models focus on predicting the result
@@ -123,8 +126,8 @@ for multi-class classification problems. The idea is that if there are :math:`L`
 each subsequent classifier uses the predictions of the previous ones as additional features.
 The authors of this method proposed to use the same idea to solve the problem of uplift modeling in two stages.
 
-.. attention::
-    In sklift this approach corresponds to the **TwoModels** class and the `ddr_control` method.
+.. hint::
+    In sklift this approach corresponds to the `TwoModels` class and the **ddr_control** method.
 
 At the beginning we train the classifier based on control data:
 
@@ -152,8 +155,8 @@ the uplift itself.
 Similarly, you can first train the :math:`P_T` classifier and then use its predictions as a trait for
 the :math:`P_C` classifier.
 
-.. attention::
-    In sklift this approach corresponds to the **TwoModels** class and the `ddr_treatmentgit a` method.
+.. hint::
+    In sklift this approach corresponds to the `TwoModels` class and the **ddr_treatment** method.
 
 .. autoclass:: sklift.models.models.TwoModels
     :members:
