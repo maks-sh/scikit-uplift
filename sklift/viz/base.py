@@ -3,12 +3,12 @@ import numpy as np
 from ..metrics import uplift_curve, auuc, qini_curve, auqc
 
 
-def plot_uplift_probs(trmnt_proba, ctrl_proba, log=False, bins=100):
-    """Plot histograms of treatment, control and uplift scores.
+def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
+    """Plot histograms of treatment, control and uplift predictions.
 
     Args:
-        trmnt_proba (1d array-like): Scores for all observations if they are treatment.
-        ctrl_proba (1d array-like): Scores for all observations if they are control.
+        trmnt_preds (1d array-like): Predictions for all observations if they are treatment.
+        ctrl_preds (1d array-like): Predictions for all observations if they are control.
         log (bool, default False): Logarithm of source samples.
         bins (integer or sequence, default 100): Number of histogram bins to be used.
             If an integer is given, bins + 1 bin edges are calculated and returned.
@@ -20,23 +20,23 @@ def plot_uplift_probs(trmnt_proba, ctrl_proba, log=False, bins=100):
     """
     # ToDo: Добавить квантиль как параметр
     if log:
-        trmnt_proba = np.log(trmnt_proba + 1)
-        ctrl_proba = np.log(ctrl_proba + 1)
+        trmnt_preds = np.log(trmnt_preds + 1)
+        ctrl_preds = np.log(ctrl_preds + 1)
 
     fig, axes = plt.subplots(ncols=3, nrows=1, figsize=(20, 7))
     axes[0].hist(
-        trmnt_proba, bins=bins, color='b', alpha=0.3, label='Treated', histtype='stepfilled')
+        trmnt_preds, bins=bins, alpha=0.3, color='b', label='Treated', histtype='stepfilled')
     axes[0].set_ylabel('Probability hist')
     axes[0].legend()
-    axes[0].set_title('Treatment probabilities')
+    axes[0].set_title('Treatment predictions')
 
     axes[1].hist(
-        ctrl_proba, bins=bins, alpha=0.5, color='y', label='Not treated', histtype='stepfilled')
+        ctrl_preds, bins=bins, alpha=0.5, color='y', label='Not treated', histtype='stepfilled')
     axes[1].legend()
-    axes[1].set_title('Control probabilities')
+    axes[1].set_title('Control predictions')
 
     axes[2].hist(
-        trmnt_proba - ctrl_proba, bins=bins, alpha=0.5, color='green', label='Uplift', histtype='stepfilled')
+        trmnt_preds - ctrl_preds, bins=bins, alpha=0.5, color='green', label='Uplift', histtype='stepfilled')
     axes[2].legend()
     axes[2].set_title('Uplift predictions')
 

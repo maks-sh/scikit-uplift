@@ -14,10 +14,27 @@
 .. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
 
+.. raw:: html
+
+    <p align="center">
+        <a href="https://pypi.org/project/scikit-uplift/">
+            <img src="./docs/_static/sklift-logo.png" alt="sklift-logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
+        </a>
+    </p>
+
+
 scikit-uplift
 ===============
 
 **scikit-uplift** is a Python module for classic approaches for uplift modelling built on top of scikit-learn.
+
+**Features**:
+
+* Comfortable and intuitive style of modelling like scikit-learn;
+
+* Applying any estimator adheres to scikit-learn conventions;
+
+* A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model.
 
 Installation
 -------------
@@ -87,7 +104,8 @@ See the `RetailHero tutorial notebook`_ for details.
     # draw Uplift and Qini curves
     plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
 
-.. figure:: https://github.com/maks-sh/scikit-uplift/raw/master/notebooks/imgs/readme_img1.png
+.. image:: https://github.com/maks-sh/scikit-uplift/raw/master/notebooks/imgs/readme_img1.png
+    :align: center
     :alt: Probabilities Histogram, Uplift anf Qini curves
 
 
