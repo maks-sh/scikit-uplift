@@ -44,18 +44,17 @@ See the `RetailHero tutorial notebook`_ for details.
 .. code-block:: python
 
     # import vizualisation tools
-    from sklift.viz import plot_uplift_probs, plot_uplift_qini_curves
+    from sklift.viz import plot_uplift_preds, plot_uplift_qini_curves
 
-    # get conditional probabilities of performing a target action
+    # get conditional predictions (probabilities) of performing a target action
     # with interaction for each object
-    sm_trmnt_proba = sm.trmnt_proba_
-    # get conditional probabilities of performing a target action
+    sm_trmnt_preds = sm.trmnt_preds_
+    # get conditional predictions (probabilities) of performing a target action
     # without interaction for each object
-    sm_ctrl_proba = sm.ctrl_proba_
+    sm_ctrl_preds = sm.ctrl_preds_
 
     # draw probability distributions and their difference (uplift)
-    plot_uplift_probs(trmnt_proba=sm_trmnt_proba, ctrl_proba=sm_ctrl_proba);
-
+    plot_uplift_preds(trmnt_preds=sm_trmnt_preds, ctrl_preds=sm_ctrl_preds);
     # draw Uplift and Qini curves
     plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
 
