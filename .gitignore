@@ -211,3 +211,5 @@ notebooks/RetailHero-data/*
 notebooks/catboost_info
 notebooks/*.tmp
 
+### PSD logo
+*.psd

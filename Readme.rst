@@ -28,20 +28,34 @@ scikit-uplift
 
 **scikit-uplift** is a Python module for classic approaches for uplift modelling built on top of scikit-learn.
 
+Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
+
 **Features**:
 
 * Comfortable and intuitive style of modelling like scikit-learn;
 
 * Applying any estimator adheres to scikit-learn conventions;
 
+* Almost all implemented approaches solve both the problem of classification and regression;
+
 * A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model.
 
 Installation
 -------------
 
-**Install** the package by the following command::
+**Install** the package by the following command from PyPI:
+
+.. code-block:: bash
 
     pip install scikit-uplift
+
+Or install from source:
+
+.. code-block:: bash
+
+    git clone https://github.com/maks-sh/scikit-uplift.git
+    cd scikit-uplift
+    python setup.py install
 
 Documentation
 --------------
@@ -143,3 +157,7 @@ Papers and materials
 5. Oscar Mesalles Naranjo. 2012.
     Testing a New Metric for Uplift Models.
     Dissertation Presented for the Degree of MSc in Statistics and Operational Research.
+
+6. Kane, K., V. S. Y. Lo, and J. Zheng. 2014.
+    “Mining for the Truly Responsive Customers and Prospects Using True-Lift Modeling: Comparison of New and Existing Methods.”
+    Journal of Marketing Analytics 2 (4): 218–238.
