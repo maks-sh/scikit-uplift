@@ -9,12 +9,16 @@ Welcome to scikit-uplift's documentation!
 
 * Applying any estimator adheres to scikit-learn conventions;
 
+* Almost all implemented approaches solve both the problem of classification and regression;
+
 * A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   about
+   install
    quick_start
    models
    metrics
