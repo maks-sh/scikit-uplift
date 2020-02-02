@@ -1,3 +1,5 @@
+.. _in russian on habr.com: https://habr.com/ru/company/ru_mts/blog/485980/
+
 About scikit-uplift
 =========================================
 
