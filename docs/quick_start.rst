@@ -1,7 +1,7 @@
 .. -*- mode: rst -*-
 
-.. _RU: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
-.. _EN: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
+.. _RU: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
+.. _EN: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
 
 Quick Start
 -----------
