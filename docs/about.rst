@@ -5,6 +5,8 @@ About scikit-uplift
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
+More about uplift modelling problem read `in russian on habr.com`_.
+
 Features
 -------------
 
@@ -19,9 +21,9 @@ Features
 
 **The package currently supports the following methods:**
 
-1. Solo Model (aka Treatment Dummy approach)
-2. Class Transformation (aka Class Variable Transformation or Revert Label)
-3. Two Model, including Dependent Data Representation
+1. Solo Model (aka Treatment Dummy) approach
+2. Class Transformation (aka Class Variable Transformation or Revert Label) approach
+3. Two Model (aka naïve approach, or difference score method, or double classifier approach), including Dependent Data Representation
 
 **And the following metrics:**
 

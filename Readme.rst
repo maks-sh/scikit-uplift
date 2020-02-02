@@ -11,14 +11,16 @@
 .. |Docs| image:: https://readthedocs.org/projects/scikit-uplift/badge/?version=latest
 .. _Docs: https://scikit-uplift.readthedocs.io/en/latest/
 
-.. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
+.. _RU: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
+.. _EN: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
+.. _in russian on habr.com: https://habr.com/ru/company/ru_mts/blog/485980/
 
 .. raw:: html
 
     <p align="center">
         <a href="https://pypi.org/project/scikit-uplift/">
-            <img src="./docs/_static/sklift-logo.png" alt="sklift-logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
+            <img src="https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/sklift-logo.png" alt="scikit-uplift (sklift) logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
         </a>
     </p>
 
@@ -29,6 +31,8 @@ scikit-uplift
 **scikit-uplift** is a Python module for classic approaches for uplift modelling built on top of scikit-learn.
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
+
+More about uplift modelling problem read `in russian on habr.com`_.
 
 **Features**:
 
@@ -62,10 +66,20 @@ Documentation
 
 The full documentation is available at `scikit-uplift.readthedocs.io`_.
 
+Or you can build the documentation locally using `Sphinx <http://sphinx-doc.org/>`_ 1.4 or later:
+
+.. code-block:: bash
+
+    cd docs
+    pip install -r requirements.txt
+    make html
+
+And if you now point your browser to ``_build/html/index.html``, you should see a documentation site.
+
 Quick Start
 -----------
 
-See the `RetailHero tutorial notebook`_ for details.
+See the **RetailHero tutorial notebook** (`EN`_, `RU`_) for details.
 
 **Train and predict uplift model**
 
@@ -117,7 +131,7 @@ See the `RetailHero tutorial notebook`_ for details.
     # draw Uplift and Qini curves
     plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
 
-.. image:: https://github.com/maks-sh/scikit-uplift/raw/master/notebooks/imgs/readme_img1.png
+.. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/images/readme_img1.png
     :align: center
     :alt: Probabilities Histogram, Uplift anf Qini curves
 

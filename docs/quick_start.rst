@@ -1,12 +1,12 @@
 .. -*- mode: rst -*-
 
-.. _RetailHero tutorial notebook: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
-
+.. _RU: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
+.. _EN: https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 
 Quick Start
 -----------
 
-See the `RetailHero tutorial notebook`_ for details.
+See the **RetailHero tutorial notebook** (`EN`_, `RU`_) for details.
 
 **Train and predict your uplift model**
 
