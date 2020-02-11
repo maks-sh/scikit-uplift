@@ -175,3 +175,7 @@ Papers and materials
 6. Kane, K., V. S. Y. Lo, and J. Zheng. 2014.
     “Mining for the Truly Responsive Customers and Prospects Using True-Lift Modeling: Comparison of New and Existing Methods.”
     Journal of Marketing Analytics 2 (4): 218–238.
+
+Tags
+~~~~~~~~~~~~~~~
+EN: uplift modeling, uplift modelling, causal inference, causal effect, causality, individual treatment effect, true lift, net lift
