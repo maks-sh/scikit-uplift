@@ -11,6 +11,10 @@
 ## Version 0.0.4
 *In development*
 
+### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/models.html)
+
+* :memo: fix typo in [TwoModels](https://scikit-uplift.readthedocs.io/en/latest/models.html#sklift.models.models.TwoModels) docstring by @spiaz 
+
 ### Miscellaneous
 
 * :memo: Add Changelog
