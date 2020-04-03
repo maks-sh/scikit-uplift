@@ -205,8 +205,8 @@ class TwoModels(BaseEstimator):
     Args:
         estimator_trmnt (estimator object implementing 'fit'): The object to use to fit the treatment data.
         estimator_ctrl (estimator object implementing 'fit'): The object to use to fit the control data.
-        method (string, ‘vanila’, ’ddr_control’ or ‘ddr_treatment’, default='vanila'): Specifies the approach:
-            * ‘vanila’ - two independent models
+        method (string, ‘vanilla’, ’ddr_control’ or ‘ddr_treatment’, default='vanilla'): Specifies the approach:
+            * ‘vanilla’ - two independent models
             * ’ddr_control’ -  dependent data representation (First train control classificator)
             * ’ddr_treatment’ -  dependent data representation (First train treatment classificator)
 
