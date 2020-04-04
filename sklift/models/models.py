@@ -26,11 +26,11 @@ class SoloModel(BaseEstimator):
         ctrl_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when control.
 
     Example:
-        >>> from sklift.models import SoloModel # import approache
-        >>> from catboost import CatBoostClassifier # import any estimator adheres to scikit-learn conventions.
-        >>> sm = SoloModel(CatBoostClassifier(verbose=100, random_state=777)) # define approach
-        >>> sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True}) # fit the model
-        >>> uplift_sm = sm.predict(X_val) # predict uplift
+        >>> from sklift.models import SoloModel  # import approach
+        >>> from catboost import CatBoostClassifier  # import any estimator adheres to scikit-learn conventions.
+        >>> sm = SoloModel(CatBoostClassifier(verbose=100, random_state=777))  # define approach
+        >>> sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})  # fit the model
+        >>> uplift_sm = sm.predict(X_val)  # predict uplift
 
     .. _here:
         https://scikit-uplift.readthedocs.io/en/latest/models.html#one-model-with-treatment-as-feature
@@ -131,11 +131,11 @@ class ClassTransformation(BaseEstimator):
         estimator (estimator object implementing 'fit'): The object to use to fit the data.
 
     Example:
-        >>> from sklift.models import SoloModel # import approaches
-        >>> from catboost import CatBoostClassifier # import any estimator adheres to scikit-learn conventions.
-        >>> ct = ClassTransformation(CatBoostClassifier(verbose=100, random_state=777)) # define approach
-        >>> ct = ct.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True}) # fit the model
-        >>> uplift_ct = ct.predict(X_val) # predict uplift
+        >>> from sklift.models import ClassTransformation  # import approach
+        >>> from catboost import CatBoostClassifier  # import any estimator adheres to scikit-learn conventions.
+        >>> ct = ClassTransformation(CatBoostClassifier(verbose=100, random_state=777))  # define approach
+        >>> ct = ct.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})  # fit the model
+        >>> uplift_ct = ct.predict(X_val)  # predict uplift
 
     .. _here:
         https://scikit-uplift.readthedocs.io/en/latest/models.html#class-transformation
@@ -207,8 +207,8 @@ class TwoModels(BaseEstimator):
         estimator_ctrl (estimator object implementing 'fit'): The object to use to fit the control data.
         method (string, ‘vanilla’, ’ddr_control’ or ‘ddr_treatment’, default='vanilla'): Specifies the approach:
             * ‘vanilla’ - two independent models
-            * ’ddr_control’ -  dependent data representation (First train control classificator)
-            * ’ddr_treatment’ -  dependent data representation (First train treatment classificator)
+            * ’ddr_control’ -  dependent data representation (First train control estimator)
+            * ’ddr_treatment’ -  dependent data representation (First train treatment estimator)
 
 
     Attributes:
@@ -219,19 +219,19 @@ class TwoModels(BaseEstimator):
         https://scikit-uplift.readthedocs.io/en/latest/models.html#one-model-with-treatment-as-feature
 
     Example:
-        >>> from sklift.models import TwoModels # import approach
-        >>> from catboost import CatBoostClassifier # import any estimator adheres to scikit-learn conventions.
-        >>> tm_ctrl = TwoModels( # define approach
+        >>> from sklift.models import TwoModels  # import approach
+        >>> from catboost import CatBoostClassifier  # import any estimator adheres to scikit-learn conventions.
+        >>> tm_ctrl = TwoModels(  # define approach
         >>>     estimator_trmnt=CatBoostClassifier(silent=True, thread_count=2, random_state=42),
         >>>     estimator_ctrl=CatBoostClassifier(silent=True, thread_count=2, random_state=42),
         >>>     method='ddr_control'
         >>> )
-        >>> tm_ctrl = tm_ctrl.fit( # fit the models
+        >>> tm_ctrl = tm_ctrl.fit(  # fit the models
         >>>     X_train, y_train, treat_train,
         >>>     estimator_trmnt_fit_params={'cat_features': cat_features},
         >>>     estimator_ctrl_fit_params={'cat_features': cat_features}
         >>> )
-        >>> uplift_tm_ctrl = tm_ctrl.predict(X_val) # predict uplift
+        >>> uplift_tm_ctrl = tm_ctrl.predict(X_val)  # predict uplift
     """
 
     def __init__(self, estimator_trmnt, estimator_ctrl, method='vanilla'):
