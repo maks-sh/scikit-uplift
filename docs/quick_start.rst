@@ -30,14 +30,13 @@ See the **RetailHero tutorial notebook** (`EN`_, `RU`_) for details.
 .. code-block:: python
 
     # import metrics to evaluate your model
-    from sklift.metrics import auqc, auuc, uplift_at_k
-
+    from sklift.metrics import qini_auc_score, uplift_auc_score, uplift_at_k
     # Uplift@30%
     sm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_sm, treatment=treat_val, k=0.3)
     # Area Under Qini Curve
-    sm_auqc = auqc(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+    sm_qini_auc_score = qini_auc_score(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
     # Area Under Uplift Curve
-    sm_auuc = auuc(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+    sm_uplift_auc_score = uplift_auc_score(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
 
 **Vizualize the results**
 
@@ -58,5 +57,6 @@ See the **RetailHero tutorial notebook** (`EN`_, `RU`_) for details.
     # draw Uplift and Qini curves
     plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
 
-.. figure:: https://github.com/maks-sh/scikit-uplift/raw/master/notebooks/imgs/readme_img1.png
+.. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/images/readme_img1.png
+    :align: center
     :alt: Probabilities Histogram, Uplift anf Qini curves

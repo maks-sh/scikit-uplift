@@ -103,14 +103,14 @@ See the **RetailHero tutorial notebook** (`EN`_, `RU`_) for details.
 .. code-block:: python
 
     # import metrics to evaluate your model
-    from sklift.metrics import auqc, auuc, uplift_at_k
+    from sklift.metrics import qini_auc_score, uplift_auc_score, uplift_at_k
 
     # Uplift@30%
     sm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_sm, treatment=treat_val, k=0.3)
     # Area Under Qini Curve
-    sm_auqc = auqc(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+    sm_qini_auc_score = qini_auc_score(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
     # Area Under Uplift Curve
-    sm_auuc = auuc(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+    sm_uplift_auc_score = uplift_auc_score(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
 
 **Vizualize the results**
 

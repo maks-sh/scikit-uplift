@@ -15,6 +15,10 @@
 
 * :memo: fix typo in [TwoModels](https://scikit-uplift.readthedocs.io/en/latest/models.html#sklift.models.models.TwoModels) docstring by @spiaz 
 
+### [sklift.metrics](https://scikit-uplift.readthedocs.io/en/latest/metrics.html)
+
+* :exclamation: The metrics `auuc` and `auqc` are now respectively renamed to [uplift_auc_score](https://scikit-uplift.readthedocs.io/en/latest/metrics.html#sklift.metrics.metrics.uplift_auc_score) and [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/metrics.html#sklift.metrics.metrics.qini_auc_score). So, `auuc` and `auqc` will be removed in 0.0.5
+
 ### Miscellaneous
 
 * :memo: Add Changelog
