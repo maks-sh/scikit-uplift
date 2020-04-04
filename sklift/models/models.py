@@ -221,9 +221,11 @@ class TwoModels(BaseEstimator):
     Example:
         >>> from sklift.models import TwoModels  # import approach
         >>> from catboost import CatBoostClassifier  # import any estimator adheres to scikit-learn conventions.
+        >>> estimator_trmnt = CatBoostClassifier(silent=True, thread_count=2, random_state=42)
+        >>> estimator_ctrl = CatBoostClassifier(silent=True, thread_count=2, random_state=42)
         >>> tm_ctrl = TwoModels(  # define approach
-        >>>     estimator_trmnt=CatBoostClassifier(silent=True, thread_count=2, random_state=42),
-        >>>     estimator_ctrl=CatBoostClassifier(silent=True, thread_count=2, random_state=42),
+        >>>     estimator_trmnt=estimator_trmnt,
+        >>>     estimator_ctrl=estimator_ctrl,
         >>>     method='ddr_control'
         >>> )
         >>> tm_ctrl = tm_ctrl.fit(  # fit the models
@@ -246,6 +248,9 @@ class TwoModels(BaseEstimator):
         if method not in all_methods:
             raise ValueError("Two models approach supports only methods in %s, got"
                              " %s." % (all_methods, method))
+
+        if estimator_trmnt is estimator_ctrl:
+            raise ValueError('Control and Treatment estimators should be different objects.')
 
     def fit(self, X, y, treatment, estimator_trmnt_fit_params=None, estimator_ctrl_fit_params=None):
         """
