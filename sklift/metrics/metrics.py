@@ -166,6 +166,12 @@ def uplift_at_k(y_true, uplift, treatment, k=0.3, average='first'):
             * ``'group'``:
                 The first step is taking the first k observations in the control group and
                 the first k observations in treatment. And then calculate the uplift score among them.
+
+    .. versionchanged:: 0.04
+
+        * Add supporting absolute values for ``k`` parameter
+        * Add parameter ``average``
+
     Returns:
         float: Uplift score at first k observations of the total sample.
 
