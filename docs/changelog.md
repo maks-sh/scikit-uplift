@@ -24,3 +24,4 @@
 
 * 📝 Add Changelog
 * 📝 Change the documentation structure. Add next pages: [Tutorials](https://scikit-uplift.readthedocs.io/en/latest/tutorials.html), [Release History](https://scikit-uplift.readthedocs.io/en/latest/changelog.html)
+* ❗️ Remove sklift.preprocess submodule
