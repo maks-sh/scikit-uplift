@@ -18,12 +18,13 @@
 
 .. raw:: html
 
-    <p align="center">
+    <div align="center">
         <a href="https://pypi.org/project/scikit-uplift/">
             <img src="https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/sklift-logo.png" alt="scikit-uplift (sklift) logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
         </a>
-        **uplift modeling in scikit-learn style in python**
-    </p>
+        </br>
+        <b>uplift modeling in scikit-learn style in python</b>
+    </div>
 
 
 scikit-uplift
@@ -155,11 +156,12 @@ Important links
 Papers and materials
 ---------------------
 1. Gutierrez, P., & Gérardy, J. Y.
-	Causal Inference and Uplift Modelling: A Review of the Literature. In International Conference on 	Predictive Applications and APIs (pp. 1-13).
+	Causal Inference and Uplift Modelling: A Review of the Literature.
+	In International Conference on Predictive Applications and APIs (pp. 1-13).
 
 2. Artem Betlei, Criteo Research; Eustache Diemert, Criteo Research; Massih-Reza Amini, Univ. Grenoble Alpes
 	Dependent and Shared Data Representations improve Uplift Prediction in Imbalanced Treatment Conditions
-	FAIM'18 Workshop on CausalML
+	FAIM'18 Workshop on CausalML.
 
 3. Eustache Diemert, Artem Betlei, Christophe Renaudin, and Massih-Reza Amini. 2018.
     A Large Scale Benchmark for Uplift Modeling.
@@ -167,18 +169,35 @@ Papers and materials
 
 4. Athey, Susan, and Imbens, Guido. 2015.
     Machine learning methods for estimating heterogeneous causal effects.
-    Preprint, arXiv:1504.01132. Google Scholar
+    Preprint, arXiv:1504.01132. Google Scholar.
 
 5. Oscar Mesalles Naranjo. 2012.
     Testing a New Metric for Uplift Models.
     Dissertation Presented for the Degree of MSc in Statistics and Operational Research.
 
 6. Kane, K., V. S. Y. Lo, and J. Zheng. 2014.
-    “Mining for the Truly Responsive Customers and Prospects Using True-Lift Modeling: Comparison of New and Existing Methods.”
+    Mining for the Truly Responsive Customers and Prospects Using True-Lift Modeling:
+    Comparison of New and Existing Methods.
     Journal of Marketing Analytics 2 (4): 218–238.
+
+7. Maciej Jaskowski and Szymon Jaroszewicz.
+    Uplift modeling for clinical trial data.
+    ICML Workshop on Clinical Data Analysis, 2012.
+
+8. Lo, Victor. 2002.
+    The True Lift Model - A Novel Data Mining Approach to Response Modeling in Database Marketing.
+    SIGKDD Explorations. 4. 78-86.
+
+9. Zhao, Yan & Fang, Xiao & Simchi-Levi, David. 2017.
+    Uplift Modeling with Multiple Treatments and General Response Types. 10.1137/1.9781611974973.66.
+
+===============
 
 Tags
 ~~~~~~~~~~~~~~~
-EN: uplift modeling, uplift modelling, causal inference, causal effect, causality, individual treatment effect, true lift, net lift, incremental modeling
-RU: аплифт моделирование, Uplift модель
-ZH: 隆起建模,因果推断,因果效应,因果关系,个人治疗效应,真正的电梯,净电梯
+**EN**: uplift modeling, uplift modelling, causal inference, causal effect, causality, individual treatment effect, true lift, net lift, incremental modeling
+
+**RU**: аплифт моделирование, Uplift модель
+
+**ZH**: 隆起建模,因果推断,因果效应,因果关系,个人治疗效应,真正的电梯,净电梯
+
