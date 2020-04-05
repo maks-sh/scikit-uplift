@@ -13,7 +13,8 @@
 
 ### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
 
-* 📝 fix typo in [TwoModels](https://scikit-uplift.readthedocs.io/en/latest/api/models.html#sklift.models.models.TwoModels) docstring by [@spiaz](https://github.com/spiaz)
+* 📝 Fix typo in [TwoModels](https://scikit-uplift.readthedocs.io/en/latest/api/models.html#sklift.models.models.TwoModels) docstring by [@spiaz](https://github.com/spiaz)
+* 📝 Fix docstrings and add references to all approaches.
 
 ### [sklift.metrics](https://scikit-uplift.readthedocs.io/en/latest/api/metrics.html)
 

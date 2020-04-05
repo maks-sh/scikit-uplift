@@ -63,7 +63,8 @@ Papers and materials
 #####################
 
 1. Gutierrez, P., & Gérardy, J. Y.
-	Causal Inference and Uplift Modelling: A Review of the Literature. In International Conference on 	Predictive Applications and APIs (pp. 1-13).
+	Causal Inference and Uplift Modelling: A Review of the Literature.
+	In International Conference on Predictive Applications and APIs (pp. 1-13).
 
 2. Artem Betlei, Criteo Research; Eustache Diemert, Criteo Research; Massih-Reza Amini, Univ. Grenoble Alpes
 	Dependent and Shared Data Representations improve Uplift Prediction in Imbalanced Treatment Conditions
@@ -82,8 +83,20 @@ Papers and materials
     Dissertation Presented for the Degree of MSc in Statistics and Operational Research.
 
 6. Kane, K., V. S. Y. Lo, and J. Zheng. 2014.
-    “Mining for the Truly Responsive Customers and Prospects Using True-Lift Modeling: Comparison of New and Existing Methods.”
+    Mining for the Truly Responsive Customers and Prospects Using True-Lift Modeling:
+    Comparison of New and Existing Methods.
     Journal of Marketing Analytics 2 (4): 218–238.
+
+7. Maciej Jaskowski and Szymon Jaroszewicz.
+    Uplift modeling for clinical trial data.
+    ICML Workshop on Clinical Data Analysis, 2012.
+
+8. Lo, Victor. 2002.
+    The True Lift Model - A Novel Data Mining Approach to Response Modeling in Database Marketing.
+    SIGKDD Explorations. 4. 78-86.
+
+9. Zhao, Yan & Fang, Xiao & Simchi-Levi, David. 2017.
+    Uplift Modeling with Multiple Treatments and General Response Types. 10.1137/1.9781611974973.66.
 
 ===============
 
