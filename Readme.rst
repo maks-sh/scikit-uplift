@@ -1,9 +1,9 @@
 .. -*- mode: rst -*-
 
-|Python36|_ |PyPi|_ |Docs|_
+|Python3|_ |PyPi|_ |Docs|_
 
-.. |Python36| image:: https://img.shields.io/badge/python-3.6-blue.svg
-.. _Python36: https://badge.fury.io/py/scikit-uplift
+.. |Python3| image:: https://img.shields.io/badge/python-3-blue.svg
+.. _Python3: https://badge.fury.io/py/scikit-uplift
 
 .. |PyPi| image:: https://badge.fury.io/py/scikit-uplift.svg
 .. _PyPi: https://badge.fury.io/py/scikit-uplift
@@ -22,13 +22,14 @@
         <a href="https://pypi.org/project/scikit-uplift/">
             <img src="https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/sklift-logo.png" alt="scikit-uplift (sklift) logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
         </a>
+        **uplift modeling in scikit-learn style in python**
     </p>
 
 
 scikit-uplift
 ===============
 
-**scikit-uplift** is a Python module for classic approaches for uplift modelling built on top of scikit-learn.
+**scikit-uplift** is a Python module for classic approaches for uplift modeling built on top of scikit-learn.
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
@@ -178,4 +179,6 @@ Papers and materials
 
 Tags
 ~~~~~~~~~~~~~~~
-EN: uplift modeling, uplift modelling, causal inference, causal effect, causality, individual treatment effect, true lift, net lift
+EN: uplift modeling, uplift modelling, causal inference, causal effect, causality, individual treatment effect, true lift, net lift, incremental modeling
+RU: аплифт моделирование, Uplift модель
+ZH: 隆起建模,因果推断,因果效应,因果关系,个人治疗效应,真正的电梯,净电梯

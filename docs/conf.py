@@ -46,7 +46,8 @@ release = get_version()
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc", "sphinx.ext.viewcode", "sphinx.ext.mathjax", "sphinx.ext.napoleon"
+    "sphinx.ext.autodoc", "sphinx.ext.viewcode", "sphinx.ext.mathjax", "sphinx.ext.napoleon",
+    "recommonmark"
 ]
 
 master_doc = 'index'
@@ -75,3 +76,6 @@ html_css_files = [
     'custom.css',
 ]
 html_logo = "./_static/sklift-logo.png"
+
+# Add supporting *.md files by recommonmark extension
+source_suffix = ['.rst', '.md']
