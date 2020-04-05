@@ -18,12 +18,13 @@
 
 .. raw:: html
 
-    <p align="center">
+    <div align="center">
         <a href="https://pypi.org/project/scikit-uplift/">
             <img src="https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/sklift-logo.png" alt="scikit-uplift (sklift) logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
         </a>
-        **uplift modeling in scikit-learn style in python**
-    </p>
+        </br>
+        <b>uplift modeling in scikit-learn style in python</b>
+    </div>
 
 
 scikit-uplift
