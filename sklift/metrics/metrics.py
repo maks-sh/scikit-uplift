@@ -191,5 +191,5 @@ def treatment_balance_curve(uplift, treatment):
     cum_idx = np.ones_like(treatment).cumsum()
 
     balance = treatment.cumsum() / cum_idx
-    frac = cum_idx / cum_idx[-1]
-    return frac, balance
+    num_all = cum_idx + 1
+    return num_all, balance
