@@ -129,6 +129,5 @@ def plot_treatment_balance_curve(uplift, treatment, random=True):
     axes.set_title('Treatment balance curve')
     axes.set_xlabel('Number targeted')
     axes.set_ylabel('Balance: treatment size / (treatment size + control size)')
-    plt.ylim(0, 1.01)
 
     return axes
