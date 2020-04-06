@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from ..metrics import uplift_curve, auuc, qini_curve, auqc
+from ..metrics import uplift_curve, auuc, qini_curve, auqc, treatment_balance_curve
 
 
 def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
@@ -98,5 +98,36 @@ def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=Fals
     axes[1].set_title(f'Qini curve: AUQC={auqc(y_true, uplift, treatment):.2f}')
     axes[1].set_xlabel('Number targteted')
     axes[1].set_ylabel('Number of incremental outcome')
+
+    return axes
+
+
+def plot_treatment_balance_curve(uplift, treatment, random=True):
+    """Plot Treatment Balance curve.
+
+    Args:
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+        random (bool, default True): Draw a random curve.
+
+    Returns:
+        Object that stores computed values.
+    """
+    x_tb, y_tb = treatment_balance_curve(uplift, treatment)
+
+    fig, axes = plt.subplots(ncols=1, nrows=1, figsize=(14, 7))
+
+    axes.plot(x_tb, y_tb, label='Model', color='b')
+
+    if random:
+        y_tb_random = np.average(treatment) * np.ones_like(uplift)
+
+        axes.plot(x_tb, y_tb_random, label='Random', color='black')
+        axes.fill_between(x_tb, y_tb, y_tb_random, alpha=0.2, color='b')
+
+    axes.legend()
+    axes.set_title('Treatment balance curve')
+    axes.set_xlabel('Number targeted')
+    axes.set_ylabel('Balance: treatment size / (treatment size + control size)')
 
     return axes
