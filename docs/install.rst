@@ -1,5 +1,6 @@
+*************
 Installation
-=========================================
+*************
 
 .. _PyPI: https://pypi.org/project/scikit-uplift/
 .. _source: https://github.com/maks-sh/scikit-uplift

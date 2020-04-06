@@ -7,7 +7,8 @@ from sklearn.utils.multiclass import type_of_target
 
 
 class SoloModel(BaseEstimator):
-    """
+    """aka Treatment Dummy approach, or Single model approach, or S-Learner.
+
     Fit solo model on whole dataset with 'treatment' as an additional feature.
 
     For each test example calculate predictions on new set twice:
@@ -16,7 +17,7 @@ class SoloModel(BaseEstimator):
 
     Return delta of predictions for each example.
 
-    See more details in documentation here_.
+    See more details about `SoloModel in documentation`_.
 
     Args:
         estimator (estimator object implementing 'fit'): The object to use to fit the data.
@@ -25,15 +26,25 @@ class SoloModel(BaseEstimator):
         trmnt_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when treatment.
         ctrl_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when control.
 
-    Example:
-        >>> from sklift.models import SoloModel # import approache
-        >>> from catboost import CatBoostClassifier # import any estimator adheres to scikit-learn conventions.
-        >>> sm = SoloModel(CatBoostClassifier(verbose=100, random_state=777)) # define approach
-        >>> sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True}) # fit the model
-        >>> uplift_sm = sm.predict(X_val) # predict uplift
+    Example::
 
-    .. _here:
-        https://scikit-uplift.readthedocs.io/en/latest/models.html#one-model-with-treatment-as-feature
+        # import approach
+        from sklift.models import SoloModel
+        # import any estimator adheres to scikit-learn conventions
+        from catboost import CatBoostClassifier
+
+
+        sm = SoloModel(CatBoostClassifier(verbose=100, random_state=777))  # define approach
+        sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})  # fit the model
+        uplift_sm = sm.predict(X_val)  # predict uplift
+
+    References:
+        Lo, Victor. (2002). The True Lift Model - A Novel Data Mining Approach to Response Modeling
+        in Database Marketing. SIGKDD Explorations. 4. 78-86.
+
+    .. _SoloModel in documentation:
+        https://scikit-uplift.readthedocs.io/en/latest/api/models.html#one-model-with-treatment-as-feature
+
     """
 
     def __init__(self, estimator):
@@ -113,7 +124,8 @@ class SoloModel(BaseEstimator):
 
 
 class ClassTransformation(BaseEstimator):
-    """
+    """aka Class Variable Transformation or Revert Label approach.
+
     Redefine target variable, which indicates that treatment make some impact on target or
     did target is negative without treatment.
 
@@ -125,20 +137,30 @@ class ClassTransformation(BaseEstimator):
 
     Returns only uplift predictions.
 
-    See more details in documentation here_.
+    See more details about `ClassTransformation in documentation`_.
+
 
     Args:
         estimator (estimator object implementing 'fit'): The object to use to fit the data.
 
-    Example:
-        >>> from sklift.models import SoloModel # import approaches
-        >>> from catboost import CatBoostClassifier # import any estimator adheres to scikit-learn conventions.
-        >>> ct = ClassTransformation(CatBoostClassifier(verbose=100, random_state=777)) # define approach
-        >>> ct = ct.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True}) # fit the model
-        >>> uplift_ct = ct.predict(X_val) # predict uplift
+    Example::
 
-    .. _here:
-        https://scikit-uplift.readthedocs.io/en/latest/models.html#class-transformation
+        # import approach
+        from sklift.models import ClassTransformation
+        # import any estimator adheres to scikit-learn conventions
+        from catboost import CatBoostClassifier
+
+
+        ct = ClassTransformation(CatBoostClassifier(verbose=100, random_state=777))  # define approach
+        ct = ct.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})  # fit the model
+        uplift_ct = ct.predict(X_val)  # predict uplift
+
+    References:
+        Maciej Jaskowski and Szymon Jaroszewicz. Uplift modeling for clinical trial data.
+        ICML Workshop on Clinical Data Analysis, 2012.
+
+    .. _ClassTransformation in documentation:
+        https://scikit-uplift.readthedocs.io/en/latest/api/models.html#class-transformation
     """
     def __init__(self, estimator):
         self.estimator = estimator
@@ -189,7 +211,7 @@ class ClassTransformation(BaseEstimator):
             X (array-like, shape (n_samples, n_features)) - Training vector, where n_samples is the number of samples
                 and n_features is the number of features.
 
-        Returns
+        Returns:
             array (shape (n_samples,)): uplift
         """
         uplift = 2 * self.estimator.predict_proba(X)[:, 1] - 1
@@ -197,41 +219,62 @@ class ClassTransformation(BaseEstimator):
 
 
 class TwoModels(BaseEstimator):
-    """
+    """aka naïve approach, or difference score method, or double classifier approach.
     Fit two separate models: on the treatment data and on the control data.
 
-    See more details in documentation here_.
+    See more details about `TwoModels in documentation`_.
 
     Args:
         estimator_trmnt (estimator object implementing 'fit'): The object to use to fit the treatment data.
         estimator_ctrl (estimator object implementing 'fit'): The object to use to fit the control data.
-        method (string, ‘vanila’, ’ddr_control’ or ‘ddr_treatment’, default='vanila'): Specifies the approach:
-            * ‘vanila’ - two independent models
-            * ’ddr_control’ -  dependent data representation (First train control classificator)
-            * ’ddr_treatment’ -  dependent data representation (First train treatment classificator)
+        method (string, ‘vanilla’, ’ddr_control’ or ‘ddr_treatment’, default='vanilla'): Specifies the approach:
+            * ‘vanilla’ - two independent models
+            * ’ddr_control’ -  dependent data representation (First train control estimator)
+            * ’ddr_treatment’ -  dependent data representation (First train treatment estimator)
 
 
     Attributes:
         trmnt_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when treatment.
         ctrl_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when control.
 
-    .. _here:
-        https://scikit-uplift.readthedocs.io/en/latest/models.html#one-model-with-treatment-as-feature
+    Example::
 
-    Example:
-        >>> from sklift.models import TwoModels # import approach
-        >>> from catboost import CatBoostClassifier # import any estimator adheres to scikit-learn conventions.
-        >>> tm_ctrl = TwoModels( # define approach
-        >>>     estimator_trmnt=CatBoostClassifier(silent=True, thread_count=2, random_state=42),
-        >>>     estimator_ctrl=CatBoostClassifier(silent=True, thread_count=2, random_state=42),
-        >>>     method='ddr_control'
-        >>> )
-        >>> tm_ctrl = tm_ctrl.fit( # fit the models
-        >>>     X_train, y_train, treat_train,
-        >>>     estimator_trmnt_fit_params={'cat_features': cat_features},
-        >>>     estimator_ctrl_fit_params={'cat_features': cat_features}
-        >>> )
-        >>> uplift_tm_ctrl = tm_ctrl.predict(X_val) # predict uplift
+        # import approach
+        from sklift.models import TwoModels
+        # import any estimator adheres to scikit-learn conventions
+        from catboost import CatBoostClassifier
+
+
+        estimator_trmnt = CatBoostClassifier(silent=True, thread_count=2, random_state=42)
+        estimator_ctrl = CatBoostClassifier(silent=True, thread_count=2, random_state=42)
+
+        # define approach
+        tm_ctrl = TwoModels(
+            estimator_trmnt=estimator_trmnt,
+            estimator_ctrl=estimator_ctrl,
+            method='ddr_control'
+        )
+
+        # fit the models
+        tm_ctrl = tm_ctrl.fit(
+            X_train, y_train, treat_train,
+            estimator_trmnt_fit_params={'cat_features': cat_features},
+            estimator_ctrl_fit_params={'cat_features': cat_features}
+        )
+        uplift_tm_ctrl = tm_ctrl.predict(X_val)  # predict uplift
+
+    References
+        Betlei, Artem & Diemert, Eustache & Amini, Massih-Reza. (2018).
+        Uplift Prediction with Dependent Feature Representation in Imbalanced Treatment and Control Conditions:
+        25th International Conference, ICONIP 2018, Siem Reap, Cambodia, December 13–16, 2018,
+        Proceedings, Part V. 10.1007/978-3-030-04221-9_5.
+
+        Zhao, Yan & Fang, Xiao & Simchi-Levi, David. (2017).
+        Uplift Modeling with Multiple Treatments and General Response Types.
+        10.1137/1.9781611974973.66.
+
+    .. _TwoModels in documentation:
+        https://scikit-uplift.readthedocs.io/en/latest/api/models.html#one-model-with-treatment-as-feature
     """
 
     def __init__(self, estimator_trmnt, estimator_ctrl, method='vanilla'):
@@ -246,6 +289,9 @@ class TwoModels(BaseEstimator):
         if method not in all_methods:
             raise ValueError("Two models approach supports only methods in %s, got"
                              " %s." % (all_methods, method))
+
+        if estimator_trmnt is estimator_ctrl:
+            raise ValueError('Control and Treatment estimators should be different objects.')
 
     def fit(self, X, y, treatment, estimator_trmnt_fit_params=None, estimator_ctrl_fit_params=None):
         """
@@ -337,7 +383,7 @@ class TwoModels(BaseEstimator):
             X (array-like, shape (n_samples, n_features)) - Training vector, where n_samples is the number of samples
             and n_features is the number of features.
 
-        Returns
+        Returns:
             array (shape (n_samples,)): uplift
         """
 

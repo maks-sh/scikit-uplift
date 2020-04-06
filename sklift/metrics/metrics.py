@@ -1,3 +1,4 @@
+import warnings
 import numpy as np
 from sklearn.utils.extmath import stable_cumsum
 from sklearn.metrics import auc
@@ -7,7 +8,7 @@ def uplift_curve(y_true, uplift, treatment):
     """Compute Uplift curve
 
     This is a general function, given points on a curve.  For computing the
-    area under the Uplift Curve, see :func:`auuc`.
+    area under the Uplift Curve, see :func:`uplift_auc_score`.
 
     Args:
         y_true (1d array-like): Ground truth (correct) labels.
@@ -18,7 +19,7 @@ def uplift_curve(y_true, uplift, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`auuc`: Compute the area under the Uplift curve.
+        :func:`uplift_auc_score`: Compute the area under the Uplift curve.
 
         :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
@@ -62,7 +63,7 @@ def qini_curve(y_true, uplift, treatment):
     """Compute Qini curve.
 
     This is a general function, given points on a curve. For computing the
-    area under the Qini Curve, see :func:`auqc`.
+    area under the Qini Curve, see :func:`qini_auc_score`.
 
     Args:
         y_true (1d array-like): Ground truth (correct) labels.
@@ -73,7 +74,7 @@ def qini_curve(y_true, uplift, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`auqc`: Compute the area under the Qini curve.
+        :func:`qini_auc_score`: Compute the area under the Qini curve.
 
         :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
@@ -114,7 +115,7 @@ def qini_curve(y_true, uplift, treatment):
     return num_all, curve_values
 
 
-def auuc(y_true, uplift, treatment):
+def uplift_auc_score(y_true, uplift, treatment):
     """
     Compute Area Under the Uplift Curve from prediction scores.
 
@@ -130,7 +131,33 @@ def auuc(y_true, uplift, treatment):
     return auc(*uplift_curve(y_true, uplift, treatment))
 
 
-def auqc(y_true, uplift, treatment):
+# FIXME: remove in 0.0.5
+def auuc(y_true, uplift, treatment):
+    """
+    Compute Area Under the Uplift Curve from prediction scores.
+
+    Args:
+        y_true (1d array-like): Ground truth (correct) labels.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+
+    Returns:
+        float: Area Under the Uplift Curve.
+
+    .. warning::
+        Metric `auuc` was renamed to :func:`uplift_auc_score`
+        in version 0.0.4 and will be removed in 0.0.5
+    """
+    # ToDO: Добавить бейзлайн
+    warnings.warn(
+        'Metric `auuc` was renamed to `uplift_auc_score`'
+        'in version 0.0.4 and will be removed in 0.0.5',
+        FutureWarning
+    )
+    return uplift_auc_score(y_true, uplift, treatment)
+
+
+def qini_auc_score(y_true, uplift, treatment):
     # ToDo: добавить описание функции
     """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
 
@@ -143,7 +170,38 @@ def auqc(y_true, uplift, treatment):
         float: Area Under the Qini Curve.
     """
     # ToDO: Добавить бейзлайн
+    warnings.warn(
+        'Metric `auuc` was renamed to `qini_auc_score`'
+        'in version 0.0.4 and will be removed in 0.0.5',
+        FutureWarning
+    )
     return auc(*qini_curve(y_true, uplift, treatment))
+
+
+# FIXME: remove in 0.0.5
+def auqc(y_true, uplift, treatment):
+    # ToDo: добавить описание функции
+    """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
+
+    Args:
+        y_true (1d array-like): Ground truth (correct) labels.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+
+    Returns:
+        float: Area Under the Qini Curve.
+
+    .. warning::
+        Metric `auqc` was renamed to :func:`qini_auc_score`
+        in version 0.0.4 and will be removed in 0.0.5
+    """
+    # ToDO: Добавить бейзлайн
+    warnings.warn(
+        'Metric `auqc` was renamed to `qini_auc_score`'
+        'in version 0.0.4 and will be removed in 0.0.5',
+        FutureWarning
+    )
+    return qini_auc_score(y_true, uplift, treatment)
 
 
 def uplift_at_k(y_true, uplift, treatment, k=0.3):

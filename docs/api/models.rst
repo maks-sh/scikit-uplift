@@ -1,19 +1,20 @@
-Models
-=========================================
+************************
+Models (sklift.models)
+************************
 
 1. Approaches with the same model
-------------------------------------
+##################################
 
 
 1.1 One model with treatment as feature
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+***************************************
 
 The simplest and most intuitive solution: the model is trained on union of two groups, with the binary
 communication flag acting as an additional feature. Each object from the test sample is scored twice:
 with the communication flag equal to `1` and equal to `0`. Subtracting the probabilities for each observation,
 we get the required uplift.
 
-.. image:: ./_static/images/SoloModel.png
+.. image:: ../_static/images/SoloModel.png
     :align: center
     :alt: Solo model
 
@@ -21,7 +22,7 @@ we get the required uplift.
     :members:
 
 1.2 Class Transformation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*************************
 
 .. warning::
     This approach is only suitable for classification problem
@@ -92,7 +93,7 @@ whom there was no communication.
     :members:
 
 2. Approaches with two models
-------------------------------------
+##############################
 
 .. _in the scikit-learn documentation: https://scikit-learn.org/stable/modules/calibration.html
 
@@ -104,7 +105,7 @@ not be completely correct. To avoid this effect, it is necessary to calibrate th
 interpolated as probabilities. Calibration of model probabilities is well described `in the scikit-learn documentation`_.
 
 2.1 Two independent models
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+****************************
 
 .. hint::
     In sklift this approach corresponds to the `TwoModels` class and the **vanilla** method.
@@ -113,12 +114,12 @@ As the name implies, the approach is to model the conditional probabilities of t
 separately. The articles argue that this approach is rather weak, since both models focus on predicting the result
 separately and can therefore skip the "weaker" differences in the samples.
 
-.. image:: ./_static/images/TwoModels_vanila.png
+.. image:: ../_static/images/TwoModels_vanila.png
     :align: center
     :alt: Two independent models vanila
 
 2.2 Two dependent models
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*************************
 
 The dependent data representation approach is based on the classifier chain method originally developed
 for multi-class classification problems. The idea is that if there are :math:`L` different labels, you can build
@@ -148,7 +149,7 @@ To get the uplift for each observation, calculate the difference:
 Intuitively, the second classifier studies the difference between the expected result in the test and the control, i.e.
 the uplift itself.
 
-.. image:: ./_static/images/TwoModels_ddr_control.png
+.. image:: ../_static/images/TwoModels_ddr_control.png
     :align: center
     :alt: Two independent models dependent data representation control
 
