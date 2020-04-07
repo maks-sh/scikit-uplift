@@ -109,7 +109,7 @@ def plot_treatment_balance_curve(uplift, treatment, random=True, winsize=0.1):
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         random (bool, default True): Draw a random curve.
-        nbins (float, default 0.1): Size of the sliding window to apply. Should be between 0 and 1, extremes excluded
+        winsize (float, default 0.1): Size of the sliding window to apply. Should be between 0 and 1, extremes excluded.
 
     Returns:
         Object that stores computed values.
