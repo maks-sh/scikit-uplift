@@ -91,12 +91,12 @@ def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=Fals
 
     axes[0].legend()
     axes[0].set_title(f'Uplift curve: AUUC={auuc(y_true, uplift, treatment):.2f}')
-    axes[0].set_xlabel('Number targteted')
+    axes[0].set_xlabel('Number targeted')
     axes[0].set_ylabel('Relative gain: treatment - control')
 
     axes[1].legend()
     axes[1].set_title(f'Qini curve: AUQC={auqc(y_true, uplift, treatment):.2f}')
-    axes[1].set_xlabel('Number targteted')
+    axes[1].set_xlabel('Number targeted')
     axes[1].set_ylabel('Number of incremental outcome')
 
     return axes
