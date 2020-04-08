@@ -102,32 +102,36 @@ def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=Fals
     return axes
 
 
-def plot_treatment_balance_curve(uplift, treatment, random=True):
+def plot_treatment_balance_curve(uplift, treatment, random=True, winsize=0.1):
     """Plot Treatment Balance curve.
 
     Args:
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         random (bool, default True): Draw a random curve.
+        winsize (float, default 0.1): Size of the sliding window to apply. Should be between 0 and 1, extremes excluded.
 
     Returns:
         Object that stores computed values.
     """
-    x_tb, y_tb = treatment_balance_curve(uplift, treatment)
+    if (winsize <= 0) or (winsize >= 1):
+        raise ValueError('winsize should be between 0 and 1, extremes excluded')
 
-    fig, axes = plt.subplots(ncols=1, nrows=1, figsize=(14, 7))
+    x_tb, y_tb = treatment_balance_curve(uplift, treatment, winsize=int(len(uplift)*winsize))
+
+    _, axes = plt.subplots(ncols=1, nrows=1, figsize=(14, 7))
 
     axes.plot(x_tb, y_tb, label='Model', color='b')
 
     if random:
-        y_tb_random = np.average(treatment) * np.ones_like(uplift)
+        y_tb_random = np.average(treatment) * np.ones_like(x_tb)
 
         axes.plot(x_tb, y_tb_random, label='Random', color='black')
         axes.fill_between(x_tb, y_tb, y_tb_random, alpha=0.2, color='b')
 
     axes.legend()
     axes.set_title('Treatment balance curve')
-    axes.set_xlabel('Number targeted')
-    axes.set_ylabel('Balance: treatment size / (treatment size + control size)')
+    axes.set_xlabel('Percentage targeted')
+    axes.set_ylabel('Balance: treatment / (treatment + control')
 
     return axes

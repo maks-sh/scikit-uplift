@@ -173,12 +173,13 @@ def uplift_at_k(y_true, uplift, treatment, k=0.3):
     return score_at_k
 
 
-def treatment_balance_curve(uplift, treatment):
+def treatment_balance_curve(uplift, treatment, winsize):
     """Compute the treatment balance curve: proportion of treatment group in the ordered predictions.
 
     Args:
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
+        winsize(int): Size of the sliding window for calculating the balance between treatment and control.
 
     Returns:
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
@@ -188,8 +189,7 @@ def treatment_balance_curve(uplift, treatment):
     desc_score_indices = np.argsort(uplift, kind="mergesort")[::-1]
 
     treatment = treatment[desc_score_indices]
-    cum_idx = np.ones_like(treatment).cumsum()
 
-    balance = treatment.cumsum() / cum_idx
-    num_all = cum_idx + 1
-    return num_all, balance
+    balance = np.convolve(treatment, np.ones(winsize), 'valid') / winsize
+    idx = np.linspace(1, 100, len(balance))
+    return idx, balance
