@@ -232,7 +232,6 @@ class TwoModels(BaseEstimator):
             * ’ddr_control’ -  dependent data representation (First train control estimator)
             * ’ddr_treatment’ -  dependent data representation (First train treatment estimator)
 
-
     Attributes:
         trmnt_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when treatment.
         ctrl_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when control.
