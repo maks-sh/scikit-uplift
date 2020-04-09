@@ -30,4 +30,4 @@
 
 * ❗️ Remove sklift.preprocess submodule.
 * 💥 Add Changelog.
-* 📝 Change the documentation structure. Add next pages: [Tutorials](https://scikit-uplift.readthedocs.io/en/latest/tutorials.html), [Release History](https://scikit-uplift.readthedocs.io/en/latest/changelog.html).
+* 📝 Change the documentation structure. Add next pages: [Tutorials](https://scikit-uplift.readthedocs.io/en/latest/tutorials.html), [Release History](https://scikit-uplift.readthedocs.io/en/latest/changelog.html) and [Hall of fame](https://scikit-uplift.readthedocs.io/en/latest/hall_of_fame.html).

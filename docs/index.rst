@@ -55,6 +55,7 @@ Project info
    api/index
    tutorials
    changelog
+   hall_of_fame
 
 
 ===============
