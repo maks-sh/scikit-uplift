@@ -87,7 +87,7 @@ And if you now point your browser to ``_build/html/index.html``, you should see 
 Quick Start
 -----------
 
-See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab|_, `RU`_ |Open In Colab|_) for details.
+See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab|, `RU`_ |Open In Colab|) for details.
 
 **Train and predict uplift model**
 
