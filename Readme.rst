@@ -13,6 +13,12 @@
 
 .. _RU: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 .. _EN: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
+
+.. |Open In Colab| image:: https://colab.research.google.com/assets/colab-badge.svg
+   :target: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
+.. |Open In Colab| image:: https://colab.research.google.com/assets/colab-badge.svg
+   :target: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
+   
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
 .. _in russian on habr.com: https://habr.com/ru/company/ru_mts/blog/485980/
 
@@ -81,7 +87,7 @@ And if you now point your browser to ``_build/html/index.html``, you should see 
 Quick Start
 -----------
 
-See the **RetailHero tutorial notebook** (`EN`_, `RU`_) for details.
+See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab|, `RU`_ |Open In Colab|) for details.
 
 **Train and predict uplift model**
 
