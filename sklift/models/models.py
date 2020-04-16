@@ -97,8 +97,8 @@ class SoloModel(BaseEstimator):
         Perform uplift on samples in X.
 
         Args:
-            X (array-like, shape (n_samples, n_features)) - Training vector, where n_samples is the number of samples
-            and n_features is the number of features.
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples
+                and n_features is the number of features.
 
         Returns:
             array (shape (n_samples,)): uplift
@@ -208,7 +208,7 @@ class ClassTransformation(BaseEstimator):
         Perform uplift on samples in X.
 
         Args:
-            X (array-like, shape (n_samples, n_features)) - Training vector, where n_samples is the number of samples
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples
                 and n_features is the number of features.
 
         Returns:
@@ -379,8 +379,8 @@ class TwoModels(BaseEstimator):
         Perform uplift on samples in X.
 
         Args:
-            X (array-like, shape (n_samples, n_features)) - Training vector, where n_samples is the number of samples
-            and n_features is the number of features.
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples
+                and n_features is the number of features.
 
         Returns:
             array (shape (n_samples,)): uplift
