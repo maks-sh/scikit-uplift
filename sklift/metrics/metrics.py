@@ -196,7 +196,7 @@ def auqc(y_true, uplift, treatment):
     return qini_auc_score(y_true, uplift, treatment)
 
 
-def uplift_at_k(y_true, uplift, strategy, treatment, k=0.3):
+def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     """Compute uplift at first k percentage of the total sample.
 
     Args:
