@@ -117,8 +117,7 @@ def qini_curve(y_true, uplift, treatment):
 
 
 def auuc(y_true, uplift, treatment):
-    """
-    Compute Area Under the Uplift Curve from prediction scores.
+    """Compute Area Under the Uplift Curve from prediction scores.
 
     Args:
         y_true (1d array-like): Ground truth (correct) labels.
@@ -148,7 +147,7 @@ def auqc(y_true, uplift, treatment):
     return auc(*qini_curve(y_true, uplift, treatment))
 
 
-def uplift_at_k(y_true, uplift, treatment, k=0.3, average='first'):
+def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     """Calculate the uplift score at the first k observations (ratio or absolute value) of the total sample.
 
     Args:
@@ -157,20 +156,21 @@ def uplift_at_k(y_true, uplift, treatment, k=0.3, average='first'):
         treatment (1d array-like): Treatment labels.
         k (float or int): If float, should be between 0.0 and 1.0 and represent the proportion of the dataset
             to include in the computation of uplift. If int, represents the absolute number of samples.
-        average (string, ['first', 'group']): Determines the calculating strategy. Defaults to 'first'.
+        strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Defaults to 'first'.
 
-            * ``'first'``:
-                The first step is taking the first k observations overall groups (control and treatment)
-                to take the first K observations and then calculate the uplift score among them.
+            * ``'overall'``:
+                The first step is taking the first k observations of all test data ordered by uplift prediction
+                (overall both groups - control and treatment) and conversions in treatment and control groups
+                calculated only on them. Then the difference between these conversions is calculated.
 
-            * ``'group'``:
-                The first step is taking the first k observations in the control group and
-                the first k observations in treatment. And then calculate the uplift score among them.
+            * ``'by_group'``:
+                Separately calculates conversions in top k observations in each group (control and treatment)
+                sorted by uplift predictions. Then the difference between these conversions is calculated
 
-    .. versionchanged:: 0.04
+    .. versionchanged:: 0.0.4
 
         * Add supporting absolute values for ``k`` parameter
-        * Add parameter ``average``
+        * Add parameter ``strategy``
 
     Returns:
         float: Uplift score at first k observations of the total sample.
@@ -179,10 +179,12 @@ def uplift_at_k(y_true, uplift, treatment, k=0.3, average='first'):
     # ToDo: checker that treatment is binary and all groups is not empty
     check_consistent_length(y_true, uplift, treatment)
 
-    average_methods = ['first', 'group']
-    if average not in average_methods:
-        raise ValueError(f'Uplift score supports only calculating methods in {average_methods},'
-                         f' got {average}.'
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+
+    strategy_methods = ['overall', 'by_group']
+    if strategy not in strategy_methods:
+        raise ValueError(f'Uplift score supports only calculating methods in {strategy_methods},'
+                         f' got {strategy}.'
                          )
 
     n_samples = len(y_true)
@@ -202,7 +204,7 @@ def uplift_at_k(y_true, uplift, treatment, k=0.3, average='first'):
     if k_type not in ('i', 'f'):
         raise ValueError(f'Invalid value for k: {k_type}')
 
-    if average == 'first':
+    if strategy == 'overall':
         if k_type == 'f':
             n_size = ceil(n_samples * k)
         else:
@@ -212,7 +214,7 @@ def uplift_at_k(y_true, uplift, treatment, k=0.3, average='first'):
         score_ctrl = y_true[order][:n_size][treatment[order][:n_size] == 0].mean()
         score_trmnt = y_true[order][:n_size][treatment[order][:n_size] == 1].mean()
 
-    else:  # average == 'group':
+    else:  # strategy == 'by_group':
         if k_type == 'f':
             n_ctrl = ceil((treatment == 0).sum() * k)
             n_trmnt = ceil((treatment == 1).sum() * k)
