@@ -14,13 +14,15 @@
 .. _RU: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 .. _EN: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
 
-.. |Open In Colab| image:: https://colab.research.google.com/assets/colab-badge.svg
-   :target: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
-.. |Open In Colab| image:: https://colab.research.google.com/assets/colab-badge.svg
-   :target: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
+.. |Open In Colab1| image:: https://colab.research.google.com/assets/colab-badge.svg
+.. _Open In Colab1: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
+
+.. |Open In Colab2| image:: https://colab.research.google.com/assets/colab-badge.svg
+.. _Open In Colab2: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
    
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
-.. _in russian on habr.com: https://habr.com/ru/company/ru_mts/blog/485980/
+.. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
+.. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
 
 .. raw:: html
 
@@ -40,7 +42,7 @@ scikit-uplift
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
-More about uplift modelling problem read `in russian on habr.com`_.
+More about uplift modelling problem read in russian on habr.com: `Part 1`_ and `Part 2`_.
 
 **Features**:
 
@@ -87,7 +89,7 @@ And if you now point your browser to ``_build/html/index.html``, you should see 
 Quick Start
 -----------
 
-See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab|, `RU`_ |Open In Colab|) for details.
+See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open In Colab2|_) for details.
 
 **Train and predict uplift model**
 

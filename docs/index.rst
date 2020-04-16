@@ -1,4 +1,5 @@
-.. _in russian on habr.com: https://habr.com/ru/company/ru_mts/blog/485980/
+.. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
+.. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
 
 **************
 scikit-uplift
@@ -8,7 +9,7 @@ scikit-uplift
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
-More about uplift modelling problem read `in russian on habr.com`_.
+More about uplift modelling problem read in russian on habr.com: `Part 1`_ and `Part 2`_.
 
 Features
 #########

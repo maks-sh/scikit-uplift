@@ -29,6 +29,6 @@
 ### Miscellaneous
 
 * ❗️ Remove sklift.preprocess submodule.
-* 💥 Add compatibility of tutorials with colab and add colab buttons by [ElMaxuno](https://github.com/ElMaxuno).
+* 💥 Add compatibility of tutorials with colab and add colab buttons by [@ElMaxuno](https://github.com/ElMaxuno).
 * 💥 Add Changelog.
 * 📝 Change the documentation structure. Add next pages: [Tutorials](https://scikit-uplift.readthedocs.io/en/latest/tutorials.html), [Release History](https://scikit-uplift.readthedocs.io/en/latest/changelog.html) and [Hall of fame](https://scikit-uplift.readthedocs.io/en/latest/hall_of_fame.html).
