@@ -1,4 +1,3 @@
-from math import ceil
 import warnings
 import numpy as np
 from sklearn.utils.extmath import stable_cumsum
@@ -256,7 +255,7 @@ def uplift_at_k(y_true, uplift, strategy, treatment, k=0.3):
 
     if strategy == 'overall':
         if k_type == 'f':
-            n_size = ceil(n_samples * k)
+            n_size = int(n_samples * k)
         else:
             n_size = k
 
@@ -266,8 +265,8 @@ def uplift_at_k(y_true, uplift, strategy, treatment, k=0.3):
 
     else:  # strategy == 'by_group':
         if k_type == 'f':
-            n_ctrl = ceil((treatment == 0).sum() * k)
-            n_trmnt = ceil((treatment == 1).sum() * k)
+            n_ctrl = int((treatment == 0).sum() * k)
+            n_trmnt = int((treatment == 1).sum() * k)
 
         else:
             n_ctrl = k
