@@ -12,7 +12,7 @@
 ***********
 Quick Start
 ***********
-git statu
+
 See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open In Colab2|_) for details.
 
 **Train and predict your uplift model**

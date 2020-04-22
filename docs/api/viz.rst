@@ -1,5 +1,5 @@
 ***************************
-Vizualization (sklift.viz)
+Visualization (sklift.viz)
 ***************************
 
 .. automodule:: sklift.viz.base
