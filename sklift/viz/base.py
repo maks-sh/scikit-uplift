@@ -132,6 +132,6 @@ def plot_treatment_balance_curve(uplift, treatment, random=True, winsize=0.1):
     axes.legend()
     axes.set_title('Treatment balance curve')
     axes.set_xlabel('Percentage targeted')
-    axes.set_ylabel('Balance: treatment / (treatment + control')
+    axes.set_ylabel('Balance: treatment / (treatment + control)')
 
     return axes
