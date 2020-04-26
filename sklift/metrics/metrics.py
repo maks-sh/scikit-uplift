@@ -205,7 +205,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
         treatment (1d array-like): Treatment labels.
         k (float or int): If float, should be between 0.0 and 1.0 and represent the proportion of the dataset
             to include in the computation of uplift. If int, represents the absolute number of samples.
-        strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Defaults to 'first'.
+        strategy (string, ['overall', 'by_group']): Determines the calculating strategy.
 
             * ``'overall'``:
                 The first step is taking the first k observations of all test data ordered by uplift prediction
@@ -237,7 +237,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
                          )
 
     n_samples = len(y_true)
-    order = np.argsort(uplift)[::-1]
+    order = np.argsort(uplift, kind='mergesort')[::-1]
     _, treatment_counts = np.unique(treatment, return_counts=True)
     n_samples_ctrl = treatment_counts[0]
     n_samples_trmnt = treatment_counts[1]
