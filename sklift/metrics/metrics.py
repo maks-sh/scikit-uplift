@@ -247,8 +247,8 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     if (k_type == 'i' and (k >= n_samples or k <= 0)
        or k_type == 'f' and (k <= 0 or k >= 1)):
         raise ValueError(f'k={k} should be either positive and smaller'
-                         ' than the number of samples {n_samples} or a float in the '
-                         '(0, 1) range')
+                         f' than the number of samples {n_samples} or a float in the '
+                         f'(0, 1) range')
 
     if k_type not in ('i', 'f'):
         raise ValueError(f'Invalid value for k: {k_type}')
