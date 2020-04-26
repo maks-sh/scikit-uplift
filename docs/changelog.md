@@ -8,6 +8,21 @@
 * 🔨 something that previously didn’t work as documentated – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
+## Version 0.1.1
+
+### [sklift.viz](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html)
+
+* 🔨 Fix bug with import [plot_treatment_balance_curve](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.viz.base.plot_treatment_balance_curve)
+
+### [sklift.metrics](https://scikit-uplift.readthedocs.io/en/latest/api/metrics.html)
+
+* 🔨 Fix bug with import [uplift_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics.html#sklift.metrics.metrics.uplift_auc_score) and [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/metrics.html#sklift.metrics.metrics.qini_auc_score).
+* 📝 Fix typos in docstrings
+
+### Miscellaneous
+
+* 📝 Add link to Release History in main Readme.md
+
 ## Version 0.1.0
 
 ### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)

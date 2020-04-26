@@ -157,7 +157,7 @@ Important links
 
 - Official source code repo: https://github.com/maks-sh/scikit-uplift/
 - Issue tracker: https://github.com/maks-sh/scikit-uplift/issues
-
+- Release History: https://scikit-uplift.readthedocs.io/en/latest/changelog.html
 
 ===============
 
