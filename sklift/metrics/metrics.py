@@ -12,7 +12,7 @@ def uplift_curve(y_true, uplift, treatment):
     area under the Uplift Curve, see :func:`uplift_auc_score`.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -48,7 +48,7 @@ def uplift_curve(y_true, uplift, treatment):
     num_ctrl = num_all - num_trmnt
     y_ctrl = stable_cumsum(y_true_ctrl)[threshold_indices]
 
-    curve_values = (np.divide(y_trmnt, num_trmnt, out=np.zeros_like(y_trmnt), where=num_trmnt != 0) -\
+    curve_values = (np.divide(y_trmnt, num_trmnt, out=np.zeros_like(y_trmnt), where=num_trmnt != 0) -
                     np.divide(y_ctrl, num_ctrl, out=np.zeros_like(y_ctrl), where=num_ctrl != 0)) * num_all
 
     if num_all.size == 0 or curve_values[0] != 0 or num_all[0] != 0:
@@ -67,7 +67,7 @@ def qini_curve(y_true, uplift, treatment):
     area under the Qini Curve, see :func:`qini_auc_score`.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -120,7 +120,7 @@ def uplift_auc_score(y_true, uplift, treatment):
     """Compute Area Under the Uplift Curve from prediction scores.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -136,7 +136,7 @@ def auuc(y_true, uplift, treatment):
     """Compute Area Under the Uplift Curve from prediction scores.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -160,7 +160,7 @@ def qini_auc_score(y_true, uplift, treatment):
     """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -176,7 +176,7 @@ def auqc(y_true, uplift, treatment):
     """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -200,7 +200,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     """Compute uplift at first k percentage of the total sample.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         k (float or int): If float, should be between 0.0 and 1.0 and represent the proportion of the dataset
