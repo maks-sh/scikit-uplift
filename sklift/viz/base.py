@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from ..metrics import uplift_curve, auuc, qini_curve, auqc, treatment_balance_curve
+from ..metrics import uplift_curve, auuc, qini_curve, auqc, response_rate_by_percentile, treatment_balance_curve
 
 
 def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
