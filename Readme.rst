@@ -11,15 +11,18 @@
 .. |Docs| image:: https://readthedocs.org/projects/scikit-uplift/badge/?version=latest
 .. _Docs: https://scikit-uplift.readthedocs.io/en/latest/
 
-.. _RU: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
-.. _EN: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
-
 .. |Open In Colab1| image:: https://colab.research.google.com/assets/colab-badge.svg
 .. _Open In Colab1: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
 
 .. |Open In Colab2| image:: https://colab.research.google.com/assets/colab-badge.svg
 .. _Open In Colab2: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
-   
+
+.. |Open In Colab3| image:: https://colab.research.google.com/assets/colab-badge.svg
+.. _Open In Colab3: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb
+
+.. |Open In Colab4| image:: https://colab.research.google.com/assets/colab-badge.svg
+.. _Open In Colab4: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb
+
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
 .. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
 .. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
@@ -50,9 +53,13 @@ More about uplift modelling problem read in russian on habr.com: `Part 1`_ and `
 
 * Applying any estimator adheres to scikit-learn conventions;
 
+* All approaches can be used in sklearn.pipeline (see example (`EN <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`__ |Open In Colab3|_, `RU <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__ |Open In Colab4|_))
+
 * Almost all implemented approaches solve both the problem of classification and regression;
 
-* A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model.
+* A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model;
+
+* Useful graphs for analyzing the built model.
 
 Installation
 -------------
@@ -89,7 +96,7 @@ And if you now point your browser to ``_build/html/index.html``, you should see 
 Quick Start
 -----------
 
-See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open In Colab2|_) for details.
+See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb>`__ |Open In Colab1|_, `RU <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb>`__ |Open In Colab2|_) for details.
 
 **Train and predict uplift model**
 
@@ -157,7 +164,7 @@ Important links
 
 - Official source code repo: https://github.com/maks-sh/scikit-uplift/
 - Issue tracker: https://github.com/maks-sh/scikit-uplift/issues
-
+- Release History: https://scikit-uplift.readthedocs.io/en/latest/changelog.html
 
 ===============
 

@@ -12,7 +12,7 @@ def uplift_curve(y_true, uplift, treatment):
     area under the Uplift Curve, see :func:`uplift_auc_score`.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -48,7 +48,7 @@ def uplift_curve(y_true, uplift, treatment):
     num_ctrl = num_all - num_trmnt
     y_ctrl = stable_cumsum(y_true_ctrl)[threshold_indices]
 
-    curve_values = (np.divide(y_trmnt, num_trmnt, out=np.zeros_like(y_trmnt), where=num_trmnt != 0) -\
+    curve_values = (np.divide(y_trmnt, num_trmnt, out=np.zeros_like(y_trmnt), where=num_trmnt != 0) -
                     np.divide(y_ctrl, num_ctrl, out=np.zeros_like(y_ctrl), where=num_ctrl != 0)) * num_all
 
     if num_all.size == 0 or curve_values[0] != 0 or num_all[0] != 0:
@@ -67,7 +67,7 @@ def qini_curve(y_true, uplift, treatment):
     area under the Qini Curve, see :func:`qini_auc_score`.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -120,7 +120,7 @@ def uplift_auc_score(y_true, uplift, treatment):
     """Compute Area Under the Uplift Curve from prediction scores.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -136,7 +136,7 @@ def auuc(y_true, uplift, treatment):
     """Compute Area Under the Uplift Curve from prediction scores.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -160,7 +160,7 @@ def qini_auc_score(y_true, uplift, treatment):
     """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -176,7 +176,7 @@ def auqc(y_true, uplift, treatment):
     """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -200,12 +200,12 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     """Compute uplift at first k percentage of the total sample.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         k (float or int): If float, should be between 0.0 and 1.0 and represent the proportion of the dataset
             to include in the computation of uplift. If int, represents the absolute number of samples.
-        strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Defaults to 'first'.
+        strategy (string, ['overall', 'by_group']): Determines the calculating strategy.
 
             * ``'overall'``:
                 The first step is taking the first k observations of all test data ordered by uplift prediction
@@ -237,7 +237,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
                          )
 
     n_samples = len(y_true)
-    order = np.argsort(uplift)[::-1]
+    order = np.argsort(uplift, kind='mergesort')[::-1]
     _, treatment_counts = np.unique(treatment, return_counts=True)
     n_samples_ctrl = treatment_counts[0]
     n_samples_trmnt = treatment_counts[1]
@@ -247,8 +247,8 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     if (k_type == 'i' and (k >= n_samples or k <= 0)
        or k_type == 'f' and (k <= 0 or k >= 1)):
         raise ValueError(f'k={k} should be either positive and smaller'
-                         ' than the number of samples {n_samples} or a float in the '
-                         '(0, 1) range')
+                         f' than the number of samples {n_samples} or a float in the '
+                         f'(0, 1) range')
 
     if k_type not in ('i', 'f'):
         raise ValueError(f'Invalid value for k: {k_type}')
@@ -287,6 +287,86 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
         score_trmnt = y_true[order][treatment[order] == 1][:n_trmnt].mean()
 
     return score_trmnt - score_ctrl
+
+
+def response_rate_by_percentile(y_true, uplift, treatment, group, strategy, bins=10):
+    """Compute response rate (target mean in the control or treatment group) at each percentile.
+    
+    Args:
+        y_true (1d array-like): Correct (true) target values.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+        group (string, ['treatment', 'control']): Group type for computing response rate: treatment or control.
+            * ``'treatment'``:
+                Values equal 1 in the treatment column. 
+            * ``'control'``:
+                Values equal 0 in the treatment column. 
+        strategy (string, ['overall', 'by_group']): Determines the calculating strategy. 
+            * ``'overall'``:
+                The first step is taking the first k observations of all test data ordered by uplift prediction
+                (overall both groups - control and treatment) and conversions in treatment and control groups
+                calculated only on them. Then the difference between these conversions is calculated.
+            * ``'by_group'``:
+                Separately calculates conversions in top k observations in each group (control and treatment)
+                sorted by uplift predictions. Then the difference between these conversions is calculated
+        bins (int): Determines the number of bins (and relative percentile) in the test data.  
+        
+    Returns:
+        array: Response rate at each percentile for control or treatment group
+        array: Variance of the response rate at each percentile 
+    """
+    
+    group_types = ['treatment', 'control']
+    strategy_methods = ['overall', 'by_group']
+    
+    n_samples = len(y_true)
+    check_consistent_length(y_true, uplift, treatment)
+    
+    if group not in group_types:
+        raise ValueError(f'Response rate supports only group types in {group_types},'
+                         f' got {group}.') 
+
+    if strategy not in strategy_methods:
+        raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
+                         f' got {strategy}.')
+    
+    if not isinstance(bins, int) or bins <= 0:
+        raise ValueError(f'bins should be positive integer.'
+                         f' Invalid value bins: {bins}')
+          
+    if bins >= n_samples:
+        raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
+    
+    if bins == 1:
+        warnings.warn(f'You will get the only one bin of {n_samples} samples'
+                      f' which is the length of y_true.' 
+                      f'\nPlease consider using uplift_at_k function instead',
+                      UserWarning)
+    
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+    order = np.argsort(uplift, kind='mergesort')[::-1]
+    
+    if group == 'treatment':
+        trmnt_flag = 1
+    else:  # group == 'control'
+        trmnt_flag = 0
+    
+    if strategy == 'overall':
+        y_true_bin = np.array_split(y_true[order], bins)
+        trmnt_bin = np.array_split(treatment[order], bins)
+        
+        group_size = np.array([len(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
+        response_rate = np.array([np.mean(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
+
+    else:  # strategy == 'by_group'
+        y_bin = np.array_split(y_true[order][treatment[order] == trmnt_flag], bins)
+        
+        group_size = np.array([len(y) for y in y_bin])
+        response_rate = np.array([np.mean(y) for y in y_bin])
+
+    variance = np.multiply(response_rate, np.divide((1 - response_rate), group_size))
+                            
+    return response_rate, variance          
 
 
 def treatment_balance_curve(uplift, treatment, winsize):

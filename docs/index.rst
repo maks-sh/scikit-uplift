@@ -1,6 +1,12 @@
 .. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
 .. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
 
+.. |Open In Colab3| image:: https://colab.research.google.com/assets/colab-badge.svg
+.. _Open In Colab3: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb
+
+.. |Open In Colab4| image:: https://colab.research.google.com/assets/colab-badge.svg
+.. _Open In Colab4: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb
+
 **************
 scikit-uplift
 **************
@@ -18,9 +24,13 @@ Features
 
 * Applying any estimator adheres to scikit-learn conventions;
 
+* All approaches can be used in sklearn.pipeline (see example (`EN <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`_ |Open In Colab3|_, `RU <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`_ |Open In Colab4|_))
+
 * Almost all implemented approaches solve both the problem of classification and regression;
 
-* A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model.
+* A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model;
+
+* Useful graphs for analyzing the built model.
 
 
 **The package currently supports the following methods:**
