@@ -25,9 +25,7 @@ def uplift_curve(y_true, uplift, treatment):
         :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
 
-    # ToDo: Добавить проверки на наличие обоих классов в столбце treatment
-    # ToDo: Добавить проверку на наличие обоих классов в  y_true для каждого уникального значения из столбца treatment
-
+    # TODO: check the treatment is binary
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
     desc_score_indices = np.argsort(uplift, kind="mergesort")[::-1]
     y_true, uplift, treatment = y_true[desc_score_indices], uplift[desc_score_indices], treatment[desc_score_indices]
@@ -79,9 +77,7 @@ def qini_curve(y_true, uplift, treatment):
 
         :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
-    # ToDo: Добавить проверки на наличие обоих классов в столбце treatment
-    # ToDo: Добавить проверку на наличие обоих классов в столбце y_true для каждого уникального значения из столбца treatment
-
+    # TODO: check the treatment is binary
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     desc_score_indices = np.argsort(uplift, kind="mergesort")[::-1]
@@ -127,7 +123,8 @@ def uplift_auc_score(y_true, uplift, treatment):
     Returns:
         float: Area Under the Uplift Curve.
     """
-    # ToDO: Добавить бейзлайн
+    # ToDO: Add normalization
+    # ToDO: Add baseline
     return auc(*uplift_curve(y_true, uplift, treatment))
 
 
@@ -147,7 +144,6 @@ def auuc(y_true, uplift, treatment):
         Metric `auuc` was renamed to :func:`uplift_auc_score`
         in version 0.1.0 and will be removed in 0.2.0
     """
-    # ToDO: Добавить бейзлайн
     warnings.warn(
         'Metric `auuc` was renamed to `uplift_auc_score`'
         'in version 0.1.0 and will be removed in 0.2.0',
@@ -167,7 +163,8 @@ def qini_auc_score(y_true, uplift, treatment):
     Returns:
         float: Area Under the Qini Curve.
     """
-    # ToDO: Добавить бейзлайн
+    # ToDO: Add normalization
+    # ToDO: Add baseline
     return auc(*qini_curve(y_true, uplift, treatment))
 
 
@@ -187,7 +184,6 @@ def auqc(y_true, uplift, treatment):
         Metric `auqc` was renamed to :func:`qini_auc_score`
         in version 0.1.0 and will be removed in 0.2.0
     """
-    # ToDO: Добавить бейзлайн
     warnings.warn(
         'Metric `auqc` was renamed to `qini_auc_score`'
         'in version 0.1.0 and will be removed in 0.2.0',
@@ -259,7 +255,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
         else:
             n_size = k
 
-        # ToDo: _checker_ there are obervations among two groups among first k
+        # ToDo: _checker_ there are observations among two groups among first k
         score_ctrl = y_true[order][:n_size][treatment[order][:n_size] == 0].mean()
         score_trmnt = y_true[order][:n_size][treatment[order][:n_size] == 1].mean()
 
@@ -331,7 +327,7 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy, bins
                          f' got {strategy}.')
     
     if not isinstance(bins, int) or bins <= 0:
-        raise ValueError(f'bins should be positive integer.'
+        raise ValueError(f'Bins should be positive integer.'
                          f' Invalid value bins: {bins}')
           
     if bins >= n_samples:
