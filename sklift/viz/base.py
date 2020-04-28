@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.utils.validation import check_consistent_length
+import warnings
 from ..metrics import uplift_curve, auuc, qini_curve, auqc, response_rate_by_percentile, treatment_balance_curve
 
 
