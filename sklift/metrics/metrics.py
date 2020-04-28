@@ -289,6 +289,86 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     return score_trmnt - score_ctrl
 
 
+def response_rate_by_percentile(y_true, uplift, treatment, group, strategy, bins=10):
+    """Compute response rate (target mean in the control or treatment group) at each percentile.
+    
+    Args:
+        y_true (1d array-like): Correct (true) target values.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+        group (string, ['treatment', 'control']): Group type for computing response rate: treatment or control.
+            * ``'treatment'``:
+                Values equal 1 in the treatment column. 
+            * ``'control'``:
+                Values equal 0 in the treatment column. 
+        strategy (string, ['overall', 'by_group']): Determines the calculating strategy. 
+            * ``'overall'``:
+                The first step is taking the first k observations of all test data ordered by uplift prediction
+                (overall both groups - control and treatment) and conversions in treatment and control groups
+                calculated only on them. Then the difference between these conversions is calculated.
+            * ``'by_group'``:
+                Separately calculates conversions in top k observations in each group (control and treatment)
+                sorted by uplift predictions. Then the difference between these conversions is calculated
+        bins (int): Determines the number of bins (and relative percentile) in the test data.  
+        
+    Returns:
+        array: Response rate at each percentile for control or treatment group
+        array: Variance of the response rate at each percentile 
+    """
+    
+    group_types = ['treatment', 'control']
+    strategy_methods = ['overall', 'by_group']
+    
+    n_samples = len(y_true)
+    check_consistent_length(y_true, uplift, treatment)
+    
+    if group not in group_types:
+        raise ValueError(f'Response rate supports only group types in {group_types},'
+                         f' got {group}.') 
+
+    if strategy not in strategy_methods:
+        raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
+                         f' got {strategy}.')
+    
+    if not isinstance(bins, int) or bins <= 0:
+        raise ValueError(f'bins should be positive integer.'
+                         f' Invalid value bins: {bins}')
+          
+    if bins >= n_samples:
+        raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
+    
+    if bins == 1:
+        warnings.warn(f'You will get the only one bin of {n_samples} samples'
+                      f' which is the length of y_true.' 
+                      f'\nPlease consider using uplift_at_k function instead',
+                      UserWarning)
+    
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+    order = np.argsort(uplift, kind='mergesort')[::-1]
+    
+    if group == 'treatment':
+        trmnt_flag = 1
+    else:  # group == 'control'
+        trmnt_flag = 0
+    
+    if strategy == 'overall':
+        y_true_bin = np.array_split(y_true[order], bins)
+        trmnt_bin = np.array_split(treatment[order], bins)
+        
+        group_size = np.array([len(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
+        response_rate = np.array([np.mean(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
+
+    else:  # strategy == 'by_group'
+        y_bin = np.array_split(y_true[order][treatment[order] == trmnt_flag], bins)
+        
+        group_size = np.array([len(y) for y in y_bin])
+        response_rate = np.array([np.mean(y) for y in y_bin])
+
+    variance = np.multiply(response_rate, np.divide((1 - response_rate), group_size))
+                            
+    return response_rate, variance          
+
+
 def treatment_balance_curve(uplift, treatment, winsize):
     """Compute the treatment balance curve: proportion of treatment group in the ordered predictions.
 
