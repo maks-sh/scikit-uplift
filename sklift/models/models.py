@@ -335,7 +335,7 @@ class TwoModels(BaseEstimator):
             if self._type_of_target == 'binary':
                 ddr_control = self.estimator_ctrl.predict_proba(X_trmnt)[:, 1]
             else:
-                ddr_control = self.estimator_ctrl.predict_(X_trmnt)
+                ddr_control = self.estimator_ctrl.predict(X_trmnt)
 
             if isinstance(X_trmnt, np.ndarray):
                 X_trmnt_mod = np.column_stack((X_trmnt, ddr_control))
