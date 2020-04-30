@@ -355,7 +355,7 @@ class TwoModels(BaseEstimator):
             if self._type_of_target == 'binary':
                 ddr_treatment = self.estimator_trmnt.predict_proba(X_ctrl)[:, 1]
             else:
-                ddr_treatment = self.estimator_trmnt.predict(X_ctrl)[:, 1]
+                ddr_treatment = self.estimator_trmnt.predict(X_ctrl)
 
             if isinstance(X_ctrl, np.ndarray):
                 X_ctrl_mod = np.column_stack((X_ctrl, ddr_treatment))
@@ -393,13 +393,17 @@ class TwoModels(BaseEstimator):
                 X_mod = X.assign(ddr_control=self.ctrl_preds_)
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame, got %s" % type(X))
-            self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X_mod)[:, 1]
+
+            if self._type_of_target == 'binary':
+                self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X_mod)[:, 1]
+            else:
+                self.trmnt_preds_ = self.estimator_trmnt.predict(X_mod)
 
         elif self.method == 'ddr_treatment':
             if self._type_of_target == 'binary':
                 self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X)[:, 1]
             else:
-                self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X)[:, 1]
+                self.trmnt_preds_ = self.estimator_trmnt.predict(X)
 
             if isinstance(X, np.ndarray):
                 X_mod = np.column_stack((X, self.trmnt_preds_))
@@ -407,7 +411,11 @@ class TwoModels(BaseEstimator):
                 X_mod = X.assign(ddr_treatment=self.trmnt_preds_)
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame, got %s" % type(X))
-            self.ctrl_preds_ = self.estimator_ctrl.predict_proba(X_mod)[:, 1]
+
+            if self._type_of_target == 'binary':
+                self.ctrl_preds_ = self.estimator_ctrl.predict_proba(X_mod)[:, 1]
+            else:
+                self.ctrl_preds_ = self.estimator_ctrl.predict(X_mod)
 
         else:
             if self._type_of_target == 'binary':
