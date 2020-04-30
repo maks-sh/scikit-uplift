@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.utils.validation import check_consistent_length
+import warnings
 from ..metrics import uplift_curve, auuc, qini_curve, auqc, response_rate_by_percentile, treatment_balance_curve
 
 
@@ -18,7 +20,12 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     Returns:
         Object that stores computed values.
     """
-    # ToDo: Добавить квантиль как параметр
+    # ToDo: Add k as parameter: vertical line on plots
+    check_consistent_length(trmnt_preds, ctrl_preds)
+
+    if not isinstance(bins, int) or bins <= 0:
+        raise ValueError(f'Bins should be positive integer. Invalid value for bins: {bins}')
+
     if log:
         trmnt_preds = np.log(trmnt_preds + 1)
         ctrl_preds = np.log(ctrl_preds + 1)
@@ -56,6 +63,9 @@ def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=Fals
     Returns:
         Object that stores computed values.
     """
+    check_consistent_length(y_true, uplift, treatment)
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+
     x_up, y_up = uplift_curve(y_true, uplift, treatment)
     x_qi, y_qi = qini_curve(y_true, uplift, treatment)
 
@@ -65,11 +75,11 @@ def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=Fals
     axes[1].plot(x_qi, y_qi, label='Model', color='b')
 
     if random:
-        up_ratio_random = y_true[treatment == 1].sum() / len(y_true[treatment == 1]) - \
-                          y_true[treatment == 0].sum() / len(y_true[treatment == 0])
+        up_ratio_random = (y_true[treatment == 1].sum() / len(y_true[treatment == 1]) -
+                           y_true[treatment == 0].sum() / len(y_true[treatment == 0]))
         y_up_random = x_up * up_ratio_random
 
-        qi_ratio_random = (y_true[treatment == 1].sum() - len(y_true[treatment == 1]) * \
+        qi_ratio_random = (y_true[treatment == 1].sum() - len(y_true[treatment == 1]) *
                            y_true[treatment == 0].sum() / len(y_true[treatment == 0])) / len(y_true)
         y_qi_random = x_qi * qi_ratio_random
 
@@ -103,10 +113,10 @@ def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=Fals
 
 
 def plot_uplift_by_percentile(y_true, uplift, treatment, strategy, bins=10):
-    """Plot Uplift score at each percentile, 
-    Treatment response rate (target mean in the treatment group) 
+    """Plot Uplift score at each percentile,
+    Treatment response rate (target mean in the treatment group)
     and Control response rate (target mean in the control group) at each percentile.
-    
+
     Args:
         y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
@@ -119,62 +129,61 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy, bins=10):
             * ``'by_group'``:
                 Separately calculates conversions in top k observations in each group (control and treatment)
                 sorted by uplift predictions. Then the difference between these conversions is calculated
-        bins (int): Determines the number of bins (and relative percentile) in the test data. 
-        
+        bins (int): Determines the number of bins (and relative percentile) in the test data.
+
     Returns:
         Object that stores computed values.
     """
-    
+
     strategy_methods = ['overall', 'by_group']
-    
+
     n_samples = len(y_true)
     check_consistent_length(y_true, uplift, treatment)
-    
+
     if strategy not in strategy_methods:
         raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
                          f' got {strategy}.')
-    
+
     if not isinstance(bins, int) or bins <= 0:
-        raise ValueError(f'bins should be positive integer.'
-                         f' Invalid value bins: {bins}')
-          
+        raise ValueError(f'Bins should be positive integer. Invalid value bins: {bins}')
+
     if bins >= n_samples:
         raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
-    
+
     if bins == 1:
         warnings.warn(f'You will get the only one bin of {n_samples} samples'
                       f' which is the length of y_true.' 
                       f'\nPlease consider using uplift_at_k function instead',
                       UserWarning)
-        
+
     rspns_rate_trmnt, var_trmnt = response_rate_by_percentile(y_true, uplift,
                                                               treatment, group='treatment',
                                                               strategy=strategy, bins=bins)
-    
+
     rspns_rate_ctrl, var_ctrl = response_rate_by_percentile(y_true, uplift,
                                                             treatment, group='control',
                                                             strategy=strategy, bins=bins)
 
     uplift_score, uplift_variance = np.subtract(rspns_rate_trmnt, rspns_rate_ctrl), np.add(var_trmnt, var_ctrl)
-    
+
     percentiles = [p * 100 / bins for p in range(1, bins + 1)]
-    
+
     _, axes = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
-    
-    axes.errorbar(percentiles, uplift_score, yerr=np.sqrt(uplift_variance), 
+
+    axes.errorbar(percentiles, uplift_score, yerr=np.sqrt(uplift_variance),
                   linewidth=2, color='red', label='uplift')
     axes.errorbar(percentiles, rspns_rate_trmnt, yerr=np.sqrt(var_trmnt),
                   linewidth=2, color='forestgreen', label='treatment\nresponse rate')
     axes.errorbar(percentiles, rspns_rate_ctrl, yerr=np.sqrt(var_ctrl),
                   linewidth=2, color='orange', label='control\nresponse rate')
     axes.fill_between(percentiles, rspns_rate_ctrl, rspns_rate_trmnt, alpha=0.1, color='red')
-    
+
     axes.set_xticks(percentiles)
     axes.legend(loc='upper right')
     axes.set_title('Uplift by percentile')
     axes.set_xlabel('Percentile')
     axes.set_ylabel('Uplift = treatment response rate - control response rate')
-    
+
     return axes
 
 
