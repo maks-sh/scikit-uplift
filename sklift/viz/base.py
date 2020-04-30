@@ -123,15 +123,26 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy, kind='line', 
         y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
-        strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Defaults to 'first'.
+        strategy (string, ['overall', 'by_group']): Determines the calculating strategy.
+
             * ``'overall'``:
                 The first step is taking the first k observations of all test data ordered by uplift prediction
                 (overall both groups - control and treatment) and conversions in treatment and control groups
                 calculated only on them. Then the difference between these conversions is calculated.
+
             * ``'by_group'``:
                 Separately calculates conversions in top k observations in each group (control and treatment)
-                sorted by uplift predictions. Then the difference between these conversions is calculated
-        bins (int): Determines the number of bins (and relative percentile) in the test data.
+                sorted by uplift predictions. Then the difference between these conversions is calculated.
+
+        kind (string, ['line', 'bar']): The type of plot to draw. Default is 'line'.
+
+            * ``'line'``:
+                Generates a line plot.
+
+            * ``'bar'``:
+                Generates a traditional bar-style plot.
+
+        bins (int): Determines а number of bins (and а relative percentile) in the test data. Default is 10.
 
     Returns:
         Object that stores computed values.

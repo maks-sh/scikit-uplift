@@ -295,19 +295,25 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy, bins
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         group (string, ['treatment', 'control']): Group type for computing response rate: treatment or control.
+
             * ``'treatment'``:
                 Values equal 1 in the treatment column.
+
             * ``'control'``:
                 Values equal 0 in the treatment column.
+
         strategy (string, ['overall', 'by_group']): Determines the calculating strategy.
+
             * ``'overall'``:
                 The first step is taking the first k observations of all test data ordered by uplift prediction
                 (overall both groups - control and treatment) and conversions in treatment and control groups
                 calculated only on them. Then the difference between these conversions is calculated.
+
             * ``'by_group'``:
                 Separately calculates conversions in top k observations in each group (control and treatment)
-                sorted by uplift predictions. Then the difference between these conversions is calculated
-        bins (int): Determines the number of bins (and relative percentile) in the test data.
+                sorted by uplift predictions. Then the difference between these conversions is calculated.
+
+        bins (int): Determines а number of bins (and а relative percentile) in the test data. Default is 10.
 
     Returns:
         array: Response rate at each percentile for control or treatment group
