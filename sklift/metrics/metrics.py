@@ -286,7 +286,9 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
 
 
 def response_rate_by_percentile(y_true, uplift, treatment, group, strategy, bins=10):
-    """Compute response rate (target mean in the control or treatment group) at each percentile.
+    """Compute response rate and its variance at each percentile.
+
+    Response rate ia a target mean in the group.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
