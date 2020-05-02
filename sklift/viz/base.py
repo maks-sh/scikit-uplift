@@ -129,7 +129,6 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy, kind='line', 
                 The first step is taking the first k observations of all test data ordered by uplift prediction
                 (overall both groups - control and treatment) and conversions in treatment and control groups
                 calculated only on them. Then the difference between these conversions is calculated.
-
             * ``'by_group'``:
                 Separately calculates conversions in top k observations in each group (control and treatment)
                 sorted by uplift predictions. Then the difference between these conversions is calculated.
@@ -138,7 +137,6 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy, kind='line', 
 
             * ``'line'``:
                 Generates a line plot.
-
             * ``'bar'``:
                 Generates a traditional bar-style plot.
 
