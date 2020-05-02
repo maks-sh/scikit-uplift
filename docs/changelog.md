@@ -13,7 +13,7 @@ _in development_
 
 ### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
 
-* 🔨 Fix bug in [TwoModels](https://scikit-uplift.readthedocs.io/en/latest/api/models.html#sklift.models.models.TwoModels) (ddr_control) in regression models.
+* 🔨 Fix bugs in [TwoModels](https://scikit-uplift.readthedocs.io/en/latest/api/models.html#sklift.models.models.TwoModels) for regression problem.
 * 📝 Minor code refactoring.
 
 ### [sklift.metrics](https://scikit-uplift.readthedocs.io/en/latest/api/metrics.html)
@@ -22,6 +22,7 @@ _in development_
 
 ### [sklift.viz](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html)
 
+* 💥 Add bar plot in [plot_uplift_by_percentile](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.viz.base.plot_uplift_by_percentile) by [@ElisovaIra](https://github.com/ElisovaIra).
 * 🔨 Fix bug in [plot_uplift_by_percentile](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.viz.base.plot_uplift_by_percentile).
 * 📝 Minor code refactoring.
 
