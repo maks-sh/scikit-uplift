@@ -8,6 +8,24 @@
 * 🔨 something that previously didn’t work as documentated – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
+## Version 0.1.2
+_in development_
+
+### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
+
+* 🔨 Fix bugs in [TwoModels](https://scikit-uplift.readthedocs.io/en/latest/api/models.html#sklift.models.models.TwoModels) for regression problem.
+* 📝 Minor code refactoring.
+
+### [sklift.metrics](https://scikit-uplift.readthedocs.io/en/latest/api/metrics.html)
+
+* 📝 Minor code refactoring.
+
+### [sklift.viz](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html)
+
+* 💥 Add bar plot in [plot_uplift_by_percentile](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.viz.base.plot_uplift_by_percentile) by [@ElisovaIra](https://github.com/ElisovaIra).
+* 🔨 Fix bug in [plot_uplift_by_percentile](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.viz.base.plot_uplift_by_percentile).
+* 📝 Minor code refactoring.
+
 ## Version 0.1.1
 
 ### [sklift.viz](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html)
