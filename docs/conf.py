@@ -33,7 +33,7 @@ def get_version():
 # -- Project information -----------------------------------------------------
 
 project = 'scikit-uplift'
-author = 'Maksim Shevchenko'
+author = 'Maksim Shevchenko and Contributors'
 copyright = "{}, {}".format(datetime.datetime.now().year, author)
 
 # The full version, including alpha/beta/rc tags
@@ -46,8 +46,11 @@ release = get_version()
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc", "sphinx.ext.viewcode", "sphinx.ext.mathjax", "sphinx.ext.napoleon",
-    "recommonmark"
+    "sphinx.ext.autodoc",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.napoleon",
+    "recommonmark",
 ]
 
 master_doc = 'index'
@@ -58,7 +61,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'Readme.rst']
 
 
 # -- Options for HTML output -------------------------------------------------
