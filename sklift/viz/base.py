@@ -1,7 +1,7 @@
-import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.utils.validation import check_consistent_length
 import warnings
+import matplotlib.pyplot as plt
+from sklearn.utils.validation import check_consistent_length
 from ..metrics import uplift_curve, auuc, qini_curve, auqc, response_rate_by_percentile, treatment_balance_curve
 
 
@@ -20,7 +20,7 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     Returns:
         Object that stores computed values.
     """
-    # ToDo: Add k as parameter: vertical line on plots
+    # TODO: Add k as parameter: vertical line on plots
     check_consistent_length(trmnt_preds, ctrl_preds)
 
     if not isinstance(bins, int) or bins <= 0:
@@ -112,78 +112,116 @@ def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=Fals
     return axes
 
 
-def plot_uplift_by_percentile(y_true, uplift, treatment, strategy, bins=10):
-    """Plot Uplift score at each percentile, 
-    Treatment response rate (target mean in the treatment group) 
-    and Control response rate (target mean in the control group) at each percentile.
-    
+def plot_uplift_by_percentile(y_true, uplift, treatment, strategy, kind='line', bins=10):
+    """Plot uplift score, treatment response rate and control response rate at each percentile.
+
+    Treatment response rate ia a target mean in the treatment group.
+    Control response rate is a target mean in the control group.
+    Uplift score is a difference between treatment response rate and control response rate.
+
     Args:
         y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
-        strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Defaults to 'first'.
+        strategy (string, ['overall', 'by_group']): Determines the calculating strategy.
+
             * ``'overall'``:
                 The first step is taking the first k observations of all test data ordered by uplift prediction
                 (overall both groups - control and treatment) and conversions in treatment and control groups
                 calculated only on them. Then the difference between these conversions is calculated.
+
             * ``'by_group'``:
                 Separately calculates conversions in top k observations in each group (control and treatment)
-                sorted by uplift predictions. Then the difference between these conversions is calculated
-        bins (int): Determines the number of bins (and relative percentile) in the test data. 
-        
+                sorted by uplift predictions. Then the difference between these conversions is calculated.
+
+        kind (string, ['line', 'bar']): The type of plot to draw. Default is 'line'.
+
+            * ``'line'``:
+                Generates a line plot.
+
+            * ``'bar'``:
+                Generates a traditional bar-style plot.
+
+        bins (int): Determines а number of bins (and а relative percentile) in the test data. Default is 10.
+
     Returns:
         Object that stores computed values.
     """
-    
+
     strategy_methods = ['overall', 'by_group']
-    
+    kind_methods = ['line', 'bar']
+
     n_samples = len(y_true)
     check_consistent_length(y_true, uplift, treatment)
-    
+
     if strategy not in strategy_methods:
         raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
                          f' got {strategy}.')
-    
+
+    if kind not in kind_methods:
+        raise ValueError(f'Function supports only types of plots in {kind_methods},'
+                         f' got {kind}.')
+
     if not isinstance(bins, int) or bins <= 0:
         raise ValueError(f'Bins should be positive integer. Invalid value bins: {bins}')
 
     if bins >= n_samples:
         raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
-    
-    if bins == 1:
-        warnings.warn(f'You will get the only one bin of {n_samples} samples'
-                      f' which is the length of y_true.' 
-                      f'\nPlease consider using uplift_at_k function instead',
-                      UserWarning)
-        
+
     rspns_rate_trmnt, var_trmnt = response_rate_by_percentile(y_true, uplift,
                                                               treatment, group='treatment',
                                                               strategy=strategy, bins=bins)
-    
+
     rspns_rate_ctrl, var_ctrl = response_rate_by_percentile(y_true, uplift,
                                                             treatment, group='control',
                                                             strategy=strategy, bins=bins)
 
     uplift_score, uplift_variance = np.subtract(rspns_rate_trmnt, rspns_rate_ctrl), np.add(var_trmnt, var_ctrl)
-    
+
     percentiles = [p * 100 / bins for p in range(1, bins + 1)]
-    
-    _, axes = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
-    
-    axes.errorbar(percentiles, uplift_score, yerr=np.sqrt(uplift_variance), 
-                  linewidth=2, color='red', label='uplift')
-    axes.errorbar(percentiles, rspns_rate_trmnt, yerr=np.sqrt(var_trmnt),
-                  linewidth=2, color='forestgreen', label='treatment\nresponse rate')
-    axes.errorbar(percentiles, rspns_rate_ctrl, yerr=np.sqrt(var_ctrl),
-                  linewidth=2, color='orange', label='control\nresponse rate')
-    axes.fill_between(percentiles, rspns_rate_ctrl, rspns_rate_trmnt, alpha=0.1, color='red')
-    
-    axes.set_xticks(percentiles)
-    axes.legend(loc='upper right')
-    axes.set_title('Uplift by percentile')
-    axes.set_xlabel('Percentile')
-    axes.set_ylabel('Uplift = treatment response rate - control response rate')
-    
+
+    if kind == 'line':
+        _, axes = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
+        axes.errorbar(percentiles, uplift_score, yerr=np.sqrt(uplift_variance),
+                      linewidth=2, color='red', label='uplift')
+        axes.errorbar(percentiles, rspns_rate_trmnt, yerr=np.sqrt(var_trmnt),
+                      linewidth=2, color='forestgreen', label='treatment\nresponse rate')
+        axes.errorbar(percentiles, rspns_rate_ctrl, yerr=np.sqrt(var_ctrl),
+                      linewidth=2, color='orange', label='control\nresponse rate')
+        axes.fill_between(percentiles, rspns_rate_ctrl, rspns_rate_trmnt, alpha=0.1, color='red')
+
+        if np.amin(uplift_score) < 0:
+            axes.axhline(y=0, color='black', linewidth=1)
+        axes.set_xticks(percentiles)
+        axes.legend(loc='upper right')
+        axes.set_title('Uplift by percentile')
+        axes.set_xlabel('Percentile')
+        axes.set_ylabel('Uplift = treatment response rate - control response rate')
+
+    else:  # kind == 'bar'
+        delta = percentiles[0]
+        fig, axes = plt.subplots(ncols=1, nrows=2, figsize=(8, 6), sharex=True, sharey=True)
+        fig.text(0.04, 0.5, 'Uplift = treatment response rate - control response rate',
+                 va='center', ha='center', rotation='vertical')
+
+        axes[0].bar(np.array(percentiles), uplift_score, delta / 1.5,
+                    yerr=np.sqrt(uplift_variance), color='red', label='uplift')
+        axes[1].bar(np.array(percentiles) - delta / 6, rspns_rate_trmnt, delta / 3,
+                    yerr=np.sqrt(var_trmnt), color='forestgreen', label='treatment\nresponse rate')
+        axes[1].bar(np.array(percentiles) + delta / 6, rspns_rate_ctrl, delta / 3,
+                    yerr=np.sqrt(var_ctrl), color='orange', label='control\nresponse rate')
+
+        axes[0].legend(loc='upper right')
+        axes[0].tick_params(axis='x', bottom=False)
+        axes[0].axhline(y=0, color='black', linewidth=1)
+        axes[0].set_title('Uplift by percentile')
+
+        axes[1].set_xticks(percentiles)
+        axes[1].legend(loc='upper right')
+        axes[1].axhline(y=0, color='black', linewidth=1)
+        axes[1].set_xlabel('Percentile')
+        axes[1].set_title('Response rate by percentile')
+
     return axes
 
 
