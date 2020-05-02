@@ -207,10 +207,9 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
                 The first step is taking the first k observations of all test data ordered by uplift prediction
                 (overall both groups - control and treatment) and conversions in treatment and control groups
                 calculated only on them. Then the difference between these conversions is calculated.
-
             * ``'by_group'``:
                 Separately calculates conversions in top k observations in each group (control and treatment)
-                sorted by uplift predictions. Then the difference between these conversions is calculated
+                sorted by uplift predictions. Then the difference between these conversions is calculated.
 
     .. versionchanged:: 0.1.0
 
@@ -298,7 +297,6 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy, bins
 
             * ``'treatment'``:
                 Values equal 1 in the treatment column.
-
             * ``'control'``:
                 Values equal 0 in the treatment column.
 
@@ -308,7 +306,6 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy, bins
                 The first step is taking the first k observations of all test data ordered by uplift prediction
                 (overall both groups - control and treatment) and conversions in treatment and control groups
                 calculated only on them. Then the difference between these conversions is calculated.
-
             * ``'by_group'``:
                 Separately calculates conversions in top k observations in each group (control and treatment)
                 sorted by uplift predictions. Then the difference between these conversions is calculated.
