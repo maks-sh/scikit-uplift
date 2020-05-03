@@ -22,6 +22,7 @@ class SoloModel(BaseEstimator):
     Args:
         estimator (estimator object implementing 'fit'): The object to use to fit the data.
         method (string, ’dummy’ or ’treatment_interaction’, default='dummy'): Specifies the approach:
+        
             * ``'dummy'``:
                 single model;
             * ``'treatment_interaction'``:
