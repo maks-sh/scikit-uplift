@@ -22,8 +22,10 @@ class SoloModel(BaseEstimator):
     Args:
         estimator (estimator object implementing 'fit'): The object to use to fit the data.
         method (string, ’dummy’ or ’treatment_interaction’, default='dummy'): Specifies the approach:
-            * ’dummy’ - single model
-            * ’treatment_interaction’ - single model including treatment interactions
+            * ``'dummy'``:
+                single model;
+            * ``'treatment_interaction'``:
+                single model including treatment interactions.
 
     Attributes:
         trmnt_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when treatment.
@@ -47,7 +49,6 @@ class SoloModel(BaseEstimator):
 
     .. _SoloModel in documentation:
         https://scikit-uplift.readthedocs.io/en/latest/api/models.html#one-model-with-treatment-as-feature
-
     """
 
     def __init__(self, estimator, method='dummy'):
@@ -63,8 +64,7 @@ class SoloModel(BaseEstimator):
                              " %s." % (all_methods, method))
 
     def fit(self, X, y, treatment, estimator_fit_params=None):
-        """
-        Fit the model according to the given training data.
+        """Fit the model according to the given training data.
 
         For each test example calculate predictions on new set twice: by the first and second models.
         After that calculate uplift as a delta between these predictions.
@@ -72,8 +72,8 @@ class SoloModel(BaseEstimator):
         Return delta of predictions for each example.
 
         Args:
-            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples and
-                n_features is the number of features.
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of
+                samples and n_features is the number of features.
             y (array-like, shape (n_samples,)): Target vector relative to X.
             treatment (array-like, shape (n_samples,)): Binary treatment vector relative to X.
             estimator_fit_params (dict, optional): Parameters to pass to the fit method of the estimator.
@@ -114,8 +114,7 @@ class SoloModel(BaseEstimator):
         return self
 
     def predict(self, X):
-        """
-        Perform uplift on samples in X.
+        """Perform uplift on samples in X.
 
         Args:
             X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples
@@ -124,6 +123,7 @@ class SoloModel(BaseEstimator):
         Returns:
             array (shape (n_samples,)): uplift
         """
+
         if self.method == 'dummy':
             if isinstance(X, np.ndarray):
                 X_mod_trmnt = np.column_stack((X, np.ones(X.shape[0])))
@@ -203,8 +203,7 @@ class ClassTransformation(BaseEstimator):
         self._type_of_target = None
 
     def fit(self, X, y, treatment, estimator_fit_params=None):
-        """
-        Fit the model according to the given training data.
+        """Fit the model according to the given training data.
 
         Args:
             X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples and
@@ -223,7 +222,6 @@ class ClassTransformation(BaseEstimator):
 
         if self._type_of_target != 'binary':
             raise ValueError("This approach is only suitable for binary classification problem")
-        # TODO: Заменить raise на Warning
         _, treatment_counts = np.unique(treatment, return_counts=True)
         if treatment_counts[0] != treatment_counts[1]:
             warnings.warn(
@@ -240,8 +238,7 @@ class ClassTransformation(BaseEstimator):
         return self
 
     def predict(self, X):
-        """
-        Perform uplift on samples in X.
+        """Perform uplift on samples in X.
 
         Args:
             X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples
@@ -256,6 +253,7 @@ class ClassTransformation(BaseEstimator):
 
 class TwoModels(BaseEstimator):
     """aka naïve approach, or difference score method, or double classifier approach.
+
     Fit two separate models: on the treatment data and on the control data.
 
     See more details about `TwoModels in documentation`_.
@@ -263,10 +261,14 @@ class TwoModels(BaseEstimator):
     Args:
         estimator_trmnt (estimator object implementing 'fit'): The object to use to fit the treatment data.
         estimator_ctrl (estimator object implementing 'fit'): The object to use to fit the control data.
-        method (string, ‘vanilla’, ’ddr_control’ or ‘ddr_treatment’, default='vanilla'): Specifies the approach:
-            * ‘vanilla’ - two independent models
-            * ’ddr_control’ -  dependent data representation (First train control estimator)
-            * ’ddr_treatment’ -  dependent data representation (First train treatment estimator)
+        method (string, 'vanilla', 'ddr_control' or 'ddr_treatment', default='vanilla'): Specifies the approach:
+
+            * ``'vanilla'``:
+                Two independent models;
+            * ``'ddr_control'``:
+                Dependent data representation (First train control estimator).
+            * ``'ddr_treatment'``:
+                Dependent data representation (First train treatment estimator).
 
     Attributes:
         trmnt_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when treatment.
@@ -329,8 +331,7 @@ class TwoModels(BaseEstimator):
             raise ValueError('Control and Treatment estimators should be different objects.')
 
     def fit(self, X, y, treatment, estimator_trmnt_fit_params=None, estimator_ctrl_fit_params=None):
-        """
-        Fit the model according to the given training data.
+        """Fit the model according to the given training data.
 
         For each test example calculate predictions on new set twice: by the first and second models.
         After that calculate uplift as a delta between these predictions.
@@ -338,12 +339,14 @@ class TwoModels(BaseEstimator):
         Return delta of predictions for each example.
 
         Args:
-            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples and
-                n_features is the number of features.
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number
+                of samples and n_features is the number of features.
             y (array-like, shape (n_samples,)): Target vector relative to X.
             treatment (array-like, shape (n_samples,)): Binary treatment vector relative to X.
-            estimator_trmnt_fit_params (dict, optional): Parameters to pass to the fit method of the treatment estimator.
-            estimator_ctrl_fit_params (dict, optional): Parameters to pass to the fit method of the control estimator.
+            estimator_trmnt_fit_params (dict, optional): Parameters to pass to the fit method
+                of the treatment estimator.
+            estimator_ctrl_fit_params (dict, optional): Parameters to pass to the fit method
+                of the control estimator.
 
         Returns:
             object: self
@@ -375,11 +378,11 @@ class TwoModels(BaseEstimator):
             if self._type_of_target == 'binary':
                 ddr_control = self.estimator_ctrl.predict_proba(X_trmnt)[:, 1]
             else:
-                ddr_control = self.estimator_ctrl.predict_(X_trmnt)
+                ddr_control = self.estimator_ctrl.predict(X_trmnt)
 
             if isinstance(X_trmnt, np.ndarray):
                 X_trmnt_mod = np.column_stack((X_trmnt, ddr_control))
-            elif isinstance(X_trmnt, pd.core.frame.DataFrame):
+            elif isinstance(X_trmnt, pd.DataFrame):
                 X_trmnt_mod = X_trmnt.assign(ddr_control=ddr_control)
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame, got %s" % type(X_trmnt))
@@ -395,11 +398,11 @@ class TwoModels(BaseEstimator):
             if self._type_of_target == 'binary':
                 ddr_treatment = self.estimator_trmnt.predict_proba(X_ctrl)[:, 1]
             else:
-                ddr_treatment = self.estimator_trmnt.predict(X_ctrl)[:, 1]
+                ddr_treatment = self.estimator_trmnt.predict(X_ctrl)
 
             if isinstance(X_ctrl, np.ndarray):
                 X_ctrl_mod = np.column_stack((X_ctrl, ddr_treatment))
-            elif isinstance(X_trmnt, pd.core.frame.DataFrame):
+            elif isinstance(X_trmnt, pd.DataFrame):
                 X_ctrl_mod = X_ctrl.assign(ddr_treatment=ddr_treatment)
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame, got %s" % type(X_ctrl))
@@ -411,8 +414,7 @@ class TwoModels(BaseEstimator):
         return self
 
     def predict(self, X):
-        """
-        Perform uplift on samples in X.
+        """Perform uplift on samples in X.
 
         Args:
             X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples
@@ -430,25 +432,33 @@ class TwoModels(BaseEstimator):
 
             if isinstance(X, np.ndarray):
                 X_mod = np.column_stack((X, self.ctrl_preds_))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod = X.assign(ddr_control=self.ctrl_preds_)
             else:
-                raise TypeError("Expected numpy.ndarray or pandas.DataFrame, got %s" % type(X_mod))
-            self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X_mod)[:, 1]
+                raise TypeError("Expected numpy.ndarray or pandas.DataFrame, got %s" % type(X))
+
+            if self._type_of_target == 'binary':
+                self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X_mod)[:, 1]
+            else:
+                self.trmnt_preds_ = self.estimator_trmnt.predict(X_mod)
 
         elif self.method == 'ddr_treatment':
             if self._type_of_target == 'binary':
                 self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X)[:, 1]
             else:
-                self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X)[:, 1]
+                self.trmnt_preds_ = self.estimator_trmnt.predict(X)
 
             if isinstance(X, np.ndarray):
                 X_mod = np.column_stack((X, self.trmnt_preds_))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod = X.assign(ddr_treatment=self.trmnt_preds_)
             else:
-                raise TypeError("Expected numpy.ndarray or pandas.DataFrame, got %s" % type(X_mod))
-            self.ctrl_preds_ = self.estimator_ctrl.predict_proba(X_mod)[:, 1]
+                raise TypeError("Expected numpy.ndarray or pandas.DataFrame, got %s" % type(X))
+
+            if self._type_of_target == 'binary':
+                self.ctrl_preds_ = self.estimator_ctrl.predict_proba(X_mod)[:, 1]
+            else:
+                self.ctrl_preds_ = self.estimator_ctrl.predict(X_mod)
 
         else:
             if self._type_of_target == 'binary':
