@@ -16,10 +16,24 @@ we get the required uplift.
 
 .. image:: ../_static/images/SoloModel.png
     :align: center
-    :alt: Solo model
+    :alt: Solo model dummy method
+
+.. hint::
+    In sklift this approach corresponds to the `SoloModel` class and the **dummy** method.
+
+This approach has various modifications. For example, double the number of attributes by adding
+the product of each attribute to the interaction flag:
+
+.. image:: ../_static/images/SoloModel_treatment_intercation.png
+    :align: center
+    :alt: Solo model treatment interaction method
+
+.. hint::
+    In sklift this approach corresponds to the `SoloModel` class and the **treatment_interaction** method.
 
 .. autoclass:: sklift.models.models.SoloModel
     :members:
+
 
 1.2 Class Transformation
 *************************
