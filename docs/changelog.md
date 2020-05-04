@@ -8,6 +8,14 @@
 * 🔨 something that previously didn’t work as documentated – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
+## Version 0.2.0
+_in development_
+
+### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
+
+* 💥 Add `treatment interaction` method to [SoloModel](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.models.models.SoloModel) approach by [@AdiVarma27](https://github.com/AdiVarma27).
+
+
 ## Version 0.1.2
 
 ### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
