@@ -17,7 +17,9 @@ _in development_
 
 ### Miscellaneous
 
+* 📝 Reformat [Tutorials](https://scikit-uplift.readthedocs.io/en/latest/tutorials.html) page.
 * 📝 Add contributors in main Readme and in index page of docs.
+* 📝 Add logo compatibility with pypi.
 
 ## Version 0.1.2
 
