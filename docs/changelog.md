@@ -15,6 +15,9 @@ _in development_
 
 * 💥 Add `treatment interaction` method to [SoloModel](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.models.models.SoloModel) approach by [@AdiVarma27](https://github.com/AdiVarma27).
 
+### Miscellaneous
+
+* 📝 Add contributors in main Readme and in index page of docs.
 
 ## Version 0.1.2
 
