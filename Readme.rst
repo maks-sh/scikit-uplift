@@ -27,7 +27,7 @@
 .. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
 .. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
 
-.. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/dev/docs/_static/soc_net_logo.png
+.. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/dev/docs/_static/sklift-github-logo.png
     :align: center
     :alt: scikit-uplift: uplift modeling in scikit-learn style in python
 
