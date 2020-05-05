@@ -20,17 +20,17 @@ More about uplift modelling problem read in russian on habr.com: `Part 1`_ and `
 Features
 #########
 
-* Comfortable and intuitive style of modelling like scikit-learn;
+- Comfortable and intuitive style of modelling like scikit-learn;
 
-* Applying any estimator adheres to scikit-learn conventions;
+- Applying any estimator adheres to scikit-learn conventions;
 
-* All approaches can be used in sklearn.pipeline (see example (`EN <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`_ |Open In Colab3|_, `RU <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`_ |Open In Colab4|_))
+- All approaches can be used in sklearn.pipeline. See example of usage: |Open In Colab3|_.
 
-* Almost all implemented approaches solve both the problem of classification and regression;
+- Almost all implemented approaches solve both the problem of classification and regression;
 
-* A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model;
+- A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model;
 
-* Useful graphs for analyzing the built model.
+- Useful graphs for analyzing the built model.
 
 
 **The package currently supports the following methods:**
@@ -50,7 +50,46 @@ Project info
 
 * GitHub repository: https://github.com/maks-sh/scikit-uplift
 * Github examples: https://github.com/maks-sh/scikit-uplift/tree/master/notebooks
+* Documentation: https://scikit-uplift.readthedocs.io/en/latest/
+* Contributing guide: https://scikit-uplift.readthedocs.io/en/latest/contributing.html
 * License: MIT
+
+Contributing
+#############
+
+We welcome new contributors of all experience levels. Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
+
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/0
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/0
+   :alt: 0
+
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/1
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/1
+   :alt: 1
+
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/2
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/2
+   :alt: 2
+
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/3
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/3
+   :alt: 3
+
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
+   :alt: 4
+
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
+   :alt: 5
+
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
+   :alt: 6
+
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
+   :alt: 7
 
 .. toctree::
    :hidden:
@@ -65,6 +104,7 @@ Project info
    quick_start
    api/index
    tutorials
+   contributing
    changelog
    hall_of_fame
 

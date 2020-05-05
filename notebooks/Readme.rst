@@ -19,10 +19,34 @@ Basic
 
 It is better to start scikit-uplift from the basic tutorials.
 
-* `The overview of the basic approaches to solving the Uplift Modeling problem`_
-    * In English: `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb>`_ | `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb>`_   |Open In Colab1|
-    * In Russian: `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb>`_ | `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb>`_   |Open In Colab2|
+`The overview of the basic approaches to solving the Uplift Modeling problem`_
+----------------------------------------------------------------------------------
 
-* `Example of usage model from sklift.models in sklearn.pipeline`_
-    * In English: `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`_ | `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`_   |Open In Colab3|
-    * In Russian: `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`_ | `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`_   |Open In Colab4|
+.. list-table::
+    :align: center
+    :widths: 12 15 10 8
+
+    * - In English 🇬🇧
+      - |Open In Colab1|
+      - `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb>`__
+      - `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb>`__
+    * - In Russian 🇷🇺
+      - |Open In Colab2|
+      - `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb>`__
+      - `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb>`__
+
+`Example of usage model from sklift.models in sklearn.pipeline`_
+----------------------------------------------------------------------------------
+
+.. list-table::
+    :align: center
+    :widths: 12 15 10 8
+
+    * - In English 🇬🇧
+      - |Open In Colab3|
+      - `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`__
+      - `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`__
+    * - In Russian 🇷🇺
+      - |Open In Colab4|
+      - `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__
+      - `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__
