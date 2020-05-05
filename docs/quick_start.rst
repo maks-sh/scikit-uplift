@@ -18,16 +18,18 @@ See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open I
 **Train and predict your uplift model**
 
 .. code-block:: python
+    :linenos:
 
     # import approaches
     from sklift.models import SoloModel, ClassTransformation, TwoModels
     # import any estimator adheres to scikit-learn conventions.
     from catboost import CatBoostClassifier
 
+
     # define approach
     sm = SoloModel(CatBoostClassifier(verbose=100, random_state=777))
     # fit model
-    sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})
+    sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={'plot': True})
 
     # predict uplift
     uplift_sm = sm.predict(X_val)
@@ -35,9 +37,12 @@ See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open I
 **Evaluate your uplift model**
 
 .. code-block:: python
+    :linenos:
 
     # import metrics to evaluate your model
     from sklift.metrics import qini_auc_score, uplift_auc_score, uplift_at_k
+
+
     # Uplift@30%
     sm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_sm, treatment=treat_val, k=0.3)
     # Area Under Qini Curve
@@ -48,9 +53,11 @@ See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open I
 **Vizualize the results**
 
 .. code-block:: python
+    :linenos:
 
     # import vizualisation tools
     from sklift.viz import plot_uplift_preds, plot_uplift_qini_curves
+
 
     # get conditional predictions (probabilities) of performing a target action
     # with interaction for each object

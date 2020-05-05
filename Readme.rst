@@ -27,15 +27,9 @@
 .. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
 .. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
 
-.. raw:: html
-
-    <div align="center">
-        <a href="https://pypi.org/project/scikit-uplift/">
-            <img src="https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/sklift-logo.png" alt="scikit-uplift (sklift) logo" height="256px" width="256px" style="display: block; margin: 0 auto;">
-        </a>
-        </br>
-        <b>uplift modeling in scikit-learn style in python</b>
-    </div>
+.. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/images/soc_net_logo.png
+    :align: center
+    :alt: scikit-uplift: uplift modeling in scikit-learn style in python
 
 
 scikit-uplift
@@ -110,7 +104,7 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
     # define approach
     sm = SoloModel(CatBoostClassifier(verbose=100, random_state=777))
     # fit model
-    sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})
+    sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={'plot': True})
 
     # predict uplift
     uplift_sm = sm.predict(X_val)
