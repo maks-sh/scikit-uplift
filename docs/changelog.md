@@ -17,8 +17,10 @@ _in development_
 
 ### Miscellaneous
 
+* 💥 Add contributors in main Readme and in index page of docs.
+* 💥 Add [contributing guide](https://scikit-uplift.readthedocs.io/en/latest/contributing.html).
+* 💥 Add [code of conduct](https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md).
 * 📝 Reformat [Tutorials](https://scikit-uplift.readthedocs.io/en/latest/tutorials.html) page.
-* 📝 Add contributors in main Readme and in index page of docs.
 * 📝 Add logo compatibility with pypi.
 
 ## Version 0.1.2
