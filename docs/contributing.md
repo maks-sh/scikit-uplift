@@ -2,12 +2,12 @@
 
 First off, thanks for taking the time to contribute! 🙌👍🎉
 
-All development is done on GitHub: https://github.com/maks-sh/scikit-uplift.
+All development is done on GitHub: [https://github.com/maks-sh/scikit-uplift](https://github.com/maks-sh/scikit-uplift).
 
 ## Submitting a bug report or a feature request
 
 We use GitHub issues to track all bugs and feature requests.
-Feel free to open an issue if you have found a bug or wish to see a feature implemented at https://github.com/maks-sh/scikit-uplift/issues.
+Feel free to open an issue if you have found a bug or wish to see a feature implemented at [https://github.com/maks-sh/scikit-uplift/issues](https://github.com/maks-sh/scikit-uplift/issues).
 
 ## Contributing code
 
@@ -53,6 +53,7 @@ We follow the PEP8 style guide for Python. Docstrings follow google style.
 #### Git Commit Messages
 
 * Use the present tense ("Add feature" not "Added feature")
-* Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
+* Use the imperative mood ("Move file to..." not "Moves file to...")
 * Limit the first line to 72 characters or less
 * Reference issues and pull requests liberally after the first line
+* If you want to use emojis, use them at the beginning of the line.

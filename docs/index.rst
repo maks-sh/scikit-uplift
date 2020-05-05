@@ -51,12 +51,13 @@ Project info
 * GitHub repository: https://github.com/maks-sh/scikit-uplift
 * Github examples: https://github.com/maks-sh/scikit-uplift/tree/master/notebooks
 * Documentation: https://scikit-uplift.readthedocs.io/en/latest/
+* Contributing guide: https://scikit-uplift.readthedocs.io/en/latest/contributing.html
 * License: MIT
 
 Contributing
 #############
 
-Contributions are welcome!
+We welcome new contributors of all experience levels. Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/0
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/0
@@ -103,6 +104,7 @@ Contributions are welcome!
    quick_start
    api/index
    tutorials
+   contributing
    changelog
    hall_of_fame
 

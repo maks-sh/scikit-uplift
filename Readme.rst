@@ -151,7 +151,7 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
 Development
 -----------
 
-We welcome new contributors of all experience levels.
+We welcome new contributors of all experience levels. Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
 
 Contributing
 ~~~~~~~~~~~~~~~
@@ -194,8 +194,9 @@ Important links
 
 - Official source code repo: https://github.com/maks-sh/scikit-uplift/
 - Issue tracker: https://github.com/maks-sh/scikit-uplift/issues
-- Release History: https://scikit-uplift.readthedocs.io/en/latest/changelog.html
 - Documentation: https://scikit-uplift.readthedocs.io/en/latest/
+- Contributing guide: https://scikit-uplift.readthedocs.io/en/latest/contributing.html
+- Release History: https://scikit-uplift.readthedocs.io/en/latest/changelog.html
 
 ===============
 
