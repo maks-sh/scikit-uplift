@@ -101,6 +101,7 @@ We welcome new contributors of all experience levels. Please see our `Contributi
    :caption: Contents
 
    install
+   user_guide/index
    quick_start
    api/index
    tutorials
