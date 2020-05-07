@@ -1,10 +1,15 @@
+.. meta::
+    :description lang=en:
+        sklift.models api reference of scikit-uplift python package to create uplift model.
+
 ************************
 Models (sklift.models)
 ************************
 
+The ``sklift.models`` module implements a variety of uplift modeling approaches.
+
 1. Approaches with the same model
 ##################################
-
 
 1.1 One model with treatment as feature
 ***************************************

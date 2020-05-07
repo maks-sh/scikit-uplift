@@ -1,4 +1,6 @@
-.. -*- mode: rst -*-
+.. meta::
+    :description lang=en:
+        scikit-uplift (sklift) quick start tutorial. Make your first uplift model and evaluate it in python.
 
 .. _RU: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 .. _EN: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
