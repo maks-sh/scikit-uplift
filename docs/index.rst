@@ -1,6 +1,6 @@
 .. meta::
     :description lang=en:
-        scikit-uplift (sklift) is a Python module for uplift modeling in scikit-learn style.
+        scikit-uplift (sklift) is a Python module for uplift modeling and causal inference in scikit-learn style.
 
 .. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
 .. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
