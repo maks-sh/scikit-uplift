@@ -61,35 +61,35 @@ We welcome new contributors of all experience levels. Please see our `Contributi
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/0
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/0
-   :alt: 0
+   :alt: Contributor 0
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/1
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/1
-   :alt: 1
+   :alt: Contributor 1
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/2
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/2
-   :alt: 2
+   :alt: Contributor 2
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/3
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/3
-   :alt: 3
+   :alt: Contributor 3
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
-   :alt: 4
+   :alt: Contributor 4
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
-   :alt: 5
+   :alt: Contributor 5
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
-   :alt: 6
+   :alt: Contributor 6
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
-   :alt: 7
+   :alt: Contributor 7
 
 .. toctree::
    :hidden:
