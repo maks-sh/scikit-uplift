@@ -8,10 +8,10 @@ Clients
 
 It is customary to distinguish 4 types of clients based on their response to a treatment:
 
-.. image:: https://habrastorage.org/webt/mb/ed/iw/mbediw3l1dh76tk6_0-zgaxz-ss.jpeg
+.. image:: ../../_static/images/user_guide/ug_clients_types.jpg
    :alt: Classification of clients based on their response to a treatment
-   :width: 250 px
-   :height: 250 px
+   :width: 268 px
+   :height: 282 px
    :align: center
 
 - :guilabel:`Do-Not-Disturbs` *(aka Sleeping-dogs)* have a negative reaction to the marketing contact. They will purchase if NOT contacted, but will NOT purchase if contacted. The marketing budget applied to these contacts is not only wasted, it also has a negative impact on the results. For example, populations targeted for retention efforts by standard response models could result in withdrawing from current products or services.
