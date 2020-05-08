@@ -6,7 +6,7 @@ from sklearn.metrics import auc
 
 
 def uplift_curve(y_true, uplift, treatment):
-    """Compute Uplift curve
+    """Compute Uplift curve.
 
     This is a general function, given points on a curve.  For computing the
     area under the Uplift Curve, see :func:`uplift_auc_score`.
@@ -20,9 +20,11 @@ def uplift_curve(y_true, uplift, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`uplift_auc_score`: Compute the area under the Uplift curve.
+        :func:`.uplift_auc_score`: Compute the area under the Uplift curve from prediction scores.
 
-        :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+
+        :func:`.uplift_at_k`: Compute uplift at first k percentage of the total sample.
     """
 
     # TODO: check the treatment is binary
@@ -73,9 +75,9 @@ def qini_curve(y_true, uplift, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`qini_auc_score`: Compute the area under the Qini curve.
+        :func:`.qini_auc_score`: Compute the area under the Qini Curve (Qini coefficient) from prediction scores.
 
-        :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
     # TODO: check the treatment is binary
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
@@ -113,7 +115,7 @@ def qini_curve(y_true, uplift, treatment):
 
 
 def uplift_auc_score(y_true, uplift, treatment):
-    """Compute Area Under the Uplift Curve from prediction scores.
+    """Compute the area under the uplift curve from prediction scores.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -122,6 +124,13 @@ def uplift_auc_score(y_true, uplift, treatment):
 
     Returns:
         float: Area Under the Uplift Curve.
+
+    See also:
+        :func:`.qini_auc_score`: Compute the area under the Qini Curve (Qini coefficient) from prediction scores.
+
+        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+
+        :func:`.uplift_at_k`: Compute uplift at first k percentage of the total sample.
     """
     # ToDO: Add normalization
     # ToDO: Add baseline
@@ -153,7 +162,7 @@ def auuc(y_true, uplift, treatment):
 
 
 def qini_auc_score(y_true, uplift, treatment):
-    """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
+    """Compute the area under the Qini Curve (Qini coefficient) from prediction scores.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -162,6 +171,11 @@ def qini_auc_score(y_true, uplift, treatment):
 
     Returns:
         float: Area Under the Qini Curve.
+
+    See also:
+        :func:`.uplift_auc_score`: Compute the area under the uplift curve from prediction scores.
+
+        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
     # ToDO: Add normalization
     # ToDO: Add baseline
@@ -193,7 +207,7 @@ def auqc(y_true, uplift, treatment):
 
 
 def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
-    """Compute uplift at first k percentage of the total sample.
+    """Compute uplift at the first k percentage of the total sample.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -218,6 +232,11 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
 
     Returns:
         float: Uplift score at first k observations of the total sample.
+
+    See also:
+        :func:`uplift_auc_score`: Compute the area under the Uplift curve from prediction scores.
+
+        :func:`qini_auc_score`: Compute the area under the Qini curve (aka Qini coefficient) from prediction scores.
 
     """
     # ToDo: checker that treatment is binary and all groups is not empty
