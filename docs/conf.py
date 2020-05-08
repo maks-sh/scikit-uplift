@@ -51,6 +51,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "recommonmark",
+    "sphinx.ext.intersphinx"
 ]
 
 master_doc = 'index'
@@ -86,3 +87,9 @@ html_show_sourcelink = False
 
 # Add supporting *.md files by recommonmark extension
 source_suffix = ['.rst', '.md']
+
+html_theme_options = {
+    'navigation_depth': 3,
+}
+
+trim_footnote_reference_space = True
