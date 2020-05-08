@@ -1,10 +1,10 @@
-***
-API
-***
+************
+API sklift
+************
 
 .. toctree::
    :maxdepth: 2
 
-   ./models
-   ./metrics
-   ./viz
+   ./models/index
+   ./metrics/index
+   ./viz/index
