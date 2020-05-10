@@ -24,6 +24,9 @@ try:
 except FileNotFoundError:
     REQUIRED = []
 
+# What packages are optional?
+EXTRAS = {"test": ["pytest"]}
+
 
 def get_version():
     version_file = os.path.join(here, "sklift", "__init__.py")
@@ -75,6 +78,7 @@ setup(
     url=URL,
     packages=find_packages(exclude=["tests", "docs", "images"]),
     install_requires=REQUIRED,
+    extras_require=EXTRAS,
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
