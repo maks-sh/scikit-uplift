@@ -1,3 +1,9 @@
+.. meta::
+    :description lang=en:
+        Solutions of machine learning competitions and contests about uplift modeling
+        in python where scikit-uplift (sklift) was used
+
+
 *************
 Hall of Fame
 *************

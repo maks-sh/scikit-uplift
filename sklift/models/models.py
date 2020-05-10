@@ -99,10 +99,13 @@ class SoloModel(BaseEstimator):
 
         if self.method == 'treatment_interaction':
             if isinstance(X, np.ndarray):
-                X_mod = np.column_stack((X, np.multiply(X, treatment.reshape(-1,1)), treatment))
+                X_mod = np.column_stack((X, np.multiply(X, np.array(treatment).reshape(-1, 1)), treatment))
             elif isinstance(X, pd.core.frame.DataFrame):
-                X_mod = pd.concat([X, X.apply(lambda x: x*treatment)\
-                    .rename(columns=lambda x: x + '_treatment_interaction')], axis=1)\
+                X_mod = pd.concat([
+                    X,
+                    X.apply(lambda x: x * treatment)
+                        .rename(columns=lambda x: str(x) + '_treatment_interaction')
+                ], axis=1)\
                     .assign(treatment=treatment)
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))           
@@ -140,12 +143,18 @@ class SoloModel(BaseEstimator):
                 X_mod_trmnt = np.column_stack((X, np.multiply(X, np.ones((X.shape[0], 1))), np.ones(X.shape[0])))
                 X_mod_ctrl = np.column_stack((X, np.multiply(X, np.zeros((X.shape[0], 1))), np.zeros(X.shape[0])))
             elif isinstance(X, pd.core.frame.DataFrame):
-                X_mod_trmnt = pd.concat([X, X.apply(lambda x: x*np.ones(X.shape[0]))\
-                    .rename(columns=lambda x: x + '_treatment_interaction')], axis=1)\
+                X_mod_trmnt = pd.concat([
+                    X,
+                    X.apply(lambda x: x * np.ones(X.shape[0]))
+                        .rename(columns=lambda x: str(x) + '_treatment_interaction')
+                ], axis=1)\
                     .assign(treatment=np.ones(X.shape[0]))
-                X_mod_ctrl = pd.concat([X, X.apply(lambda x: x*np.zeros(X.shape[0]))\
-                    .rename(columns=lambda x: x + '_treatment_interaction')], axis=1)\
-                    .assign(treatment=np.zeros(X.shape[0]))   
+                X_mod_ctrl = pd.concat([
+                    X,
+                    X.apply(lambda x: x * np.zeros(X.shape[0]))
+                        .rename(columns=lambda x: str(x) + '_treatment_interaction')
+                ], axis=1)\
+                    .assign(treatment=np.zeros(X.shape[0]))
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))
 
