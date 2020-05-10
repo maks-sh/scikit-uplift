@@ -99,7 +99,7 @@ class SoloModel(BaseEstimator):
 
         if self.method == 'treatment_interaction':
             if isinstance(X, np.ndarray):
-                X_mod = np.column_stack((X, np.multiply(X, treatment.reshape(-1, 1)), treatment))
+                X_mod = np.column_stack((X, np.multiply(X, np.array(treatment).reshape(-1, 1)), treatment))
             elif isinstance(X, pd.core.frame.DataFrame):
                 X_mod = pd.concat([
                     X,
