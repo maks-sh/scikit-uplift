@@ -1,10 +1,15 @@
+.. meta::
+    :description lang=en:
+        sklift.models api reference of scikit-uplift python package to create uplift model.
+
 ************************
 Models (sklift.models)
 ************************
 
+The ``sklift.models`` module implements a variety of uplift modeling approaches.
+
 1. Approaches with the same model
 ##################################
-
 
 1.1 One model with treatment as feature
 ***************************************
@@ -16,7 +21,7 @@ we get the required uplift.
 
 .. image:: ../_static/images/SoloModel.png
     :align: center
-    :alt: Solo model dummy method
+    :alt: Uplift solo model: dummy method
 
 .. hint::
     In sklift this approach corresponds to the `SoloModel` class and the **dummy** method.
@@ -29,7 +34,7 @@ the product of each attribute to the interaction flag:
 
 .. image:: ../_static/images/SoloModel_treatment_intercation.png
     :align: center
-    :alt: Solo model treatment interaction method
+    :alt: Uplift solo model: treatment interaction method
 
 .. hint::
     In sklift this approach corresponds to the `SoloModel` class and the **treatment_interaction** method.
@@ -133,7 +138,7 @@ separately and can therefore skip the "weaker" differences in the samples.
 
 .. image:: ../_static/images/TwoModels_vanila.png
     :align: center
-    :alt: Two independent models vanila
+    :alt: Uplift two independent models: vanilla method
 
 2.2 Two dependent models
 *************************
@@ -168,7 +173,7 @@ the uplift itself.
 
 .. image:: ../_static/images/TwoModels_ddr_control.png
     :align: center
-    :alt: Two independent models dependent data representation control
+    :alt: Uplift two independent models: dependent data representation (control first) method
 
 Similarly, you can first train the :math:`P_T` classifier and then use its predictions as a trait for
 the :math:`P_C` classifier.
