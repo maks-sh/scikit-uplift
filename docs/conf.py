@@ -78,6 +78,7 @@ html_static_path = ['_static']
 html_css_files = [
     'custom.css',
 ]
+html_js_files = ['https://buttons.github.io/buttons.js']
 html_logo = "./_static/sklift-logo.png"
 
 # Removing the view source link
