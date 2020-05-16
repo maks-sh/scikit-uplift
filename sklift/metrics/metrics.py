@@ -342,11 +342,8 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
     
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
     order = np.argsort(uplift, kind='mergesort')[::-1]
-    
-    if group == 'treatment':
-        trmnt_flag = 1
-    else:  # group == 'control'
-        trmnt_flag = 0
+
+    trmnt_flag = 1 if group == 'treatment' else 0
     
     if strategy == 'overall':
         y_true_bin = np.array_split(y_true[order], bins)
@@ -367,8 +364,7 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
 
 
 def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=10):
-    """
-    Weighted average uplift.
+    """Weighted average uplift.
 
     It is an average of uplift by percentile.
     Weights are sizes of the treatment group by percentile.
@@ -417,7 +413,7 @@ def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=
 
     uplift_scores = response_rate_trmnt - response_rate_ctrl
 
-    weighted_avg_uplift = 1 / np.sum(n_trmnt) * np.dot(n_trmnt, uplift_scores)
+    weighted_avg_uplift = np.dot(n_trmnt, uplift_scores) / np.sum(n_trmnt)
 
     return weighted_avg_uplift
 
