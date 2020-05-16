@@ -75,7 +75,7 @@ References
 
 2️⃣ Zhao, Yan & Fang, Xiao & Simchi-Levi, David. (2017). Uplift Modeling with Multiple Treatments and General Response Types. 10.1137/1.9781611974973.66.
 
-Examples using ``sklift.models.SoloModel``
+Examples using ``sklift.models.TwoModels``
 ============================================
 
 .. |Open In Colab1| image:: https://colab.research.google.com/assets/colab-badge.svg

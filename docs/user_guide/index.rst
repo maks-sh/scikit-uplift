@@ -30,4 +30,4 @@ Credits
 
 **Graphics:**
 
-- `Alina Zhukova <https://www.linkedin.com/in/alina-zhukova-a307b677/>`_
+- `Alina Zhukova <https://www.linkedin.com/in/alina-zhukova-a307b677/>`_ - pictures on the main User Guide page and on the "Type of clients" pages.
