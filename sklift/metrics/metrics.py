@@ -7,7 +7,7 @@ from sklearn.metrics import auc
 
 
 def uplift_curve(y_true, uplift, treatment):
-    """Compute Uplift curve
+    """Compute Uplift curve.
 
     This is a general function, given points on a curve.  For computing the
     area under the Uplift Curve, see :func:`uplift_auc_score`.
@@ -153,20 +153,52 @@ def auuc(y_true, uplift, treatment):
     return uplift_auc_score(y_true, uplift, treatment)
 
 
-def qini_auc_score(y_true, uplift, treatment):
+def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
     """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
+
+    For binary outcomes the ratio of the actual uplift gains curve above the diagonal to that of the optimum Qini Curve.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
+        negative_effect (bool): If True, optimum Qini Curve contains the negative effects.
+            Otherwise, optimum Qini Curve does not the negative effects.
+
+            .. versionadded:: 0.2.0
 
     Returns:
-        float: Area Under the Qini Curve.
+        float: Qini coefficient.
+
+    References:
+        Nicholas J Radcliffe. (2007). Using control groups to target on predicted lift:
+        Building and assessing uplift model. Direct Marketing Analytics Journal, (3):14–21, 2007.
     """
-    # ToDO: Add normalization
-    # ToDO: Add baseline
-    return auc(*qini_curve(y_true, uplift, treatment))
+    # ToDO: Add Continuous Outcomes
+    check_consistent_length(y_true, uplift, treatment)
+
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+
+    if not isinstance(negative_effect, bool):
+        raise TypeError(f'Negative_effects flag should be bool, got: {type(negative_effect)}')
+
+    ratio_random = (y_true[treatment == 1].sum() - len(y_true[treatment == 1]) *
+                    y_true[treatment == 0].sum() / len(y_true[treatment == 0])) / len(y_true)
+
+    x_baseline, y_baseline = np.array([0, len(y_true)]), np.array([0, ratio_random])
+    auc_score_baseline = auc(x_baseline, y_baseline)
+
+    if negative_effect:
+        x_perfect, y_perfect = qini_curve(
+            y_true, y_true * treatment - y_true * (1 - treatment), treatment
+        )
+    else:
+        x_perfect, y_perfect = np.array([0, ratio_random, len(y_true)]), np.array([0, ratio_random, ratio_random])
+
+    qini_auc_score_perfect = auc(x_perfect, y_perfect) - auc_score_baseline
+    qini_auc_score_actual = auc(*qini_curve(y_true, uplift, treatment)) - auc_score_baseline
+
+    return qini_auc_score_actual / qini_auc_score_perfect
 
 
 # FIXME: remove in 0.2.0
@@ -212,6 +244,8 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
             * ``'by_group'``:
                 Separately calculates conversions in top k observations in each group (control and treatment)
                 sorted by uplift predictions. Then the difference between these conversions is calculated
+
+
 
     .. versionchanged:: 0.1.0
 
