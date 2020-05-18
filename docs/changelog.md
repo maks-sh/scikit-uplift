@@ -11,9 +11,19 @@
 ## Version 0.2.0
 _in development_
 
+### [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
+
+🔥 Add [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
+
 ### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
 
 * 💥 Add `treatment interaction` method to [SoloModel](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.models.models.SoloModel) approach by [@AdiVarma27](https://github.com/AdiVarma27).
+
+### [sklift.metrics](https://scikit-uplift.readthedocs.io/en/latest/api/metrics.html)
+
+* 💥 Add [uplift_by_percentile](/) function by [@ElisovaIra](https://github.com/ElisovaIra).
+* 💥 Add [weighted_average_uplift](/) function by [@ElisovaIra](https://github.com/ElisovaIra).
+* 🔨 Add normalisation in [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/metrics.html#sklift.metrics.metrics.qini_auc_score).
 
 ### Miscellaneous
 
