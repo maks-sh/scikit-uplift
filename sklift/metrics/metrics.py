@@ -176,6 +176,7 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
     """
     # ToDO: Add Continuous Outcomes
     check_consistent_length(y_true, uplift, treatment)
+    n_samples = len(y_true)
 
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
@@ -183,9 +184,9 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
         raise TypeError(f'Negative_effects flag should be bool, got: {type(negative_effect)}')
 
     ratio_random = (y_true[treatment == 1].sum() - len(y_true[treatment == 1]) *
-                    y_true[treatment == 0].sum() / len(y_true[treatment == 0])) / len(y_true)
+                    y_true[treatment == 0].sum() / len(y_true[treatment == 0]))
 
-    x_baseline, y_baseline = np.array([0, len(y_true)]), np.array([0, ratio_random])
+    x_baseline, y_baseline = np.array([0, n_samples]), np.array([0, ratio_random])
     auc_score_baseline = auc(x_baseline, y_baseline)
 
     if negative_effect:
@@ -193,7 +194,7 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
             y_true, y_true * treatment - y_true * (1 - treatment), treatment
         )
     else:
-        x_perfect, y_perfect = np.array([0, ratio_random, len(y_true)]), np.array([0, ratio_random, ratio_random])
+        x_perfect, y_perfect = np.array([0, ratio_random, n_samples]), np.array([0, ratio_random, ratio_random])
 
     qini_auc_score_perfect = auc(x_perfect, y_perfect) - auc_score_baseline
     qini_auc_score_actual = auc(*qini_curve(y_true, uplift, treatment)) - auc_score_baseline
