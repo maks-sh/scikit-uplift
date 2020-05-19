@@ -156,7 +156,8 @@ Papers and materials
     Uplift Modeling with Multiple Treatments and General Response Types. 10.1137/1.9781611974973.66.
 
 10. Nicholas J Radcliffe. 2007
-    Using control groups to target on predicted lift: Building and assessing uplift model. Direct Marketing Analytics Journal, (3):14–21, 2007.
+	Using control groups to target on predicted lift: Building and assessing uplift model.
+	Direct Marketing Analytics Journal, (3):14–21, 2007.
 
 ===============
 
