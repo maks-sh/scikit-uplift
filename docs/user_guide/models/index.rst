@@ -1,3 +1,5 @@
+.. _models:
+
 .. meta::
     :description lang=en:
         Introduction to approaches for building uplift model with examples

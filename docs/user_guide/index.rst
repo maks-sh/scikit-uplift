@@ -31,3 +31,19 @@ Credits
 **Graphics:**
 
 - `Alina Zhukova <https://www.linkedin.com/in/alina-zhukova-a307b677/>`_ - pictures on the main User Guide page and on the "Type of clients" pages.
+
+Citations
+----------
+
+If you find this User guide useful for your research, please consider citing:
+
+.. code:: latex
+
+    @misc{user-guide-for-uplift-modeling,
+      author = {Maksim Shevchenko, Irina Elisova},
+      title = {User guide for uplift modeling and casual inference},
+      year = {2020},
+      publisher = {GitHub},
+      journal = {GitHub repository},
+      howpublished = {\url{https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html}}
+    }

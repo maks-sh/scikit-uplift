@@ -10,7 +10,7 @@
    ./uplift_auc_score
    ./qini_curve
    ./qini_auc_score
+   ./weighted_average_uplift
+   ./uplift_by_percentile
    ./response_rate_by_percentile
    ./treatment_balance_curve
-
-
