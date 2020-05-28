@@ -9,8 +9,7 @@ from sklearn.metrics import auc
 def uplift_curve(y_true, uplift, treatment):
     """Compute Uplift curve.
 
-    This is a general function, given points on a curve.  For computing the
-    area under the Uplift Curve, see :func:`uplift_auc_score`.
+    For computing the area under the Uplift Curve, see :func:`uplift_auc_score`.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -22,6 +21,8 @@ def uplift_curve(y_true, uplift, treatment):
 
     See also:
         :func:`uplift_auc_score`: Compute the area under the Uplift curve.
+
+        :func:`perfect_uplift_curve`: Compute the perfect (optimal) Uplift curve.
 
         :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
@@ -59,6 +60,75 @@ def uplift_curve(y_true, uplift, treatment):
     return num_all, curve_values
 
 
+def perfect_uplift_curve(y_true, treatment):
+    """Compute the perfect (optimum) Uplift curve.
+
+    This is a function, given points on a curve.  For computing the
+    area under the Uplift Curve, see :func:`uplift_auc_score`.
+
+    Args:
+        y_true (1d array-like): Correct (true) target values.
+        treatment (1d array-like): Treatment labels.
+
+    Returns:
+        array (shape = [>2]), array (shape = [>2]): Points on a curve.
+
+    See also:
+        :func:`uplift_auc_score`: Compute the area under the Uplift curve.
+
+        :func:`perfect_uplift_curve`: Compute Uplift curve.
+
+        :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+    """
+    check_consistent_length(y_true, treatment)
+    y_true, treatment = np.array(y_true), np.array(treatment)
+
+    CR_num = np.sum((y_true == 1) & (treatment == 0))  # Control Responders
+    TN_num = np.sum((y_true == 0) & (treatment == 1))  # Treated Non-Responders
+
+    summand = y_true if CR_num > TN_num else treatment
+    perfect_uplift = 2 * (y_true == treatment) + summand
+
+    return uplift_curve(y_true, perfect_uplift, treatment)
+
+
+def uplift_auc_score(y_true, uplift, treatment):
+    """Compute normalized Area Under the Uplift Curve from prediction scores.
+
+    By computing the area under the Qini curve, the curve information is summarized in one number.
+    For binary outcomes the ratio of the actual uplift gains curve above the diagonal to that of the optimum Qini Curve.
+
+    Args:
+        y_true (1d array-like): Correct (true) target values.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+
+    Returns:
+        float: Area Under the Uplift Curve.
+
+    See also:
+        :func:`uplift_curve`:
+
+        :func:`perfect_uplift_curve`:
+
+        :func:`plot_uplift_qini_curves`:
+    """
+    check_consistent_length(y_true, uplift, treatment)
+    n_samples = len(y_true)
+
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+
+    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
+    x_perfect, y_perfect = perfect_uplift_curve(y_true, treatment)
+    x_baseline, y_baseline = np.array([0, x_perfect[-1]]), np.array([0, y_perfect[-1]])
+
+    auc_score_baseline = auc(x_baseline, y_baseline)
+    auc_score_perfect = auc(x_perfect, y_perfect) - auc_score_baseline
+    auc_score_actual = auc(x_actual, y_actual) - auc_score_baseline
+
+    return auc_score_actual / auc_score_perfect
+
+
 def qini_curve(y_true, uplift, treatment):
     """Compute Qini curve.
 
@@ -74,7 +144,7 @@ def qini_curve(y_true, uplift, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`qini_auc_score`: Compute the area under the Qini curve.
+        :func:`uplift_curve`: Compute the area under the Qini curve.
 
         :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
@@ -113,22 +183,6 @@ def qini_curve(y_true, uplift, treatment):
     return num_all, curve_values
 
 
-def uplift_auc_score(y_true, uplift, treatment):
-    """Compute Area Under the Uplift Curve from prediction scores.
-
-    Args:
-        y_true (1d array-like): Correct (true) target values.
-        uplift (1d array-like): Predicted uplift, as returned by a model.
-        treatment (1d array-like): Treatment labels.
-
-    Returns:
-        float: Area Under the Uplift Curve.
-    """
-    # ToDO: Add normalization
-    # ToDO: Add baseline
-    return auc(*uplift_curve(y_true, uplift, treatment))
-
-
 # FIXME: remove in 0.2.0
 def auuc(y_true, uplift, treatment):
     """Compute Area Under the Uplift Curve from prediction scores.
@@ -154,8 +208,9 @@ def auuc(y_true, uplift, treatment):
 
 
 def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
-    """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
+    """Compute normalized Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
 
+    By computing the area under the Qini curve, the curve information is summarized in one number.
     For binary outcomes the ratio of the actual uplift gains curve above the diagonal to that of the optimum Qini Curve.
 
     Args:
