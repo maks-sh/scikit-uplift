@@ -8,7 +8,7 @@ from sklearn.utils.validation import check_consistent_length
 def uplift_curve(y_true, uplift, treatment):
     """Compute Uplift curve.
 
-    For computing the area under the Uplift Curve, see :func:`uplift_auc_score`.
+    For computing the area under the Uplift Curve, see :func:`.uplift_auc_score`.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -19,13 +19,13 @@ def uplift_curve(y_true, uplift, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
+        :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
 
-        :func:`perfect_uplift_curve`: Compute the perfect Uplift curve.
+        :func:`.perfect_uplift_curve`: Compute the perfect Uplift curve.
 
-        :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
 
-        :func:`qini_curve`: Compute Qini curve.
+        :func:`.qini_curve`: Compute Qini curve.
 
     References:
         Devriendt, F., Guns, T., & Verbeke, W. (2020). Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
@@ -68,7 +68,7 @@ def perfect_uplift_curve(y_true, treatment):
     """Compute the perfect (optimum) Uplift curve.
 
     This is a function, given points on a curve.  For computing the
-    area under the Uplift Curve, see :func:`uplift_auc_score`.
+    area under the Uplift Curve, see :func:`.uplift_auc_score`.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -78,11 +78,11 @@ def perfect_uplift_curve(y_true, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`uplift_curve`: Compute the area under the Qini curve.
+        :func:`.uplift_curve`: Compute the area under the Qini curve.
 
-        :func:`uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
+        :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
 
-        :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
     check_consistent_length(y_true, treatment)
     y_true, treatment = np.array(y_true), np.array(treatment)
@@ -112,13 +112,13 @@ def uplift_auc_score(y_true, uplift, treatment):
         float: Area Under the Uplift Curve.
 
     See also:
-        :func:`uplift_curve`: Compute Uplift curve.
+        :func:`.uplift_curve`: Compute Uplift curve.
 
-        :func:`perfect_uplift_curve`: Compute the perfect (optimum) Uplift curve.
+        :func:`.perfect_uplift_curve`: Compute the perfect (optimum) Uplift curve.
 
-        :func:`plot_uplift_qini_curves`:  Plot Uplift and Qini curves.
+        :func:`.plot_uplift_qini_curves`:  Plot Uplift and Qini curves.
 
-        :func:`qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
+        :func:`.qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
     """
     check_consistent_length(y_true, uplift, treatment)
 
@@ -138,7 +138,7 @@ def uplift_auc_score(y_true, uplift, treatment):
 def qini_curve(y_true, uplift, treatment):
     """Compute Qini curve.
 
-    For computing the area under the Qini Curve, see :func:`qini_auc_score`.
+    For computing the area under the Qini Curve, see :func:`.qini_auc_score`.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -149,13 +149,13 @@ def qini_curve(y_true, uplift, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`uplift_curve`: Compute the area under the Qini curve.
+        :func:`.uplift_curve`: Compute the area under the Qini curve.
 
-        :func:`perfect_qini_curve`: Compute the perfect Qini curve.
+        :func:`.perfect_qini_curve`: Compute the perfect Qini curve.
 
-        :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
 
-        :func:`uplift_curve`: Compute Uplift curve.
+        :func:`.uplift_curve`: Compute Uplift curve.
 
     References:
         Nicholas J Radcliffe. (2007). Using control groups to target on predicted lift:
@@ -201,7 +201,7 @@ def qini_curve(y_true, uplift, treatment):
 def perfect_qini_curve(y_true, treatment, negative_effect=True):
     """Compute the perfect (optimum) Qini curve.
 
-    For computing the area under the Qini Curve, see :func:`qini_auc_score`.
+    For computing the area under the Qini Curve, see :func:`.qini_auc_score`.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -213,11 +213,11 @@ def perfect_qini_curve(y_true, treatment, negative_effect=True):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`qini_curve`: Compute Qini curve.
+        :func:`.qini_curve`: Compute Qini curve.
 
-        :func:`qini_auc_score`: Compute the area under the Qini curve.
+        :func:`.qini_auc_score`: Compute the area under the Qini curve.
 
-        :func:`plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
     """
     check_consistent_length(y_true, treatment)
     n_samples = len(y_true)
@@ -260,13 +260,13 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
         float: Qini coefficient.
 
     See also:
-        :func:`qini_curve`: Compute Qini curve.
+        :func:`.qini_curve`: Compute Qini curve.
 
-        :func:`perfect_qini_curve`: Compute the perfect (optimum) Qini curve.
+        :func:`.perfect_qini_curve`: Compute the perfect (optimum) Qini curve.
 
-        :func:`plot_uplift_qini_curves`:  Plot Uplift and Qini curves.
+        :func:`.plot_uplift_qini_curves`:  Plot Uplift and Qini curves.
 
-        :func:`uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
+        :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
 
     References:
         Nicholas J Radcliffe. (2007). Using control groups to target on predicted lift:
@@ -322,9 +322,9 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
         float: Uplift score at first k observations of the total sample.
 
     See also:
-        :func:`uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
+        :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
 
-        :func:`qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
+        :func:`.qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
     """
     # ToDo: checker that treatment is binary and all groups is not empty
     check_consistent_length(y_true, uplift, treatment)
@@ -550,7 +550,7 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
         std (bool): If True, add columns with the uplift standard deviation and the response rate standard deviation.
             Default is False.
         total (bool): If True, add the last row with the total values. Default is False.
-            The total uplift is a weighted average uplift. See :func:`weighted_average_uplift`.
+            The total uplift is a weighted average uplift. See :func:`.weighted_average_uplift`.
             The total response rate is a response rate on the full data amount.
         bins (int): Determines the number of bins (and the relative percentile) in the data. Default is 10.
 
