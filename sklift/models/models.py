@@ -93,7 +93,7 @@ class SoloModel(BaseEstimator):
         if self.method == 'dummy':
             if isinstance(X, np.ndarray):
                 X_mod = np.column_stack((X, treatment))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod = X.assign(treatment=treatment)
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))
@@ -101,15 +101,15 @@ class SoloModel(BaseEstimator):
         if self.method == 'treatment_interaction':
             if isinstance(X, np.ndarray):
                 X_mod = np.column_stack((X, np.multiply(X, np.array(treatment).reshape(-1, 1)), treatment))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod = pd.concat([
                     X,
                     X.apply(lambda x: x * treatment)
                         .rename(columns=lambda x: str(x) + '_treatment_interaction')
-                ], axis=1)\
+                ], axis=1) \
                     .assign(treatment=treatment)
             else:
-                raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))           
+                raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))
 
         self._type_of_target = type_of_target(y)
 
@@ -133,7 +133,7 @@ class SoloModel(BaseEstimator):
             if isinstance(X, np.ndarray):
                 X_mod_trmnt = np.column_stack((X, np.ones(X.shape[0])))
                 X_mod_ctrl = np.column_stack((X, np.zeros(X.shape[0])))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod_trmnt = X.assign(treatment=np.ones(X.shape[0]))
                 X_mod_ctrl = X.assign(treatment=np.zeros(X.shape[0]))
             else:
@@ -143,18 +143,18 @@ class SoloModel(BaseEstimator):
             if isinstance(X, np.ndarray):
                 X_mod_trmnt = np.column_stack((X, np.multiply(X, np.ones((X.shape[0], 1))), np.ones(X.shape[0])))
                 X_mod_ctrl = np.column_stack((X, np.multiply(X, np.zeros((X.shape[0], 1))), np.zeros(X.shape[0])))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod_trmnt = pd.concat([
                     X,
                     X.apply(lambda x: x * np.ones(X.shape[0]))
                         .rename(columns=lambda x: str(x) + '_treatment_interaction')
-                ], axis=1)\
+                ], axis=1) \
                     .assign(treatment=np.ones(X.shape[0]))
                 X_mod_ctrl = pd.concat([
                     X,
                     X.apply(lambda x: x * np.zeros(X.shape[0]))
                         .rename(columns=lambda x: str(x) + '_treatment_interaction')
-                ], axis=1)\
+                ], axis=1) \
                     .assign(treatment=np.zeros(X.shape[0]))
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))
@@ -209,6 +209,7 @@ class ClassTransformation(BaseEstimator):
     .. _ClassTransformation in documentation:
         https://scikit-uplift.readthedocs.io/en/latest/api/models.html#class-transformation
     """
+
     def __init__(self, estimator):
         self.estimator = estimator
         self._type_of_target = None
