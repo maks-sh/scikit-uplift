@@ -1,16 +1,14 @@
-import warnings
 import numpy as np
 import pandas as pd
+from sklearn.metrics import auc
 from sklearn.utils.extmath import stable_cumsum
 from sklearn.utils.validation import check_consistent_length
-from sklearn.metrics import auc
 
 
 def uplift_curve(y_true, uplift, treatment):
     """Compute Uplift curve.
 
-    This is a general function, given points on a curve.  For computing the
-    area under the Uplift Curve, see :func:`uplift_auc_score`.
+    For computing the area under the Uplift Curve, see :func:`.uplift_auc_score`.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -21,11 +19,16 @@ def uplift_curve(y_true, uplift, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`.uplift_auc_score`: Compute the area under the Uplift curve from prediction scores.
+        :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
 
-        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.perfect_uplift_curve`: Compute the perfect Uplift curve.
 
-        :func:`.uplift_at_k`: Compute uplift at first k percentage of the total sample.
+        :func:`.plot_uplift_curve`: Plot Uplift curves from predictions.
+
+        :func:`.qini_curve`: Compute Qini curve.
+
+    References:
+        Devriendt, F., Guns, T., & Verbeke, W. (2020). Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
     """
 
     # TODO: check the treatment is binary
@@ -61,11 +64,82 @@ def uplift_curve(y_true, uplift, treatment):
     return num_all, curve_values
 
 
+def perfect_uplift_curve(y_true, treatment):
+    """Compute the perfect (optimum) Uplift curve.
+
+    This is a function, given points on a curve.  For computing the
+    area under the Uplift Curve, see :func:`.uplift_auc_score`.
+
+    Args:
+        y_true (1d array-like): Correct (true) target values.
+        treatment (1d array-like): Treatment labels.
+
+    Returns:
+        array (shape = [>2]), array (shape = [>2]): Points on a curve.
+
+    See also:
+        :func:`.uplift_curve`: Compute the area under the Qini curve.
+
+        :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
+
+        :func:`.plot_uplift_curve`: Plot Uplift curves from predictions.
+    """
+    check_consistent_length(y_true, treatment)
+    y_true, treatment = np.array(y_true), np.array(treatment)
+
+    cr_num = np.sum((y_true == 1) & (treatment == 0))  # Control Responders
+    tn_num = np.sum((y_true == 0) & (treatment == 1))  # Treated Non-Responders
+
+    # express an ideal uplift curve through y_true and treatment
+    summand = y_true if cr_num > tn_num else treatment
+    perfect_uplift = 2 * (y_true == treatment) + summand
+
+    return uplift_curve(y_true, perfect_uplift, treatment)
+
+
+def uplift_auc_score(y_true, uplift, treatment):
+    """Compute normalized Area Under the Uplift Curve from prediction scores.
+
+    By computing the area under the Uplift curve, the curve information is summarized in one number.
+    For binary outcomes the ratio of the actual uplift gains curve above the diagonal to that of
+    the optimum Uplift Curve.
+
+    Args:
+        y_true (1d array-like): Correct (true) target values.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+
+    Returns:
+        float: Area Under the Uplift Curve.
+
+    See also:
+        :func:`.uplift_curve`: Compute Uplift curve.
+
+        :func:`.perfect_uplift_curve`: Compute the perfect (optimum) Uplift curve.
+
+        :func:`.plot_uplift_curve`: Plot Uplift curves from predictions.
+
+        :func:`.qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
+    """
+    check_consistent_length(y_true, uplift, treatment)
+
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+
+    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
+    x_perfect, y_perfect = perfect_uplift_curve(y_true, treatment)
+    x_baseline, y_baseline = np.array([0, x_perfect[-1]]), np.array([0, y_perfect[-1]])
+
+    auc_score_baseline = auc(x_baseline, y_baseline)
+    auc_score_perfect = auc(x_perfect, y_perfect) - auc_score_baseline
+    auc_score_actual = auc(x_actual, y_actual) - auc_score_baseline
+
+    return auc_score_actual / auc_score_perfect
+
+
 def qini_curve(y_true, uplift, treatment):
     """Compute Qini curve.
 
-    This is a general function, given points on a curve. For computing the
-    area under the Qini Curve, see :func:`qini_auc_score`.
+    For computing the area under the Qini Curve, see :func:`.qini_auc_score`.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -76,9 +150,19 @@ def qini_curve(y_true, uplift, treatment):
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`.qini_auc_score`: Compute the area under the Qini Curve (Qini coefficient) from prediction scores.
+        :func:`.uplift_curve`: Compute the area under the Qini curve.
 
-        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.perfect_qini_curve`: Compute the perfect Qini curve.
+
+        :func:`.plot_qini_curves`: Plot Qini curves from predictions..
+
+        :func:`.uplift_curve`: Compute Uplift curve.
+
+    References:
+        Nicholas J Radcliffe. (2007). Using control groups to target on predicted lift:
+        Building and assessing uplift model. Direct Marketing Analytics Journal, (3):14–21, 2007.
+
+        Devriendt, F., Guns, T., & Verbeke, W. (2020). Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
     """
     # TODO: check the treatment is binary
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
@@ -115,75 +199,76 @@ def qini_curve(y_true, uplift, treatment):
     return num_all, curve_values
 
 
-def uplift_auc_score(y_true, uplift, treatment):
-    """Compute the area under the uplift curve from prediction scores.
+def perfect_qini_curve(y_true, treatment, negative_effect=True):
+    """Compute the perfect (optimum) Qini curve.
+
+    For computing the area under the Qini Curve, see :func:`.qini_auc_score`.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
-        uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
-
+        negative_effect (bool): If True, optimum Qini Curve contains the negative effects
+            (negative uplift because of campaign). Otherwise, optimum Qini Curve will not
+            contain the negative effects.
     Returns:
-        float: Area Under the Uplift Curve.
+        array (shape = [>2]), array (shape = [>2]): Points on a curve.
 
     See also:
-        :func:`.qini_auc_score`: Compute the area under the Qini Curve (Qini coefficient) from prediction scores.
+        :func:`.qini_curve`: Compute Qini curve.
 
-        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.qini_auc_score`: Compute the area under the Qini curve.
 
-        :func:`.uplift_at_k`: Compute uplift at first k percentage of the total sample.
+        :func:`.plot_qini_curves`: Plot Qini curves from predictions..
     """
-    # ToDO: Add normalization
-    # ToDO: Add baseline
-    return auc(*uplift_curve(y_true, uplift, treatment))
+    check_consistent_length(y_true, treatment)
+    n_samples = len(y_true)
 
+    y_true, treatment = np.array(y_true), np.array(treatment)
 
-# FIXME: remove in 0.2.0
-def auuc(y_true, uplift, treatment):
-    """Compute Area Under the Uplift Curve from prediction scores.
+    if not isinstance(negative_effect, bool):
+        raise TypeError(f'Negative_effects flag should be bool, got: {type(negative_effect)}')
 
-    Args:
-        y_true (1d array-like): Correct (true) target values.
-        uplift (1d array-like): Predicted uplift, as returned by a model.
-        treatment (1d array-like): Treatment labels.
+    # express an ideal uplift curve through y_true and treatment
+    if negative_effect:
+        x_perfect, y_perfect = qini_curve(
+            y_true, y_true * treatment - y_true * (1 - treatment), treatment
+        )
+    else:
+        ratio_random = (y_true[treatment == 1].sum() - len(y_true[treatment == 1]) *
+                        y_true[treatment == 0].sum() / len(y_true[treatment == 0]))
 
-    Returns:
-        float: Area Under the Uplift Curve.
+        x_perfect, y_perfect = np.array([0, ratio_random, n_samples]), np.array([0, ratio_random, ratio_random])
 
-    .. warning::
-        Metric `auuc` was renamed to :func:`uplift_auc_score`
-        in version 0.1.0 and will be removed in 0.2.0
-    """
-    warnings.warn(
-        'Metric `auuc` was renamed to `uplift_auc_score`'
-        'in version 0.1.0 and will be removed in 0.2.0',
-        FutureWarning
-    )
-    return uplift_auc_score(y_true, uplift, treatment)
+    return x_perfect, y_perfect
 
 
 def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
-    """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
+    """Compute normalized Area Under the Qini curve (aka Qini coefficient) from prediction scores.
 
-    For binary outcomes the ratio of the actual uplift gains curve above the diagonal to that of the optimum Qini Curve.
+    By computing the area under the Qini curve, the curve information is summarized in one number.
+    For binary outcomes the ratio of the actual uplift gains curve above the diagonal to that of
+    the optimum Qini curve.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
-        negative_effect (bool): If True, optimum Qini Curve contains the negative effects.
-            Otherwise, optimum Qini Curve does not the negative effects.
+        negative_effect (bool): If True, optimum Qini Curve contains the negative effects
+            (negative uplift because of campaign). Otherwise, optimum Qini Curve will not contain the negative effects.
 
             .. versionadded:: 0.2.0
 
     Returns:
-        float: Area Under the Qini Curve.
+        float: Qini coefficient.
 
     See also:
-        :func:`.uplift_auc_score`: Compute the area under the uplift curve from prediction scores.
+        :func:`.qini_curve`: Compute Qini curve.
 
-        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
-        float: Qini coefficient.
+        :func:`.perfect_qini_curve`: Compute the perfect (optimum) Qini curve.
+
+        :func:`.plot_qini_curves`: Plot Qini curves from predictions..
+
+        :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
 
     References:
         Nicholas J Radcliffe. (2007). Using control groups to target on predicted lift:
@@ -197,51 +282,19 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
     if not isinstance(negative_effect, bool):
         raise TypeError(f'Negative_effects flag should be bool, got: {type(negative_effect)}')
 
-    ratio_random = (y_true[treatment == 1].sum() - len(y_true[treatment == 1]) *
-                    y_true[treatment == 0].sum() / len(y_true[treatment == 0])) / len(y_true)
+    x_actual, y_actual = qini_curve(y_true, uplift, treatment)
+    x_perfect, y_perfect = perfect_qini_curve(y_true, treatment, negative_effect)
+    x_baseline, y_baseline = np.array([0, x_perfect[-1]]), np.array([0, y_perfect[-1]])
 
-    x_baseline, y_baseline = np.array([0, len(y_true)]), np.array([0, ratio_random])
     auc_score_baseline = auc(x_baseline, y_baseline)
+    auc_score_perfect = auc(x_perfect, y_perfect) - auc_score_baseline
+    auc_score_actual = auc(x_actual, y_actual) - auc_score_baseline
 
-    if negative_effect:
-        x_perfect, y_perfect = qini_curve(
-            y_true, y_true * treatment - y_true * (1 - treatment), treatment
-        )
-    else:
-        x_perfect, y_perfect = np.array([0, ratio_random, len(y_true)]), np.array([0, ratio_random, ratio_random])
-
-    qini_auc_score_perfect = auc(x_perfect, y_perfect) - auc_score_baseline
-    qini_auc_score_actual = auc(*qini_curve(y_true, uplift, treatment)) - auc_score_baseline
-
-    return qini_auc_score_actual / qini_auc_score_perfect
-
-
-# FIXME: remove in 0.2.0
-def auqc(y_true, uplift, treatment):
-    """Compute Area Under the Qini Curve (aka Qini coefficient) from prediction scores.
-
-    Args:
-        y_true (1d array-like): Correct (true) target values.
-        uplift (1d array-like): Predicted uplift, as returned by a model.
-        treatment (1d array-like): Treatment labels.
-
-    Returns:
-        float: Area Under the Qini Curve.
-
-    .. warning::
-        Metric `auqc` was renamed to :func:`qini_auc_score`
-        in version 0.1.0 and will be removed in 0.2.0
-    """
-    warnings.warn(
-        'Metric `auqc` was renamed to `qini_auc_score`'
-        'in version 0.1.0 and will be removed in 0.2.0',
-        FutureWarning
-    )
-    return qini_auc_score(y_true, uplift, treatment)
+    return auc_score_actual / auc_score_perfect
 
 
 def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
-    """Compute uplift at the first k percentage of the total sample.
+    """Compute uplift at first k observations by uplift of the total sample.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -271,10 +324,9 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
         float: Uplift score at first k observations of the total sample.
 
     See also:
-        :func:`uplift_auc_score`: Compute the area under the Uplift curve from prediction scores.
+        :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
 
-        :func:`qini_auc_score`: Compute the area under the Qini curve (aka Qini coefficient) from prediction scores.
-
+        :func:`.qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
     """
     # ToDo: checker that treatment is binary and all groups is not empty
     check_consistent_length(y_true, uplift, treatment)
@@ -296,7 +348,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     k_type = np.asarray(k).dtype.kind
 
     if (k_type == 'i' and (k >= n_samples or k <= 0)
-       or k_type == 'f' and (k <= 0 or k >= 1)):
+            or k_type == 'f' and (k <= 0 or k >= 1)):
         raise ValueError(f'k={k} should be either positive and smaller'
                          f' than the number of samples {n_samples} or a float in the '
                          f'(0, 1) range')
@@ -364,50 +416,50 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
                 Separately calculates conversions in top k observations in each group (control and treatment)
                 sorted by uplift predictions. Then the difference between these conversions is calculated.
 
-        bins (int): Determines а number of bins (and а relative percentile) in the test data. Default is 10.
-
+        bins (int): Determines the number of bins (and relative percentile) in the data. Default is 10.
+        
     Returns:
         array (shape = [>2]), array (shape = [>2]), array (shape = [>2]):
         response rate at each percentile for control or treatment group,
         variance of the response rate at each percentile,
         group size at each percentile.
     """
-
+    
     group_types = ['treatment', 'control']
     strategy_methods = ['overall', 'by_group']
-
+    
     n_samples = len(y_true)
     check_consistent_length(y_true, uplift, treatment)
-
+    
     if group not in group_types:
         raise ValueError(f'Response rate supports only group types in {group_types},'
-                         f' got {group}.')
+                         f' got {group}.') 
 
     if strategy not in strategy_methods:
         raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
                          f' got {strategy}.')
-
+    
     if not isinstance(bins, int) or bins <= 0:
         raise ValueError(f'Bins should be positive integer. Invalid value bins: {bins}')
 
     if bins >= n_samples:
         raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
-
+    
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
     order = np.argsort(uplift, kind='mergesort')[::-1]
 
     trmnt_flag = 1 if group == 'treatment' else 0
-
+    
     if strategy == 'overall':
         y_true_bin = np.array_split(y_true[order], bins)
         trmnt_bin = np.array_split(treatment[order], bins)
-
+        
         group_size = np.array([len(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
         response_rate = np.array([np.mean(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
 
     else:  # strategy == 'by_group'
         y_bin = np.array_split(y_true[order][treatment[order] == trmnt_flag], bins)
-
+        
         group_size = np.array([len(y) for y in y_bin])
         response_rate = np.array([np.mean(y) for y in y_bin])
 
@@ -496,14 +548,15 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
                 Separately calculates conversions in top k observations in each group (control and treatment)
                 sorted by uplift predictions. Then the difference between these conversions is calculated
 
-        std (bool): If True, add columns with the uplift standard deviation and the response rate standard deviation. Default is False.
+        std (bool): If True, add columns with the uplift standard deviation and the response rate standard deviation.
+            Default is False.
         total (bool): If True, add the last row with the total values. Default is False.
-            The total uplift is a weighted average uplift. See :func:`weighted_average_uplift`.
+            The total uplift is a weighted average uplift. See :func:`.weighted_average_uplift`.
             The total response rate is a response rate on the full data amount.
         bins (int): Determines the number of bins (and the relative percentile) in the data. Default is 10.
 
     Returns:
-        pandas.DataFrame: Dataframe where metrics are by columns and percentiles are by rows.
+        pandas.DataFrame: DataFrame where metrics are by columns and percentiles are by rows.
     """
 
     strategy_methods = ['overall', 'by_group']
@@ -545,7 +598,7 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
 
     df = pd.DataFrame({
         'percentile': percentiles,
-        'n_treatment':n_trmnt,
+        'n_treatment': n_trmnt,
         'n_control': n_ctrl,
         'response_rate_treatment': response_rate_trmnt,
         'response_rate_control': response_rate_ctrl,
@@ -556,7 +609,7 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
         response_rate_trmnt_total, variance_trmnt_total, n_trmnt_total = response_rate_by_percentile(
             y_true, uplift, treatment, strategy=strategy, group='treatment', bins=1)
 
-        response_rate_ctrl_total, variance_ctrl_total, n_ctrl_total  = response_rate_by_percentile(
+        response_rate_ctrl_total, variance_ctrl_total, n_ctrl_total = response_rate_by_percentile(
             y_true, uplift, treatment, strategy=strategy, group='control', bins=1)
 
         weighted_avg_uplift = 1 / n_trmnt_total * np.dot(n_trmnt, uplift_scores)
@@ -578,8 +631,8 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
         df.loc[:, 'std_control'] = std_control
         df.loc[:, 'std_uplift'] = std_uplift
 
-    df = df\
-        .set_index('percentile', drop=True, inplace=False)\
+    df = df \
+        .set_index('percentile', drop=True, inplace=False) \
         .astype({'n_treatment': 'int32', 'n_control': 'int32'})
 
     return df
