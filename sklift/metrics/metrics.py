@@ -23,7 +23,7 @@ def uplift_curve(y_true, uplift, treatment):
 
         :func:`.perfect_uplift_curve`: Compute the perfect Uplift curve.
 
-        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_uplift_curve`: Plot Uplift curves from predictions.
 
         :func:`.qini_curve`: Compute Qini curve.
 
@@ -82,7 +82,7 @@ def perfect_uplift_curve(y_true, treatment):
 
         :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
 
-        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_uplift_curve`: Plot Uplift curves from predictions.
     """
     check_consistent_length(y_true, treatment)
     y_true, treatment = np.array(y_true), np.array(treatment)
@@ -116,7 +116,7 @@ def uplift_auc_score(y_true, uplift, treatment):
 
         :func:`.perfect_uplift_curve`: Compute the perfect (optimum) Uplift curve.
 
-        :func:`.plot_uplift_qini_curves`:  Plot Uplift and Qini curves.
+        :func:`.plot_uplift_curve`: Plot Uplift curves from predictions.
 
         :func:`.qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
     """
@@ -153,7 +153,7 @@ def qini_curve(y_true, uplift, treatment):
 
         :func:`.perfect_qini_curve`: Compute the perfect Qini curve.
 
-        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_qini_curves`: Plot Qini curves from predictions..
 
         :func:`.uplift_curve`: Compute Uplift curve.
 
@@ -217,7 +217,7 @@ def perfect_qini_curve(y_true, treatment, negative_effect=True):
 
         :func:`.qini_auc_score`: Compute the area under the Qini curve.
 
-        :func:`.plot_uplift_qini_curves`: Plot Uplift and Qini curves.
+        :func:`.plot_qini_curves`: Plot Qini curves from predictions..
     """
     check_consistent_length(y_true, treatment)
     n_samples = len(y_true)
@@ -264,7 +264,7 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
 
         :func:`.perfect_qini_curve`: Compute the perfect (optimum) Qini curve.
 
-        :func:`.plot_uplift_qini_curves`:  Plot Uplift and Qini curves.
+        :func:`.plot_qini_curves`: Plot Qini curves from predictions..
 
         :func:`.uplift_auc_score`: Compute normalized Area Under the Uplift curve from prediction scores.
 
