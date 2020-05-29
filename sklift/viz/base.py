@@ -5,7 +5,7 @@ from sklearn.utils.validation import check_consistent_length
 from ..metrics import (
     uplift_curve, perfect_uplift_curve, uplift_auc_score,
     qini_curve, perfect_qini_curve, qini_auc_score,
-    treatment_balance_curve
+    treatment_balance_curve, uplift_by_percentile
 )
 
 
@@ -191,12 +191,16 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
                               std=True, total=True, bins=bins)
 
     percentiles = df.index[:bins].values.astype(float)
-    response_rate_trmnt, std_trmnt = df.loc[percentiles, 'response_rate_treatment'].values, \
-                                     df.loc[percentiles, 'std_treatment'].values
-    response_rate_ctrl, std_ctrl = df.loc[percentiles, 'response_rate_control'].values, \
-                                   df.loc[percentiles, 'std_control'].values
-    uplift_score, std_uplift = df.loc[percentiles, 'uplift'].values, \
-                               df.loc[percentiles, 'std_uplift'].values
+
+    response_rate_trmnt = df.loc[percentiles, 'response_rate_treatment'].values
+    std_trmnt = df.loc[percentiles, 'std_treatment'].values
+
+    response_rate_ctrl = df.loc[percentiles, 'response_rate_control'].values
+    std_ctrl = df.loc[percentiles, 'std_control'].values
+
+    uplift_score = df.loc[percentiles, 'uplift'].values
+    std_uplift = df.loc[percentiles, 'std_uplift'].values
+
     uplift_weighted_avg = df.loc['total', 'uplift']
 
     check_consistent_length(percentiles, response_rate_trmnt, response_rate_ctrl, uplift_score,

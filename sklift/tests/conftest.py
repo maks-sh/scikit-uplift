@@ -1,9 +1,9 @@
-import numpy as np
-import pandas as pd
 import itertools
 from collections import defaultdict
-import pytest
 
+import numpy as np
+import pandas as pd
+import pytest
 
 n_vals = (100, 1000)
 k_vals = (1, 5)

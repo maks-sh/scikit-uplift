@@ -87,10 +87,11 @@ def perfect_uplift_curve(y_true, treatment):
     check_consistent_length(y_true, treatment)
     y_true, treatment = np.array(y_true), np.array(treatment)
 
-    CR_num = np.sum((y_true == 1) & (treatment == 0))  # Control Responders
-    TN_num = np.sum((y_true == 0) & (treatment == 1))  # Treated Non-Responders
+    cr_num = np.sum((y_true == 1) & (treatment == 0))  # Control Responders
+    tn_num = np.sum((y_true == 0) & (treatment == 1))  # Treated Non-Responders
 
-    summand = y_true if CR_num > TN_num else treatment
+    # express an ideal uplift curve through y_true and treatment
+    summand = y_true if cr_num > tn_num else treatment
     perfect_uplift = 2 * (y_true == treatment) + summand
 
     return uplift_curve(y_true, perfect_uplift, treatment)
@@ -227,6 +228,7 @@ def perfect_qini_curve(y_true, treatment, negative_effect=True):
     if not isinstance(negative_effect, bool):
         raise TypeError(f'Negative_effects flag should be bool, got: {type(negative_effect)}')
 
+    # express an ideal uplift curve through y_true and treatment
     if negative_effect:
         x_perfect, y_perfect = qini_curve(
             y_true, y_true * treatment - y_true * (1 - treatment), treatment
