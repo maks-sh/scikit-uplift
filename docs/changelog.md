@@ -26,7 +26,14 @@ _in development_
 * 💥 Add [perfect_uplift_curve](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/perfect_uplift_curve.html) function.
 * 💥 Add [perfect_qini_curve](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/perfect_qini_curve.html) function.
 * 🔨 Add normalization in [uplift_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/uplift_auc_score.html) and [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/qini_auc_score.html) functions.
-* ❗ Remove metrics `auuc` and `auqc`. In exchange use respectively [uplift_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/uplift_auc_score.html) and [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/qini_auc_score.html)
+* ❗ Remove metrics `auuc` and `auqc`. In exchange for them use respectively [uplift_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/uplift_auc_score.html) and [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/qini_auc_score.html)
+
+### [sklift.viz](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html)
+
+* 💥 Add [plot_uplift_curve](https://scikit-uplift.readthedocs.io/en/latest/api/viz/plot_uplift_curve.html) function.
+* 💥 Add [plot_qini_curve](https://scikit-uplift.readthedocs.io/en/latest/api/viz/plot_qini_curve.html) function.
+* ❗ Remove `plot_uplift_qini_curves`.
+
 
 ### Miscellaneous
 
