@@ -1,7 +1,3 @@
-.. meta::
-    :description lang=en:
-        Introduction to uplift modeling and casual inference.
-
 *************
 Introduction
 *************

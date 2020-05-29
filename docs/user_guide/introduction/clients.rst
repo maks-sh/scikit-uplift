@@ -1,29 +1,25 @@
-.. meta::
-    :description lang=en:
-        Uplift modeling: classification of clients based on their response to a treatment.
-
 ******************************************
-Type of clients
+Types of customers
 ******************************************
 
-It is customary to distinguish 4 types of clients based on their response to a treatment:
+We can determine 4 types of customers based on a response to a treatment:
 
 .. image:: ../../_static/images/user_guide/ug_clients_types.jpg
-   :alt: Classification of clients based on their response to a treatment
+   :alt: Classification of customers based on their response to a treatment
    :width: 268 px
    :height: 282 px
    :align: center
 
-- :guilabel:`Do-Not-Disturbs` *(aka Sleeping-dogs)* have a negative reaction to the marketing contact. They will purchase if NOT contacted, but will NOT purchase if contacted. The marketing budget applied to these contacts is not only wasted, it also has a negative impact on the results. For example, populations targeted for retention efforts by standard response models could result in withdrawing from current products or services. In terms of math: :math:`W_i = 1, Y_i = 0` or :math:`W_i = 0, Y_i = 1`.
-- :guilabel:`Lost Causes` will NOT purchase the product whether they are contacted or not. The marketing budget applied to these contacts is wasted because it has no effect on their action. In terms of math: :math:`W_i = 1, Y_i = 0` or :math:`W_i = 0, Y_i = 0`.
-- :guilabel:`Sure Things` will purchase the product whether they are contacted or not. The marketing budget applied to these contacts is wasted because it has no effect on their action. In terms of math: :math:`W_i = 1, Y_i = 1` or :math:`W_i = 0, Y_i = 1`.
-- :guilabel:`Persuadables` have a positive reaction to the marketing contact. They purchase ONLY if contacted (or sometimes they purchase MORE or EARLIER only if contacted). They are the only efficient target that marketers should aim for. Methodologies discussed in this article will focus on finding the likely persuadable targets. In terms of math: :math:`W_i = 0, Y_i = 0` or :math:`W_i = 1, Y_i = 1`.
+- :guilabel:`Do-Not-Disturbs` *(a.k.a. Sleeping-dogs)* have a strong negative response to a marketing communication. They are going to purchase if *NOT* treated and will *NOT* purchase *IF* treated. It is not only a wasted marketing budget but also a negative impact. For instance, customers targeted could result in rejecting current products or services. In terms of math: :math:`W_i = 1, Y_i = 0` or :math:`W_i = 0, Y_i = 1`.
+- :guilabel:`Lost Causes` will *NOT* purchase the product *NO MATTER* they are contacted or not. The marketing budget in this case is also wasted because it has no effect. In terms of math: :math:`W_i = 1, Y_i = 0` or :math:`W_i = 0, Y_i = 0`.
+- :guilabel:`Sure Things` will purchase *ANYWAY* no matter they are contacted or not. There is no motivation to spend the budget because it also has no effect. In terms of math: :math:`W_i = 1, Y_i = 1` or :math:`W_i = 0, Y_i = 1`.
+- :guilabel:`Persuadables` will always respond *POSITIVE* to the marketing communication. They is going to purchase *ONLY* if contacted (or sometimes they purchase *MORE* or *EARLIER* only if contacted). This customer's type should be the only target for the marketing campaign. In terms of math: :math:`W_i = 0, Y_i = 0` or :math:`W_i = 1, Y_i = 1`.
 
-Because we can't communicate with the client and not communicate at the same time, we will never be able to tell exactly which type of client a particular client belongs to.
+Because we can't communicate and not communicate with the customer at the same time, we will never be able to observe exactly which type a particular customer belongs to.
 
-It is worth noting that depending on the client base and the company's characteristics, some of these types of clients may not be available. In addition, the performance of a target action depends heavily on various characteristics of the campaign itself, such as the channel of interaction or the type and size of the proposed marketing offer. To maximize profit, you should also select these parameters.
+Depends on the product characteristics and the customer base structure some types may be absent. In addition, a customer response depends heavily on various characteristics of the campaign, such as a communication channel or a type and a size of the marketing offer. To maximize profit, these parameters should be selected.
 
-Thus, when predicting uplift and selecting the top predictions, we want to find only one of the four types: **persuadable**. There are several ways to do this.
+Thus, when predicting uplift score and selecting a segment by the highest score, we are trying to find the only one type: **persuadables**.
 
 References
 ==========

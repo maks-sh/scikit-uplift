@@ -1,25 +1,20 @@
-.. meta::
-    :description lang=en:
-        Basic concept of causal inference: CATE, uplift, propensity score.
-
-
 ******************************************
 Causal Inference: Basics
 ******************************************
 
-To optimize the effect of exposure, we want to calculate the difference in human reactions in the presence of communication and in its absence.
-The problem is that we can't simultaneously make a communication (for example, send an e-mail) and not make a communication (not send an e-mail).
+In a perfect world, we want to calculate a difference in a person's reaction received communication and the reaction without receiving any communication.
+But there is a problem: we can not make a communication (send an e-mail) and do not make a communication (no e-mail) at the same time.
 
 .. image:: https://habrastorage.org/webt/fl/fi/dz/flfidz416o7of5j0nmgdjqqkzfe.jpeg
    :alt: Joke about Schrodinger's cat
    :align: center
 
-Denoting :math:`Y_i^1` person :math:`i`’s outcome when he receives the active treatment and :math:`Y_i^0` :math:`i`’s outcome when he receives the control treatment, the :guilabel:`causal effect`, :math:`\tau_i`, of the active treatment *vis-a-vis* the control treatment is given by:
+Denoting :math:`Y_i^1` person :math:`i`’s outcome when receives the treatment (a presense of a communication) and :math:`Y_i^0` :math:`i`’s outcome when he receives no treatment (control, no communication), the :guilabel:`causal effect` :math:`\tau_i` of the treatment *vis-a-vis* no treatment is given by:
 
 .. math::
     \tau_i = Y_i^1 - Y_i^0
 
-Researchers are typically interested in estimating the :guilabel:`Conditional Average Treatment Effect` (CATE), that is, the expected causal effect of the active treatment for a subgroup in the population:
+Researchers are typically interested in estimating the :guilabel:`Conditional Average Treatment Effect` (CATE), that is, the expected causal effect of the treatment for a subgroup in the population:
 
 .. math::
     CATE = E[Y_i^1 \vert X_i] - E[Y_i^0 \vert X_i]
@@ -27,14 +22,14 @@ Researchers are typically interested in estimating the :guilabel:`Conditional Av
 Where :math:`X_i` - features vector describing :math:`i`-th person.
 
 We can observe neither causal effect nor CATE for the :math:`i`-th object, and, accordingly, we can't optimize it.
-But we can estimate CATE or equation for the uplift of a specific object:
+But we can estimate CATE or *uplift* of an object:
 
 .. math::
     \textbf{uplift} = \widehat{CATE} = E[Y_i \vert X_i = x, W_i = 1] - E[Y_i \vert X_i = x, W_i = 0]
 
 Where:
 
-- :math:`W_i \in {0, 1}` - a binary variable taking on value 1 if person :math:`i` receives the active treatment (:guilabel:`treatment group`), and 0 if person i receives the control treatment (:guilabel:`control group`);
+- :math:`W_i \in {0, 1}` - a binary variable: 1 if person :math:`i` receives the treatment :guilabel:`treatment group`, and 0 if person i receives no treatment :guilabel:`control group`;
 - :math:`Y_i` - person :math:`i`’s observed outcome, which is actually equal:
 
 .. math::
