@@ -1,13 +1,10 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.utils.validation import check_consistent_length
+
 from ..metrics import (
-    uplift_curve,
-    auuc,
-    qini_curve,
-    auqc,
-    response_rate_by_percentile,
-    uplift_by_percentile,
+    uplift_curve, perfect_uplift_curve, uplift_auc_score,
+    qini_curve, perfect_qini_curve, qini_auc_score,
     treatment_balance_curve
 )
 
@@ -18,11 +15,11 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     Args:
         trmnt_preds (1d array-like): Predictions for all observations if they are treatment.
         ctrl_preds (1d array-like): Predictions for all observations if they are control.
-        log (bool, default False): Logarithm of source samples.
+        log (bool, default False): Logarithm of source samples. Default is False.
         bins (integer or sequence, default 100): Number of histogram bins to be used.
             If an integer is given, bins + 1 bin edges are calculated and returned.
             If bins is a sequence, gives bin edges, including left edge of first bin and right edge of last bin.
-            In this case, bins is returned unmodified.
+            In this case, bins is returned unmodified. Default is 100.
 
     Returns:
         Object that stores computed values.
@@ -57,15 +54,15 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     return axes
 
 
-def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=False):
-    """Plot Uplift and Qini curves.
+def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
+    """Plot Uplift curves from predictions.
 
     Args:
         y_true (1d array-like): Ground truth (correct) labels.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
-        random (bool, default True): Draw a random curve.
-        perfect (bool, default False): Draw a perfect curve.
+        random (bool, default True): Draw a random curve. Default is True.
+        perfect (bool, default False): Draw a perfect curve. Default is True.
 
     Returns:
         Object that stores computed values.
@@ -73,50 +70,67 @@ def plot_uplift_qini_curves(y_true, uplift, treatment, random=True, perfect=Fals
     check_consistent_length(y_true, uplift, treatment)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
-    x_up, y_up = uplift_curve(y_true, uplift, treatment)
-    x_qi, y_qi = qini_curve(y_true, uplift, treatment)
+    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
 
-    fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(14, 7))
-
-    axes[0].plot(x_up, y_up, label='Model', color='b')
-    axes[1].plot(x_qi, y_qi, label='Model', color='b')
+    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
+    ax.plot(x_actual, y_actual, label='Model', color='blue')
 
     if random:
-        up_ratio_random = (y_true[treatment == 1].sum() / len(y_true[treatment == 1]) -
-                           y_true[treatment == 0].sum() / len(y_true[treatment == 0]))
-        y_up_random = x_up * up_ratio_random
-
-        qi_ratio_random = (y_true[treatment == 1].sum() - len(y_true[treatment == 1]) *
-                           y_true[treatment == 0].sum() / len(y_true[treatment == 0])) / len(y_true)
-        y_qi_random = x_qi * qi_ratio_random
-
-        axes[0].plot(x_up, y_up_random, label='Random', color='black')
-        axes[0].fill_between(x_up, y_up, y_up_random, alpha=0.2, color='b')
-        axes[1].plot(x_qi, y_qi_random, label='Random', color='black')
-        axes[1].fill_between(x_qi, y_qi, y_qi_random, alpha=0.2, color='b')
+        x_baseline, y_baseline = x_actual, x_actual * y_actual[-1] / len(y_true)
+        ax.plot(x_baseline, y_baseline, label='Random', color='black')
+        ax.fill_between(x_actual, y_actual, y_baseline, alpha=0.2, color='b')
 
     if perfect:
-        x_up_perfect, y_up_perfect = uplift_curve(
-            y_true, y_true * treatment - y_true * (1 - treatment), treatment
-        )
-        x_qi_perfect, y_qi_perfect = qini_curve(
-            y_true, y_true * treatment - y_true * (1 - treatment), treatment
-        )
+        x_perfect, y_perfect = perfect_uplift_curve(y_true, treatment)
+        ax.plot(x_perfect, y_perfect, label='Perfect', color='Red')
 
-        axes[0].plot(x_up_perfect, y_up_perfect, label='Perfect', color='red')
-        axes[1].plot(x_qi_perfect, y_qi_perfect, label='Perfect', color='red')
+    ax.legend(loc='lower right')
+    ax.set_title(f'Uplift curve\nuplift_auc_score={uplift_auc_score(y_true, uplift, treatment):.2f}')
+    ax.set_xlabel('Number targeted')
+    ax.set_ylabel('Gain: treatment - control')
 
-    axes[0].legend(loc='upper left')
-    axes[0].set_title(f'Uplift curve: AUUC={auuc(y_true, uplift, treatment):.2f}')
-    axes[0].set_xlabel('Number targeted')
-    axes[0].set_ylabel('Relative gain: treatment - control')
+    return ax
 
-    axes[1].legend(loc='upper left')
-    axes[1].set_title(f'Qini curve: AUQC={auqc(y_true, uplift, treatment):.2f}')
-    axes[1].set_xlabel('Number targeted')
-    axes[1].set_ylabel('Number of incremental outcome')
 
-    return axes
+def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negative_effect=True):
+    """Plot Qini curves from predictions.
+
+    Args:
+        y_true (1d array-like): Ground truth (correct) labels.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+        random (bool, default True): Draw a random curve. Default is True.
+        perfect (bool, default False): Draw a perfect curve. Default is True.
+        negative_effect (bool): If True, optimum Qini Curve contains the negative effects
+            (negative uplift because of campaign). Otherwise, optimum Qini Curve will not
+            contain the negative effects. Default is True.
+
+    Returns:
+        Object that stores computed values.
+    """
+    check_consistent_length(y_true, uplift, treatment)
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+
+    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
+
+    x_actual, y_actual = qini_curve(y_true, uplift, treatment)
+    ax.plot(x_actual, y_actual, label='Model', color='blue')
+
+    if random:
+        x_baseline, y_baseline = x_actual, x_actual * y_actual[-1] / len(y_true)
+        ax.plot(x_baseline, y_baseline, label='Random', color='black')
+        ax.fill_between(x_actual, y_actual, y_baseline, alpha=0.2, color='b')
+
+    if perfect:
+        x_perfect, y_perfect = perfect_qini_curve(y_true, treatment, negative_effect)
+        ax.plot(x_perfect, y_perfect, label='Perfect', color='Red')
+
+    ax.legend(loc='lower right')
+    ax.set_title(f'Qini curve\nqini_auc_score={qini_auc_score(y_true, uplift, treatment, negative_effect):.2f}')
+    ax.set_xlabel('Number targeted')
+    ax.set_ylabel('Number of incremental outcome')
+
+    return ax
 
 
 def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kind='line', bins=10):
@@ -250,19 +264,19 @@ def plot_treatment_balance_curve(uplift, treatment, random=True, winsize=0.1):
 
     x_tb, y_tb = treatment_balance_curve(uplift, treatment, winsize=int(len(uplift)*winsize))
 
-    _, axes = plt.subplots(ncols=1, nrows=1, figsize=(14, 7))
+    _, ax = plt.subplots(ncols=1, nrows=1, figsize=(14, 7))
 
-    axes.plot(x_tb, y_tb, label='Model', color='b')
+    ax.plot(x_tb, y_tb, label='Model', color='b')
 
     if random:
         y_tb_random = np.average(treatment) * np.ones_like(x_tb)
 
-        axes.plot(x_tb, y_tb_random, label='Random', color='black')
-        axes.fill_between(x_tb, y_tb, y_tb_random, alpha=0.2, color='b')
+        ax.plot(x_tb, y_tb_random, label='Random', color='black')
+        ax.fill_between(x_tb, y_tb, y_tb_random, alpha=0.2, color='b')
 
-    axes.legend()
-    axes.set_title('Treatment balance curve')
-    axes.set_xlabel('Percentage targeted')
-    axes.set_ylabel('Balance: treatment / (treatment + control)')
+    ax.legend()
+    ax.set_title('Treatment balance curve')
+    ax.set_xlabel('Percentage targeted')
+    ax.set_ylabel('Balance: treatment / (treatment + control)')
 
-    return axes
+    return ax
