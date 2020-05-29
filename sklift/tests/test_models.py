@@ -2,6 +2,7 @@ import pytest
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+
 from ..models import (
     SoloModel,
     ClassTransformation,
