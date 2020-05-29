@@ -1,16 +1,14 @@
 .. _SoloModel:
 
 *********************************
-Approaches with the same model
+Single model approaches
 *********************************
 
-One model with treatment as feature
+Single model with treatment as feature
 ========================================
 
-The simplest and most intuitive solution: the model is trained on union of two groups, with the binary
-communication flag acting as an additional feature. Each object from the test sample is scored twice:
-with the communication flag equal to `1` and equal to `0`. Subtracting the probabilities for each observation,
-we get the required uplift.
+The most intuitive and simple uplift modeling technique. A training set consists of two groups: treatment samples and control samples. There is also a binary treatment flag added as a feature to the training set. After the model is trained, at the scoring time it is going to be applied twice:
+with the treatment flag equals `1` and with the treatment flag equals `0`. Subtracting these model's outcomes for each test sample, we will get an estimate of the uplift.
 
 .. image:: ../../_static/images/SoloModel.png
     :align: center
@@ -22,8 +20,8 @@ we get the required uplift.
 Treatment interaction
 =========================
 
-The approach described above has various modifications. For example, double the number of attributes by adding
-the product of each attribute to the interaction flag:
+The single model approach has various modifications. For instance, we can update the number of attributes in the training set by adding
+the product of each attribute and the treatment flag:
 
 .. image:: ../../_static/images/SoloModel_treatment_intercation.png
     :align: center

@@ -7,67 +7,65 @@ Class Transformation
 .. warning::
     This approach is only suitable for classification problem
 
-Quite an interesting and mathematically confirmed approach to the construction of the model, presented in 2012.
-The method is to predict a slightly changed target:
+Simple yet powerful and mathematically proven uplift modeling method, presented in 2012.
+The main idea is to predict a slightly changed target :math:`Z_i`:
 
 .. math::
-    z_i = y_i * w_i + (1 - y_i) * (1 - w_i), где
+    Z_i = Y_i \cdot W_i + (1 - Y_i) \cdot (1 - W_i),
 
-* :math:`z_i` - new target for :math:`i` customer;
+* :math:`Z_i` - new target for the :math:`i` customer;
 
-* :math:`y_i` - old target :math:`i` customer;
+* :math:`Y_i` - previous target for the :math:`i` customer;
 
-* :math:`w_i` - treatment flag :math:`i` customer.
+* :math:`W_i` - treatment flag assigned to the :math:`i` customer.
 
-In other words, the new class is 1 if we know that on a particular observation, the result in the interaction
-would be as good as in the control group if we could know the result in both groups:
+In other words, the new target equals 1 if a response in the treatment group is as good as a response in the control group and equals 0 otherwise:
 
 .. math::
-    z_i = \begin{cases}
-        1, & \mbox{if } w_i = 1 \mbox{ and } y_i = 1 \\
-        1, & \mbox{if } w_i = 0 \mbox{ and } y_i = 0 \\
+    Z_i = \begin{cases}
+        1, & \mbox{if } W_i = 1 \mbox{ and } Y_i = 1 \\
+        1, & \mbox{if } W_i = 0 \mbox{ and } Y_i = 0 \\
         0, & \mbox{otherwise}
        \end{cases}
 
-Let's describe in more detail what is the probability of a new target variable:
+Let's go deeper and estimate the conditional probability of the target variable:
 
 .. math::
-    P(Z=1|X_1, ..., X_m) = \\
-    = P(Z=1|X_1, ..., X_m, W = 1) * P(W = 1|X_1, ..., X_m, ) + \\
-    + P(Z=1|X_1, ..., X_m, W = 0) * P(W = 0|X_1, ..., X_m, ) = \\
-    = P(Y=1|X_1, ..., X_m, W = 1) * P(W = 1|X_1, ..., X_m, ) + \\
-    + P(Y=0|X_1, ..., X_m, W = 0) * P(W = 0|X_1, ..., X_m, ).
+    P(Z=1|X = x) = \\
+    = P(Z=1|X = x, W = 1) \cdot P(W = 1|X = x) + \\
+    + P(Z=1|X = x, W = 0) \cdot P(W = 0|X = x) = \\
+    = P(Y=1|X = x, W = 1) \cdot P(W = 1|X = x) + \\
+    + P(Y=0|X = x, W = 0) \cdot P(W = 0|X = x).
 
-We assume that :math:`W` does not depend on the attributes of :math:`X_1, ..., X_m`, because otherwise the experiment
-design is not very well designed. Taking this, we have: :math:`P(W | X_1, ..., X_m, ) = P(W)` and
+We assume that :math:`W` is independent of :math:`X = x` by design.
+Thus we have: :math:`P(W | X = x) = P(W)` and
 
 .. math::
-    P(Z=1|X_1, ..., X_m) = \\
-    = P^T(Y=1|X_1, ..., X_m) * P(W = 1) + \\
-    + P^C(Y=0|X_1, ..., X_m) * P(W = 0).
+    P(Z=1|X = x) = \\
+    = P^T(Y=1|X = x) \cdot P(W = 1) + \\
+    + P^C(Y=0|X = x) \cdot P(W = 0)
 
-Also assume that :math:`P(W = 1) = P(W = 0) = \frac{1}{2}`, i.e. during the experiment, the control and treatment groups
+Also, we assume that :math:`P(W = 1) = P(W = 0) = \frac{1}{2}`, which means that during the experiment the control and the treatment groups
 were divided in equal proportions. Then we get the following:
 
 .. math::
-    P(Z=1|X_1, ..., X_m) = \\
-    = P^T(Y=1|X_1, ..., X_m) * \frac{1}{2} + P^C(Y=0|X_1, ..., X_m) *\frac{1}{2} \Rightarrow \\
-    \Rightarrow 2 * P(Z=1|X_1, ..., X_m) = \\
-    = P^T(Y=1|X_1, ..., X_m) + P^C(Y=0|X_1, ..., X_m) = \\
-    = P^T(Y=1|X_1, ..., X_m) + 1 - P^C(Y=1|X_1, ..., X_m) \Rightarrow \\
-    \Rightarrow P^T(Y=1|X_1, ..., X_m) - P^C(Y=1|X_1, ..., X_m) = \\
-     = UPLIFT = 2 * P(Z=1|X_1, ..., X_m) - 1
+    P(Z=1|X = x) = \\
+    = P^T(Y=1|X = x) \cdot \frac{1}{2} + P^C(Y=0|X = x) \cdot \frac{1}{2} \Rightarrow \\
+
+    2 \cdot P(Z=1|X = x) = \\
+    = P^T(Y=1|X = x) + P^C(Y=0|X = x) = \\
+    = P^T(Y=1|X = x) + 1 - P^C(Y=1|X = x) \Rightarrow \\
+    \Rightarrow P^T(Y=1|X = x) - P^C(Y=1|X = x) = \\
+     = UPLIFT = 2 \cdot P(Z=1|X = x) - 1
 
 
-Thus, by doubling the forecast of the new target and subtracting one from it, we get the value of the uplift itself,
-i.e.
+Thus, by doubling the estimate of the new target :math:`Z` and subtracting one we will get an estimation of the uplift:
 
 .. math::
-    UPLIFT = 2 * P(Z=1) - 1
+    UPLIFT = 2 \cdot P(Z=1) - 1
 
-Based on the assumption described above: :math:`P(W = 1) = P(W = 0) = \frac{1}{2}`, this approach should be used
-only in cases where the number of clients with whom we have communicated is equal to the number of clients with
-whom there was no communication.
+This approach is based on the assumption: :math:`P(W = 1) = P(W = 0) = \frac{1}{2}`. That is the reason that it has to be used
+only in cases where the number of treated customers (communication) is equal to the number of control customers (no communication).
 
 .. hint::
     In sklift this approach corresponds to the :class:`.ClassTransformation` class.
@@ -85,7 +83,7 @@ Examples using ``sklift.models.ClassTransformation``
 .. |Open In Colab2| image:: https://colab.research.google.com/assets/colab-badge.svg
    :target: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 
-1. The overview of the basic approaches to solving the Uplift Modeling problem
+1. The overview of the basic approaches to the Uplift Modeling problem
 
 .. list-table::
     :align: center
