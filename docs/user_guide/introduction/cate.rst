@@ -9,7 +9,7 @@ But there is a problem: we can not make a communication (send an e-mail) and do 
    :alt: Joke about Schrodinger's cat
    :align: center
 
-Denoting :math:`Y_i^1` person :math:`i`’s outcome when receives the treatment (a presense of a communication) and :math:`Y_i^0` :math:`i`’s outcome when he receives no treatment (control, no communication), the :guilabel:`causal effect` :math:`\tau_i` of the treatment *vis-a-vis* no treatment is given by:
+Denoting :math:`Y_i^1` person :math:`i`’s outcome when receives the treatment (a presence of the communication) and :math:`Y_i^0` :math:`i`’s outcome when he receives no treatment (control, no communication), the :guilabel:`causal effect` :math:`\tau_i` of the treatment *vis-a-vis* no treatment is given by:
 
 .. math::
     \tau_i = Y_i^1 - Y_i^0
@@ -29,7 +29,7 @@ But we can estimate CATE or *uplift* of an object:
 
 Where:
 
-- :math:`W_i \in {0, 1}` - a binary variable: 1 if person :math:`i` receives the treatment :guilabel:`treatment group`, and 0 if person i receives no treatment :guilabel:`control group`;
+- :math:`W_i \in {0, 1}` - a binary variable: 1 if person :math:`i` receives the treatment :guilabel:`treatment group`, and 0 if person :math:`i` receives no treatment :guilabel:`control group`;
 - :math:`Y_i` - person :math:`i`’s observed outcome, which is actually equal:
 
 .. math::
