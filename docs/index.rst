@@ -1,7 +1,3 @@
-.. meta::
-    :description lang=en:
-        scikit-uplift (sklift) is a Python module for uplift modeling and causal inference in scikit-learn style.
-
 .. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
 .. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
 
@@ -19,7 +15,7 @@ scikit-uplift
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
-More about uplift modelling problem read in russian on habr.com: `Part 1`_ and `Part 2`_.
+Read more about uplift modelling problem in :ref:`User guide <user_guide>`, also in russian on habr.com: `Part 1`_ and `Part 2`_.
 
 Features
 #########
@@ -28,7 +24,7 @@ Features
 
 - Applying any estimator adheres to scikit-learn conventions;
 
-- All approaches can be used in sklearn.pipeline. See example of usage: |Open In Colab3|_.
+- All approaches can be used in sklearn.pipeline. See example of usage: |Open In Colab3|_;
 
 - Almost all implemented approaches solve both the problem of classification and regression;
 
@@ -39,7 +35,7 @@ Features
 
 **The package currently supports the following methods:**
 
-1. Solo Model (aka Treatment Dummy) approach
+1. Solo Model (aka Treatment Dummy and Treatment interaction) approach
 2. Class Transformation (aka Class Variable Transformation or Revert Label) approach
 3. Two Models (aka naïve approach, or difference score method, or double classifier approach) approach, including Dependent Data Representation
 
@@ -48,6 +44,7 @@ Features
 1. Uplift@k
 2. Area Under Uplift Curve
 3. Area Under Qini Curve
+4. Weighted average uplift
 
 Project info
 #############
@@ -56,12 +53,15 @@ Project info
 * Github examples: https://github.com/maks-sh/scikit-uplift/tree/master/notebooks
 * Documentation: https://scikit-uplift.readthedocs.io/en/latest/
 * Contributing guide: https://scikit-uplift.readthedocs.io/en/latest/contributing.html
-* License: MIT
+* License: `MIT <https://github.com/maks-sh/scikit-uplift/blob/master/LICENSE>`__
 
-Contributing
+Community
 #############
 
-We welcome new contributors of all experience levels. Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
+We welcome new contributors of all experience levels.
+
+- Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
+- By participating in this project, you agree to abide by its `Code of Conduct <https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md>`__.
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/0
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/0
@@ -160,7 +160,7 @@ Papers and materials
 	Direct Marketing Analytics Journal, (3):14–21, 2007.
 
 11. Devriendt, F., Guns, T., & Verbeke, W. 2020.
-    Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
+	Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
 
 ===============
 
