@@ -27,8 +27,6 @@
 .. _Open In Colab4: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb
 
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
-.. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
-.. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
 
 .. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/dev/docs/_static/sklift-github-logo.png
     :align: center
@@ -42,7 +40,9 @@ scikit-uplift
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
-More about uplift modelling problem read in `User Guide <https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html>`__, and also in russian on habr.com: `Part 1`_ and `Part 2`_.
+Read more about uplift modeling problem in `User Guide <https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html>`__,
+also articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
+and `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__.
 
 **Features**:
 

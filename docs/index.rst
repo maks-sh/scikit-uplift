@@ -1,6 +1,3 @@
-.. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
-.. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
-
 .. |Open In Colab3| image:: https://colab.research.google.com/assets/colab-badge.svg
 .. _Open In Colab3: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb
 
@@ -15,7 +12,9 @@ scikit-uplift
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
-Read more about uplift modelling problem in :ref:`User Guide <user_guide>`, also in russian on habr.com: `Part 1`_ and `Part 2`_.
+Read more about uplift modeling problem in :ref:`User Guide <user_guide>`,
+also articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
+and `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__.
 
 Features
 #########
