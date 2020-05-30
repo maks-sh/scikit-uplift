@@ -1,17 +1,15 @@
-.. meta::
-    :description lang=en:
-        User guide for uplift modeling and casual inference.
+.. _user_guide:
 
 **********
 User guide
 **********
 
 .. image:: https://habrastorage.org/webt/hf/7i/nu/hf7inuu3agtnwl1yo0g--mznzno.jpeg
-   :alt: User guide for uplift modeling and casual inference.
+   :alt: User guide for uplift modeling and causal inference.
 
-Uplift modeling evaluates the effect of communication with clients and selects the group that is most affected.
-This class of tasks is easy to implement, but it is not widely used in the machine learning courses or in the relevant literature.
-In this guide we will try to reveal all the necessary basics for modeling uplift.
+Uplift modeling estimates the effect of communication action on some customer outcome and gives an opportunity to efficiently target customers which are most likely to respond to a marketing campaign.
+It is relatively easy to implement, but surprisingly poorly covered in the machine learning courses and literature.
+This guide is going to shed some light on the essentials of causal inference estimating and uplift modeling.
 
 .. toctree::
    :maxdepth: 3
@@ -28,9 +26,10 @@ Credits
 - `Irina Elisova <https://github.com/ElisovaIra>`_
 - `Maksim Shevchenko <https://github.com/maks-sh>`_
 
-**Graphics:**
+**Acknowledgements:**
 
-- `Alina Zhukova <https://www.linkedin.com/in/alina-zhukova-a307b677/>`_ - pictures on the main User Guide page and on the "Type of clients" pages.
+- `Kirill Liksakov <https://github.com/kirrlix1994>`_ - uplift metrics research
+- `Alina Zhukova <https://www.linkedin.com/in/alina-zhukova-a307b677/>`_ - artwork: user guide cover and key pictures
 
 Citations
 ----------
