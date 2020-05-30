@@ -1,6 +1,6 @@
 .. -*- mode: rst -*-
 
-|Python3|_ |PyPi|_ |Docs|_
+|Python3|_ |PyPi|_ |Docs|_ |License|
 
 .. |Python3| image:: https://img.shields.io/badge/python-3-blue.svg
 .. _Python3: https://badge.fury.io/py/scikit-uplift
@@ -10,6 +10,9 @@
 
 .. |Docs| image:: https://readthedocs.org/projects/scikit-uplift/badge/?version=latest
 .. _Docs: https://scikit-uplift.readthedocs.io/en/latest/
+
+.. |Docs| image:: https://img.shields.io/badge/license-MIT-green
+.. _Docs: https://github.com/maks-sh/scikit-uplift/blob/master/LICENSE
 
 .. |Open In Colab1| image:: https://colab.research.google.com/assets/colab-badge.svg
 .. _Open In Colab1: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
@@ -24,8 +27,6 @@
 .. _Open In Colab4: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb
 
 .. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
-.. _Part 1: https://habr.com/ru/company/ru_mts/blog/485980/
-.. _Part 2: https://habr.com/ru/company/ru_mts/blog/485976/
 
 .. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/dev/docs/_static/sklift-github-logo.png
     :align: center
@@ -39,7 +40,9 @@ scikit-uplift
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
-More about uplift modelling problem read in russian on habr.com: `Part 1`_ and `Part 2`_.
+Read more about uplift modeling problem in `User Guide <https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html>`__,
+also articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
+and `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__.
 
 **Features**:
 
@@ -47,7 +50,7 @@ More about uplift modelling problem read in russian on habr.com: `Part 1`_ and `
 
 * Applying any estimator adheres to scikit-learn conventions;
 
-* All approaches can be used in sklearn.pipeline (see example (`EN <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`__ |Open In Colab3|_, `RU <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__ |Open In Colab4|_))
+* All approaches can be used in sklearn.pipeline (see example (`EN <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`__ |Open In Colab3|_, `RU <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__ |Open In Colab4|_));
 
 * Almost all implemented approaches solve both the problem of classification and regression;
 
@@ -101,57 +104,65 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
     # import any estimator adheres to scikit-learn conventions.
     from catboost import CatBoostClassifier
 
+
+    # define models
+    treatment_model = CatBoostClassifier(iterations=50, thread_count=3,
+                                         random_state=42, silent=True)
+    control_model = CatBoostClassifier(iterations=50, thread_count=3,
+                                       random_state=42, silent=True)
+
     # define approach
-    sm = SoloModel(CatBoostClassifier(verbose=100, random_state=777))
+    tm = TwoModels(treatment_model, control_model, method='vanilla')
     # fit model
-    sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={'plot': True})
+    tm = tm.fit(X_train, y_train, treat_train)
 
     # predict uplift
-    uplift_sm = sm.predict(X_val)
+    uplift_preds = tm.predict(X_val)
 
 **Evaluate your uplift model**
 
 .. code-block:: python
 
     # import metrics to evaluate your model
-    from sklift.metrics import qini_auc_score, uplift_auc_score, uplift_at_k
+    from sklift.metrics import (
+        uplift_at_k, uplift_auc_score, qini_auc_score, weighted_average_uplift
+    )
+
 
     # Uplift@30%
-    sm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_sm, treatment=treat_val, k=0.3)
+    tm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_preds, treatment=treat_val,
+                                 strategy='overall', k=0.3)
+
     # Area Under Qini Curve
-    sm_qini_auc_score = qini_auc_score(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+    tm_qini_auc = qini_auc_score(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
+
     # Area Under Uplift Curve
-    sm_uplift_auc_score = uplift_auc_score(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+    tm_uplift_auc = uplift_auc_score(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
+
+    # Weighted average uplift
+    tm_wau = weighted_average_uplift(y_true=y_val, uplift=uplift_preds,  treatment=treat_val)
 
 **Vizualize the results**
 
 .. code-block:: python
 
     # import vizualisation tools
-    from sklift.viz import plot_uplift_preds, plot_uplift_qini_curves
+    from sklift.viz import plot_qini_curve
 
-    # get conditional predictions (probabilities) of performing a target action
-    # with interaction for each object
-    sm_trmnt_preds = sm.trmnt_preds_
-    # get conditional predictions (probabilities) of performing a target action
-    # without interaction for each object
-    sm_ctrl_preds = sm.ctrl_preds_
+    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
 
-    # draw probability distributions and their difference (uplift)
-    plot_uplift_preds(trmnt_preds=sm_trmnt_preds, ctrl_preds=sm_ctrl_preds);
-    # draw Uplift and Qini curves
-    plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
-
-.. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/images/readme_img1.png
-    :align: center
-    :alt: Probabilities Histogram, Uplift anf Qini curves
-
-
+.. image:: _static/images/quick_start_qini.png
+    :width: 514px
+    :height: 400px
+    :alt: Example of model's qini curve, perfect qini curve and random qini curve
 
 Development
 -----------
 
-We welcome new contributors of all experience levels. Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
+We welcome new contributors of all experience levels.
+
+- Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
+- By participating in this project, you agree to abide by its `Code of Conduct <https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md>`__.
 
 Contributing
 ~~~~~~~~~~~~~~~
@@ -195,6 +206,7 @@ Important links
 - Official source code repo: https://github.com/maks-sh/scikit-uplift/
 - Issue tracker: https://github.com/maks-sh/scikit-uplift/issues
 - Documentation: https://scikit-uplift.readthedocs.io/en/latest/
+- User Guide: https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html
 - Contributing guide: https://scikit-uplift.readthedocs.io/en/latest/contributing.html
 - Release History: https://scikit-uplift.readthedocs.io/en/latest/changelog.html
 
@@ -239,10 +251,10 @@ Papers and materials
     Uplift Modeling with Multiple Treatments and General Response Types. 10.1137/1.9781611974973.66.
 
 10. Nicholas J Radcliffe. 2007.
-    Using control groups to target on predicted lift: Building and assessing uplift model. Direct Marketing Analytics Journal, (3):14–21, 2007.
+	Using control groups to target on predicted lift: Building and assessing uplift model. Direct Marketing Analytics Journal, (3):14–21, 2007.
 
 11. Devriendt, F., Guns, T., & Verbeke, W. 2020.
-    Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
+	Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
 
 ===============
 

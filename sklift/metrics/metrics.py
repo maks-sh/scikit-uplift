@@ -294,7 +294,7 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
 
 
 def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
-    """Compute uplift at first k observation by uplift of the total sample.
+    """Compute uplift at first k observations by uplift of the total sample.
 
     Args:
         y_true (1d array-like): Correct (true) target values.
@@ -394,7 +394,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
 
 def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='overall', bins=10):
     """Compute response rate (target mean in the control or treatment group) at each percentile.
-    
+
     Args:
         y_true (1d array-like): Correct (true) target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
@@ -414,7 +414,7 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
                 calculated only on them. Then the difference between these conversions is calculated.
             * ``'by_group'``:
                 Separately calculates conversions in top k observations in each group (control and treatment)
-                sorted by uplift predictions. Then the difference between these conversions is calculated
+                sorted by uplift predictions. Then the difference between these conversions is calculated.
 
         bins (int): Determines the number of bins (and relative percentile) in the data. Default is 10.
         
@@ -424,43 +424,42 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
         variance of the response rate at each percentile,
         group size at each percentile.
     """
-
+    
     group_types = ['treatment', 'control']
     strategy_methods = ['overall', 'by_group']
-
+    
     n_samples = len(y_true)
     check_consistent_length(y_true, uplift, treatment)
-
+    
     if group not in group_types:
         raise ValueError(f'Response rate supports only group types in {group_types},'
-                         f' got {group}.')
+                         f' got {group}.') 
 
     if strategy not in strategy_methods:
         raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
                          f' got {strategy}.')
-
+    
     if not isinstance(bins, int) or bins <= 0:
-        raise ValueError(f'Bins should be positive integer.'
-                         f' Invalid value bins: {bins}')
+        raise ValueError(f'Bins should be positive integer. Invalid value bins: {bins}')
 
     if bins >= n_samples:
         raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
-
+    
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
     order = np.argsort(uplift, kind='mergesort')[::-1]
 
     trmnt_flag = 1 if group == 'treatment' else 0
-
+    
     if strategy == 'overall':
         y_true_bin = np.array_split(y_true[order], bins)
         trmnt_bin = np.array_split(treatment[order], bins)
-
+        
         group_size = np.array([len(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
         response_rate = np.array([np.mean(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
 
     else:  # strategy == 'by_group'
         y_bin = np.array_split(y_true[order][treatment[order] == trmnt_flag], bins)
-
+        
         group_size = np.array([len(y) for y in y_bin])
         response_rate = np.array([np.mean(y) for y in y_bin])
 
