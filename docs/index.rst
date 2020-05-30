@@ -15,7 +15,7 @@ scikit-uplift
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
-Read more about uplift modelling problem in :ref:`User guide <user_guide>`, also in russian on habr.com: `Part 1`_ and `Part 2`_.
+Read more about uplift modelling problem in :ref:`User Guide <user_guide>`, also in russian on habr.com: `Part 1`_ and `Part 2`_.
 
 Features
 #########

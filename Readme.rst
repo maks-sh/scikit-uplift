@@ -42,7 +42,7 @@ scikit-uplift
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
-More about uplift modelling problem read in `User guide <https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html>`__, and also in russian on habr.com: `Part 1`_ and `Part 2`_.
+More about uplift modelling problem read in `User Guide <https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html>`__, and also in russian on habr.com: `Part 1`_ and `Part 2`_.
 
 **Features**:
 
@@ -206,7 +206,7 @@ Important links
 - Official source code repo: https://github.com/maks-sh/scikit-uplift/
 - Issue tracker: https://github.com/maks-sh/scikit-uplift/issues
 - Documentation: https://scikit-uplift.readthedocs.io/en/latest/
-- User guide: https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html
+- User Guide: https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html
 - Contributing guide: https://scikit-uplift.readthedocs.io/en/latest/contributing.html
 - Release History: https://scikit-uplift.readthedocs.io/en/latest/changelog.html
 

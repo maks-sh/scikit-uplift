@@ -2,7 +2,7 @@
 `sklift <../>`_.models
 **********************
 
-See :ref:`Models <models>` section of the User guide for further details.
+See :ref:`Models <models>` section of the User Guide for further details.
 
 .. toctree::
    :maxdepth: 3
