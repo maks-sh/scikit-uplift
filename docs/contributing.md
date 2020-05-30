@@ -48,7 +48,7 @@ Then push the changes to your GitHub account with:
 
 #### Python
 
-We follow the PEP8 style guide for Python. Docstrings follow google style.
+We follow the PEP8 style guide for Python. Docstrings follow [google style](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html).
 
 #### Git Commit Messages
 

@@ -1,7 +1,3 @@
-.. meta::
-    :description lang=en:
-        Installing scikit-uplift (sklift) - python package for uplift modeling in scikit-learn style
-
 *************
 Installation
 *************

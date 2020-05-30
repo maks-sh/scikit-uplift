@@ -1,7 +1,3 @@
-.. meta::
-    :description lang=en:
-        See how to build uplift model and predict uplift in python using scikit-uplift (sklift)
-
 .. _The overview of the basic approaches to solving the Uplift Modeling problem: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
 .. |Open In Colab1| image:: https://colab.research.google.com/assets/colab-badge.svg
    :target: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
