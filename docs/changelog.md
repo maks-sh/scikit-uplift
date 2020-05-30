@@ -9,7 +9,6 @@
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
 ## Version 0.2.0
-_in development_
 
 ### [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
 
@@ -34,10 +33,9 @@ _in development_
 * 💥 Add [plot_qini_curve](https://scikit-uplift.readthedocs.io/en/latest/api/viz/plot_qini_curve.html) function.
 * ❗ Remove `plot_uplift_qini_curves`.
 
-
 ### Miscellaneous
 
-* 💥 Add contributors in main Readme and in index page of docs.
+* 💥 Add contributors in main Readme and in main page of docs.
 * 💥 Add [contributing guide](https://scikit-uplift.readthedocs.io/en/latest/contributing.html).
 * 💥 Add [code of conduct](https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md).
 * 📝 Reformat [Tutorials](https://scikit-uplift.readthedocs.io/en/latest/tutorials.html) page.
