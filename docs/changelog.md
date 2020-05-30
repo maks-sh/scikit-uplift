@@ -11,9 +11,29 @@
 ## Version 0.2.0
 _in development_
 
+### [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
+
+🔥 Add [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
+
 ### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
 
 * 💥 Add `treatment interaction` method to [SoloModel](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.models.models.SoloModel) approach by [@AdiVarma27](https://github.com/AdiVarma27).
+
+### [sklift.metrics](https://scikit-uplift.readthedocs.io/en/latest/api/metrics.html)
+
+* 💥 Add [uplift_by_percentile](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/uplift_by_percentile.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
+* 💥 Add [weighted_average_uplift](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/weighted_average_uplift.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
+* 💥 Add [perfect_uplift_curve](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/perfect_uplift_curve.html) function.
+* 💥 Add [perfect_qini_curve](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/perfect_qini_curve.html) function.
+* 🔨 Add normalization in [uplift_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/uplift_auc_score.html) and [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/qini_auc_score.html) functions.
+* ❗ Remove metrics `auuc` and `auqc`. In exchange for them use respectively [uplift_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/uplift_auc_score.html) and [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/qini_auc_score.html)
+
+### [sklift.viz](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html)
+
+* 💥 Add [plot_uplift_curve](https://scikit-uplift.readthedocs.io/en/latest/api/viz/plot_uplift_curve.html) function.
+* 💥 Add [plot_qini_curve](https://scikit-uplift.readthedocs.io/en/latest/api/viz/plot_qini_curve.html) function.
+* ❗ Remove `plot_uplift_qini_curves`.
+
 
 ### Miscellaneous
 
