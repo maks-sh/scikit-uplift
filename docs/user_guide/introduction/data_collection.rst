@@ -16,7 +16,7 @@ The only difference between the experiment and the future uplift model's campaig
 There is a trick: before running the marketing campaign, it is recommended to randomly subset a small part of the customer base and divide it into a control and a treatment group again, similar to the previous experiment. Using this data, you will not only be able to accurately evaluate the effectiveness of the campaign but also collect additional data for a further model retraining.
 
 .. image:: ../../_static/images/user_guide/ug_data_collection.gif
-   :alt: Experimental design to collect the train data for uplift modeling
+   :alt: Animation: Design of a train data collection experiment for uplift modeling
 
 It is recommended to configure a development of the uplift model and the campaign launch as an iterative process: each iteration will collect new training data. It should consist of a mix of a random customer subset and customers selected by the model.
 
