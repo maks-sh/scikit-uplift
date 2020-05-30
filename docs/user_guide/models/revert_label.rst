@@ -56,13 +56,17 @@ were divided in equal proportions. Then we get the following:
     = P^T(Y=1|X = x) + P^C(Y=0|X = x) = \\
     = P^T(Y=1|X = x) + 1 - P^C(Y=1|X = x) \Rightarrow \\
     \Rightarrow P^T(Y=1|X = x) - P^C(Y=1|X = x) = \\
-     = UPLIFT = 2 \cdot P(Z=1|X = x) - 1
+     = uplift = 2 \cdot P(Z=1|X = x) - 1
 
+.. image:: ../../_static/images/user_guide/ug_revert_label_mem.png
+    :align: center
+    :alt: Mem about class transformation approach for uplift modeling
 
 Thus, by doubling the estimate of the new target :math:`Z` and subtracting one we will get an estimation of the uplift:
 
 .. math::
-    UPLIFT = 2 \cdot P(Z=1) - 1
+    uplift = 2 \cdot P(Z=1) - 1
+
 
 This approach is based on the assumption: :math:`P(W = 1) = P(W = 0) = \frac{1}{2}`. That is the reason that it has to be used
 only in cases where the number of treated customers (communication) is equal to the number of control customers (no communication).
