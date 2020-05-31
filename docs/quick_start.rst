@@ -1,5 +1,3 @@
-.. -*- mode: rst -*-
-
 .. _RU: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb
 .. _EN: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
 
@@ -18,52 +16,92 @@ See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open I
 **Train and predict your uplift model**
 
 .. code-block:: python
+    :linenos:
 
     # import approaches
     from sklift.models import SoloModel, ClassTransformation, TwoModels
     # import any estimator adheres to scikit-learn conventions.
     from catboost import CatBoostClassifier
 
+
+    # define models
+    treatment_model = CatBoostClassifier(iterations=50, thread_count=3,
+                                         random_state=42, silent=True)
+    control_model = CatBoostClassifier(iterations=50, thread_count=3,
+                                       random_state=42, silent=True)
+
     # define approach
-    sm = SoloModel(CatBoostClassifier(verbose=100, random_state=777))
+    tm = TwoModels(treatment_model, control_model, method='vanilla')
     # fit model
-    sm = sm.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})
+    tm = tm.fit(X_train, y_train, treat_train)
 
     # predict uplift
-    uplift_sm = sm.predict(X_val)
+    uplift_preds = tm.predict(X_val)
 
 **Evaluate your uplift model**
 
 .. code-block:: python
+    :linenos:
 
     # import metrics to evaluate your model
-    from sklift.metrics import qini_auc_score, uplift_auc_score, uplift_at_k
+    from sklift.metrics import (
+        uplift_at_k, uplift_auc_score, qini_auc_score, weighted_average_uplift
+    )
+
+
     # Uplift@30%
-    sm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_sm, treatment=treat_val, k=0.3)
+    tm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_preds,
+                                 treatment=treat_val,
+                                 strategy='overall', k=0.3)
+
     # Area Under Qini Curve
-    sm_qini_auc_score = qini_auc_score(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+    tm_qini_auc = qini_auc_score(y_true=y_val, uplift=uplift_preds,
+                                 treatment=treat_val)
+
     # Area Under Uplift Curve
-    sm_uplift_auc_score = uplift_auc_score(y_true=y_val, uplift=uplift_sm, treatment=treat_val)
+    tm_uplift_auc = uplift_auc_score(y_true=y_val, uplift=uplift_preds,
+                                     treatment=treat_val)
+
+    # Weighted average uplift
+    tm_wau = weighted_average_uplift(y_true=y_val, uplift=uplift_preds,
+                                     treatment=treat_val)
 
 **Vizualize the results**
 
 .. code-block:: python
+    :linenos:
 
-    # import vizualisation tools
-    from sklift.viz import plot_uplift_preds, plot_uplift_qini_curves
+    from sklift.viz import plot_qini_curve
 
-    # get conditional predictions (probabilities) of performing a target action
-    # with interaction for each object
-    sm_trmnt_preds = sm.trmnt_preds_
-    # get conditional predictions (probabilities) of performing a target action
-    # without interaction for each object
-    sm_ctrl_preds = sm.ctrl_preds_
+    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
 
-    # draw probability distributions and their difference (uplift)
-    plot_uplift_preds(trmnt_preds=sm_trmnt_preds, ctrl_preds=sm_ctrl_preds);
-    # draw Uplift and Qini curves
-    plot_uplift_qini_curves(y_true=y_val, uplift=uplift_sm, treatment=treat_val);
+.. image:: _static/images/quick_start_qini.png
+    :width: 514px
+    :height: 400px
+    :alt: Example of model's qini curve, perfect qini curve and random qini curve
 
-.. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/master/docs/_static/images/readme_img1.png
-    :align: center
-    :alt: Probabilities Histogram, Uplift anf Qini curves
+
+.. code-block:: python
+    :linenos:
+
+    from sklift.viz import plot_uplift_curve
+
+    plot_uplift_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
+
+.. image:: _static/images/quick_start_uplift.png
+    :width: 514px
+    :height: 400px
+    :alt: Example of model's uplift curve, perfect uplift curve and random uplift curve
+
+.. code-block:: python
+    :linenos:
+
+    from sklift.viz import plot_uplift_by_percentile
+
+    plot_uplift_by_percentile(y_true=y_val, uplift=uplift_preds,
+                              treatment=treat_val, kind='bar')
+
+.. image:: _static/images/quick_start_wau.png
+    :width: 514px
+    :height: 400px
+    :alt: Uplift by percentile

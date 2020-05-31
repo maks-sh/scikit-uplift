@@ -1,0 +1,13 @@
+{% extends "!layout.html" %}
+  {%- block extrahead %}
+    {{ super() }}
+    <meta name="google-site-verification" content="b85cnQ7Wo0WqTtLY0iREMg4zYafNPO5QE-Md7ozY9JU" />
+  {% endblock %}
+  {% block menu %}
+    <div style="padding: 10px 10px; text-align: center;">
+      <iframe src="https://ghbtns.com/github-btn.html?user=maks-sh&repo=scikit-uplift&type=star&count=true&size=large" frameborder="0" scrolling="0" width="150px" height="30px"></iframe>
+      <br>
+    </div>
+    {{ super() }}
+  {% endblock %}
+
