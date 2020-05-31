@@ -1,6 +1,6 @@
 .. -*- mode: rst -*-
 
-|Python3|_ |PyPi|_ |Docs|_ |License|
+|Python3|_ |PyPi|_ |Docs|_ |License|_
 
 .. |Python3| image:: https://img.shields.io/badge/python-3-blue.svg
 .. _Python3: https://badge.fury.io/py/scikit-uplift
@@ -11,8 +11,8 @@
 .. |Docs| image:: https://readthedocs.org/projects/scikit-uplift/badge/?version=latest
 .. _Docs: https://scikit-uplift.readthedocs.io/en/latest/
 
-.. |Docs| image:: https://img.shields.io/badge/license-MIT-green
-.. _Docs: https://github.com/maks-sh/scikit-uplift/blob/master/LICENSE
+.. |License| image:: https://img.shields.io/badge/license-MIT-green
+.. _License: https://github.com/maks-sh/scikit-uplift/blob/master/LICENSE
 
 .. |Open In Colab1| image:: https://colab.research.google.com/assets/colab-badge.svg
 .. _Open In Colab1: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb
