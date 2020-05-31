@@ -12,7 +12,7 @@
 
 ### [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
 
-🔥 Add [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
+* 🔥 Add [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
 
 ### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
 
