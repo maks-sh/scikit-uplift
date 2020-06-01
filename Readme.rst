@@ -151,7 +151,7 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
 
     plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
 
-.. image:: _static/images/quick_start_qini.png
+.. image:: docs/_static/images/quick_start_qini.png
     :width: 514px
     :height: 400px
     :alt: Example of model's qini curve, perfect qini curve and random qini curve
@@ -169,36 +169,35 @@ Contributing
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/0
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/0
-   :alt: 0
+   :alt: Top contributor 1
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/1
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/1
-   :alt: 1
+   :alt: Top contributor 2
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/2
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/2
-   :alt: 2
+   :alt: Top contributor 3
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/3
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/3
-   :alt: 3
+   :alt: Top contributor 4
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
-   :alt: 4
+   :alt: Top contributor 5
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
-   :alt: 5
+   :alt: Top contributor 6
 
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
-   :alt: 6
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/6
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/6
+   :alt: Top contributor 7
 
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
-   :alt: 7
-
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/7
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/7
+   :alt: Legend
 
 Important links
 ~~~~~~~~~~~~~~~

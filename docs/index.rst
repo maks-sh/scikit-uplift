@@ -64,35 +64,35 @@ We welcome new contributors of all experience levels.
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/0
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/0
-   :alt: Contributor 0
+   :alt: Top contributor 1
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/1
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/1
-   :alt: Contributor 1
+   :alt: Top contributor 2
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/2
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/2
-   :alt: Contributor 2
+   :alt: Top contributor 3
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/3
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/3
-   :alt: Contributor 3
+   :alt: Top contributor 4
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
-   :alt: Contributor 4
+   :alt: Top contributor 5
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
    :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
-   :alt: Contributor 5
+   :alt: Top contributor 6
 
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
-   :alt: Contributor 6
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/6
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/6
+   :alt: Top contributor 7
 
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
-   :alt: Contributor 7
+.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/7
+   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/7
+   :alt: Legend
 
 .. toctree::
    :hidden:

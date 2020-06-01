@@ -10,13 +10,13 @@
 
 ## Version 0.2.0
 
-### [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
+### [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html)
 
-* 🔥 Add [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide.html)
+* 🔥 Add [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html)
 
 ### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
 
-* 💥 Add `treatment interaction` method to [SoloModel](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.models.models.SoloModel) approach by [@AdiVarma27](https://github.com/AdiVarma27).
+* 💥 Add `treatment interaction` method to [SoloModel](https://scikit-uplift.readthedocs.io/en/latest/api/models/SoloModel.html) approach by [@AdiVarma27](https://github.com/AdiVarma27).
 
 ### [sklift.metrics](https://scikit-uplift.readthedocs.io/en/latest/api/metrics.html)
 
