@@ -151,7 +151,7 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
 
     plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
 
-.. image:: docs/_static/images/quick_start_qini.png
+.. image:: docs/_static/images/Readme_qini_curve.png
     :width: 514px
     :height: 400px
     :alt: Example of model's qini curve, perfect qini curve and random qini curve
