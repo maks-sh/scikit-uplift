@@ -16,7 +16,7 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
         trmnt_preds (1d array-like): Predictions for all observations if they are treatment.
         ctrl_preds (1d array-like): Predictions for all observations if they are control.
         log (bool): Logarithm of source samples. Default is False.
-        bins (integer or sequence): Number of histogram bins to be used.
+        bins (integer or sequence): Number of histogram bins to be used. Default is 100.
             If an integer is given, bins + 1 bin edges are calculated and returned.
             If bins is a sequence, gives bin edges, including left edge of first bin and right edge of last bin.
             In this case, bins is returned unmodified. Default is 100.
