@@ -36,7 +36,7 @@
 scikit-uplift
 ===============
 
-**scikit-uplift** is a Python module for classic approaches for uplift modeling built on top of scikit-learn.
+**scikit-uplift (sklift)** is a Python module for classic approaches for uplift modeling built on top of scikit-learn.
 
 Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
 
@@ -48,13 +48,13 @@ and `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__.
 
 * Comfortable and intuitive style of modelling like scikit-learn;
 
-* Applying any estimator adheres to scikit-learn conventions;
+* Applying any estimator adheres to scikit-learn conventions (e.g. Xgboost, LightGBM, Catboost, etc.);
 
 * All approaches can be used in sklearn.pipeline (see example (`EN <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`__ |Open In Colab3|_, `RU <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__ |Open In Colab4|_));
 
 * Almost all implemented approaches solve both the problem of classification and regression;
 
-* A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model;
+* A lot of metrics are implemented to evaluate your uplift model. Such as *Area Under Uplift Curve* (AUUC) or *Area Under Qini Curve* (Qini coefficient);
 
 * Useful graphs for analyzing the built model.
 
@@ -149,7 +149,7 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
     # import vizualisation tools
     from sklift.viz import plot_qini_curve
 
-    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
+    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val, negative_effect=True)
 
 .. image:: docs/_static/images/Readme_qini_curve.png
     :width: 514px

@@ -73,7 +73,7 @@ See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open I
 
     from sklift.viz import plot_qini_curve
 
-    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
+    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val, negative_effect=True)
 
 .. image:: _static/images/quick_start_qini.png
     :width: 514px
