@@ -7,7 +7,7 @@ User Guide
 .. image:: https://habrastorage.org/webt/hf/7i/nu/hf7inuu3agtnwl1yo0g--mznzno.jpeg
    :alt: Cover of User Guide for uplift modeling and causal inference
 
-Uplift modeling estimates the effect of communication action on some customer outcome and gives an opportunity to efficiently target customers which are most likely to respond to a marketing campaign.
+Uplift modeling estimates the effect of communication action on some customer outcomes and gives an opportunity to efficiently target customers which are most likely to respond to a marketing campaign.
 It is relatively easy to implement, but surprisingly poorly covered in the machine learning courses and literature.
 This guide is going to shed some light on the essentials of causal inference estimating and uplift modeling.
 
@@ -44,5 +44,5 @@ If you find this User Guide useful for your research, please consider citing:
       year = {2020},
       publisher = {GitHub},
       journal = {GitHub repository},
-      howpublished = {\url{https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html}}
+      howpublished = {\url{https://www.uplift-modeling.com/en/latest/user_guide/index.html}}
     }

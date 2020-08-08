@@ -10,20 +10,20 @@ scikit-uplift
 
 **scikit-uplift (sklift)** is a Python module for basic approaches of uplift modeling built on top of scikit-learn.
 
-Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
+Uplift prediction aims to estimate the causal impact of treatment at the individual level.
 
-Read more about uplift modeling problem in :ref:`User Guide <user_guide>`,
-also articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
+Read more about the uplift modeling problem in :ref:`User Guide <user_guide>`,
+also articles in Russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
 and `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__.
 
 Features
 #########
 
-- Comfortable and intuitive style of modelling like scikit-learn;
+- Comfortable and intuitive style of modeling like scikit-learn;
 
 - Applying any estimator adheres to scikit-learn conventions;
 
-- All approaches can be used in sklearn.pipeline. See example of usage: |Open In Colab3|_;
+- All approaches can be used in sklearn.pipeline. See the example of usage: |Open In Colab3|_;
 
 - Almost all implemented approaches solve both the problem of classification and regression;
 
@@ -50,8 +50,8 @@ Project info
 
 * GitHub repository: https://github.com/maks-sh/scikit-uplift
 * Github examples: https://github.com/maks-sh/scikit-uplift/tree/master/notebooks
-* Documentation: https://scikit-uplift.readthedocs.io/en/latest/
-* Contributing guide: https://scikit-uplift.readthedocs.io/en/latest/contributing.html
+* Documentation: https://www.uplift-modeling.com/en/latest/index.html
+* Contributing guide: https://www.uplift-modeling.com/en/latest/contributing.html
 * License: `MIT <https://github.com/maks-sh/scikit-uplift/blob/master/LICENSE>`__
 
 Community
@@ -59,7 +59,7 @@ Community
 
 We welcome new contributors of all experience levels.
 
-- Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
+- Please see our `Contributing Guide <https://www.uplift-modeling.com/en/latest/contributing.html>`_ for more details.
 - By participating in this project, you agree to abide by its `Code of Conduct <https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md>`__.
 
 .. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/0
