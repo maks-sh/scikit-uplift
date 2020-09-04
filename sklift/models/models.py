@@ -1,9 +1,10 @@
 import warnings
+
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
-from sklearn.utils.validation import check_consistent_length
 from sklearn.utils.multiclass import type_of_target
+from sklearn.utils.validation import check_consistent_length
 
 
 class SoloModel(BaseEstimator):
@@ -11,22 +12,21 @@ class SoloModel(BaseEstimator):
 
     Fit solo model on whole dataset with 'treatment' as an additional feature.
 
-    For each test example calculate predictions on new set twice:
-    with treatment == '1' and with treatment == '0'.
-    After that calculate uplift as a delta between these predictions.
+    Each object from the test sample is scored twice: with the communication flag equal to 1 and equal to 0.
+    Subtracting the probabilities for each observation, we get the uplift.
 
     Return delta of predictions for each example.
 
-    See more details about `SoloModel in documentation`_.
+    Read more in the :ref:`User Guide <SoloModel>`.
 
     Args:
         estimator (estimator object implementing 'fit'): The object to use to fit the data.
         method (string, ’dummy’ or ’treatment_interaction’, default='dummy'): Specifies the approach:
         
             * ``'dummy'``:
-                single model;
+                Single model;
             * ``'treatment_interaction'``:
-                single model including treatment interactions.
+                Single model including treatment interactions.
 
     Attributes:
         trmnt_preds_ (array-like, shape (n_samples, )): Estimator predictions on samples when treatment.
@@ -48,8 +48,16 @@ class SoloModel(BaseEstimator):
         Lo, Victor. (2002). The True Lift Model - A Novel Data Mining Approach to Response Modeling
         in Database Marketing. SIGKDD Explorations. 4. 78-86.
 
-    .. _SoloModel in documentation:
-        https://scikit-uplift.readthedocs.io/en/latest/api/models.html#one-model-with-treatment-as-feature
+    See Also:
+
+        **Other approaches:**
+
+        * :class:`.ClassTransformation`: Class Variable Transformation approach.
+        * :class:`.TwoModels`: Double classifier approach.
+
+        **Other:**
+
+        * :func:`.plot_uplift_preds`: Plot histograms of treatment, control and uplift predictions.
     """
 
     def __init__(self, estimator, method='dummy'):
@@ -92,7 +100,7 @@ class SoloModel(BaseEstimator):
         if self.method == 'dummy':
             if isinstance(X, np.ndarray):
                 X_mod = np.column_stack((X, treatment))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod = X.assign(treatment=treatment)
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))
@@ -100,15 +108,15 @@ class SoloModel(BaseEstimator):
         if self.method == 'treatment_interaction':
             if isinstance(X, np.ndarray):
                 X_mod = np.column_stack((X, np.multiply(X, np.array(treatment).reshape(-1, 1)), treatment))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod = pd.concat([
                     X,
                     X.apply(lambda x: x * treatment)
                         .rename(columns=lambda x: str(x) + '_treatment_interaction')
-                ], axis=1)\
+                ], axis=1) \
                     .assign(treatment=treatment)
             else:
-                raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))           
+                raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))
 
         self._type_of_target = type_of_target(y)
 
@@ -132,7 +140,7 @@ class SoloModel(BaseEstimator):
             if isinstance(X, np.ndarray):
                 X_mod_trmnt = np.column_stack((X, np.ones(X.shape[0])))
                 X_mod_ctrl = np.column_stack((X, np.zeros(X.shape[0])))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod_trmnt = X.assign(treatment=np.ones(X.shape[0]))
                 X_mod_ctrl = X.assign(treatment=np.zeros(X.shape[0]))
             else:
@@ -142,18 +150,18 @@ class SoloModel(BaseEstimator):
             if isinstance(X, np.ndarray):
                 X_mod_trmnt = np.column_stack((X, np.multiply(X, np.ones((X.shape[0], 1))), np.ones(X.shape[0])))
                 X_mod_ctrl = np.column_stack((X, np.multiply(X, np.zeros((X.shape[0], 1))), np.zeros(X.shape[0])))
-            elif isinstance(X, pd.core.frame.DataFrame):
+            elif isinstance(X, pd.DataFrame):
                 X_mod_trmnt = pd.concat([
                     X,
                     X.apply(lambda x: x * np.ones(X.shape[0]))
                         .rename(columns=lambda x: str(x) + '_treatment_interaction')
-                ], axis=1)\
+                ], axis=1) \
                     .assign(treatment=np.ones(X.shape[0]))
                 X_mod_ctrl = pd.concat([
                     X,
                     X.apply(lambda x: x * np.zeros(X.shape[0]))
                         .rename(columns=lambda x: str(x) + '_treatment_interaction')
-                ], axis=1)\
+                ], axis=1) \
                     .assign(treatment=np.zeros(X.shape[0]))
             else:
                 raise TypeError("Expected numpy.ndarray or pandas.DataFrame in training vector X, got %s" % type(X))
@@ -173,18 +181,15 @@ class ClassTransformation(BaseEstimator):
     """aka Class Variable Transformation or Revert Label approach.
 
     Redefine target variable, which indicates that treatment make some impact on target or
-    did target is negative without treatment.
+    did target is negative without treatment: ``Z = Y * W + (1 - Y)(1 - W)``,
 
-    Z = Y * W + (1 - Y)(1 - W),
+    where ``Y`` - target vector, ``W`` - vector of binary communication flags.
 
-    where Y - target, W - communication flag.
-
-    Then, Uplift ~ 2 * (Z == 1) - 1
+    Then, ``Uplift ~ 2 * (Z == 1) - 1``
 
     Returns only uplift predictions.
 
-    See more details about `ClassTransformation in documentation`_.
-
+    Read more in the :ref:`User Guide <ClassTransformation>`.
 
     Args:
         estimator (estimator object implementing 'fit'): The object to use to fit the data.
@@ -197,17 +202,25 @@ class ClassTransformation(BaseEstimator):
         from catboost import CatBoostClassifier
 
 
-        ct = ClassTransformation(CatBoostClassifier(verbose=100, random_state=777))  # define approach
-        ct = ct.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})  # fit the model
-        uplift_ct = ct.predict(X_val)  # predict uplift
+        # define approach
+        ct = ClassTransformation(CatBoostClassifier(verbose=100, random_state=777))
+        # fit the model
+        ct = ct.fit(X_train, y_train, treat_train, estimator_fit_params={{'plot': True})
+        # predict uplift
+        uplift_ct = ct.predict(X_val)
 
     References:
         Maciej Jaskowski and Szymon Jaroszewicz. Uplift modeling for clinical trial data.
         ICML Workshop on Clinical Data Analysis, 2012.
 
-    .. _ClassTransformation in documentation:
-        https://scikit-uplift.readthedocs.io/en/latest/api/models.html#class-transformation
+    See Also:
+
+        **Other approaches:**
+
+        * :class:`.SoloModel`: Single model approach.
+        * :class:`.TwoModels`: Double classifier approach.
     """
+
     def __init__(self, estimator):
         self.estimator = estimator
         self._type_of_target = None
@@ -266,7 +279,7 @@ class TwoModels(BaseEstimator):
 
     Fit two separate models: on the treatment data and on the control data.
 
-    See more details about `TwoModels in documentation`_.
+    Read more in the :ref:`User Guide <TwoModels>`.
 
     Args:
         estimator_trmnt (estimator object implementing 'fit'): The object to use to fit the treatment data.
@@ -320,8 +333,16 @@ class TwoModels(BaseEstimator):
         Uplift Modeling with Multiple Treatments and General Response Types.
         10.1137/1.9781611974973.66.
 
-    .. _TwoModels in documentation:
-        https://scikit-uplift.readthedocs.io/en/latest/api/models.html#one-model-with-treatment-as-feature
+    See Also:
+
+        **Other approaches:**
+
+        * :class:`.SoloModel`: Single model approach.
+        * :class:`.ClassTransformation`: Class Variable Transformation approach.
+
+        **Other:**
+
+        * :func:`.plot_uplift_preds`: Plot histograms of treatment, control and uplift predictions.
     """
 
     def __init__(self, estimator_trmnt, estimator_ctrl, method='vanilla'):

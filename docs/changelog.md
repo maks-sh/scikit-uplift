@@ -9,15 +9,33 @@
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
 ## Version 0.2.0
-_in development_
+
+### [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html)
+
+* 🔥 Add [User Guide](https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html)
 
 ### [sklift.models](https://scikit-uplift.readthedocs.io/en/latest/api/models.html)
 
-* 💥 Add `treatment interaction` method to [SoloModel](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html#sklift.models.models.SoloModel) approach by [@AdiVarma27](https://github.com/AdiVarma27).
+* 💥 Add `treatment interaction` method to [SoloModel](https://scikit-uplift.readthedocs.io/en/latest/api/models/SoloModel.html) approach by [@AdiVarma27](https://github.com/AdiVarma27).
+
+### [sklift.metrics](https://scikit-uplift.readthedocs.io/en/latest/api/metrics.html)
+
+* 💥 Add [uplift_by_percentile](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/uplift_by_percentile.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
+* 💥 Add [weighted_average_uplift](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/weighted_average_uplift.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
+* 💥 Add [perfect_uplift_curve](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/perfect_uplift_curve.html) function.
+* 💥 Add [perfect_qini_curve](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/perfect_qini_curve.html) function.
+* 🔨 Add normalization in [uplift_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/uplift_auc_score.html) and [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/qini_auc_score.html) functions.
+* ❗ Remove metrics `auuc` and `auqc`. In exchange for them use respectively [uplift_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/uplift_auc_score.html) and [qini_auc_score](https://scikit-uplift.readthedocs.io/en/latest/api/metrics/qini_auc_score.html)
+
+### [sklift.viz](https://scikit-uplift.readthedocs.io/en/latest/api/viz.html)
+
+* 💥 Add [plot_uplift_curve](https://scikit-uplift.readthedocs.io/en/latest/api/viz/plot_uplift_curve.html) function.
+* 💥 Add [plot_qini_curve](https://scikit-uplift.readthedocs.io/en/latest/api/viz/plot_qini_curve.html) function.
+* ❗ Remove `plot_uplift_qini_curves`.
 
 ### Miscellaneous
 
-* 💥 Add contributors in main Readme and in index page of docs.
+* 💥 Add contributors in main Readme and in main page of docs.
 * 💥 Add [contributing guide](https://scikit-uplift.readthedocs.io/en/latest/contributing.html).
 * 💥 Add [code of conduct](https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md).
 * 📝 Reformat [Tutorials](https://scikit-uplift.readthedocs.io/en/latest/tutorials.html) page.
