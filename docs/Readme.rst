@@ -1,9 +1,9 @@
-.. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
+.. _uplift-modeling.com: https://www.uplift-modeling.com/en/latest/index.html
 
 Documentation
 ===============
 
-The full documentation is available at `scikit-uplift.readthedocs.io`_.
+The full documentation is available at `uplift-modeling.com`_.
 
 Or you can build the documentation locally using `Sphinx <http://sphinx-doc.org/>`_ 1.4 or later:
 
