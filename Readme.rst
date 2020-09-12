@@ -36,27 +36,36 @@
 scikit-uplift
 ===============
 
-**scikit-uplift** is a Python module for classic approaches for uplift modeling built on top of scikit-learn.
+**scikit-uplift (sklift)** is an uplift modeling python package that provides fast sklearn-style models implementation, evaluation metrics and visualization tools.
 
-Uplift prediction aims to estimate the causal impact of a treatment at the individual level.
+Uplift modeling estimates a causal effect of treatment and uses it to effectively target customers that are most likely to respond to a marketing campaign.
+
+**Use cases for uplift modeling:**
+
+* Target customers in the marketing campaign. Quite useful in promotion of some popular product where there is a big part of customers who make a target action by themself without any influence. By modeling uplift you can find customers who are likely to make the target action (for instance, install an app) only when treated (for instance, received a push).
+
+* Combine a churn model and an uplift model to offer some bonus to a group of customers who are likely to churn.
+
+* Select a tiny group of customers in the campaign where a price per customer is high.
 
 Read more about uplift modeling problem in `User Guide <https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html>`__,
-also articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
+
+Articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
 and `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__.
 
 **Features**:
 
-* Comfortable and intuitive style of modelling like scikit-learn;
+* Сomfortable and intuitive scikit-learn-like API;
 
-* Applying any estimator adheres to scikit-learn conventions;
+* Applying any estimator compatible with scikit-learn (e.g. Xgboost, LightGBM, Catboost, etc.);
 
 * All approaches can be used in sklearn.pipeline (see example (`EN <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`__ |Open In Colab3|_, `RU <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__ |Open In Colab4|_));
 
-* Almost all implemented approaches solve both the problem of classification and regression;
+* Almost all implemented approaches solve classification and regression problem;
 
-* A lot of metrics (Such as *Area Under Uplift Curve* or *Area Under Qini Curve*) are implemented to evaluate your uplift model;
+* More uplift metrics that you have ever seen in one place! Include brilliants like  *Area Under Uplift Curve* (AUUC) or *Area Under Qini Curve* (Qini coefficient) with ideal cases;
 
-* Useful graphs for analyzing the built model.
+* Nice and useful viz for analyzing a performance model.
 
 Installation
 -------------
@@ -149,7 +158,7 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
     # import vizualisation tools
     from sklift.viz import plot_qini_curve
 
-    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
+    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val, negative_effect=True)
 
 .. image:: docs/_static/images/Readme_qini_curve.png
     :width: 514px
@@ -163,6 +172,8 @@ We welcome new contributors of all experience levels.
 
 - Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
 - By participating in this project, you agree to abide by its `Code of Conduct <https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md>`__.
+
+If you have any questions, please contact us at team@uplift-modeling.com
 
 Contributing
 ~~~~~~~~~~~~~~~
