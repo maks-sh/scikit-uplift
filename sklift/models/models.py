@@ -1,10 +1,11 @@
 import warnings
-
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.utils.multiclass import type_of_target
 from sklearn.utils.validation import check_consistent_length
+
+from ..utils import check_is_binary
 
 
 class SoloModel(BaseEstimator):
@@ -92,6 +93,7 @@ class SoloModel(BaseEstimator):
         """
 
         check_consistent_length(X, y, treatment)
+        check_is_binary(treatment)
         treatment_values = np.unique(treatment)
 
         if len(treatment_values) != 2:
@@ -239,8 +241,8 @@ class ClassTransformation(BaseEstimator):
             object: self
         """
 
-        # TODO: check the treatment is binary
         check_consistent_length(X, y, treatment)
+        check_is_binary(treatment)
         self._type_of_target = type_of_target(y)
 
         if self._type_of_target != 'binary':
@@ -382,8 +384,9 @@ class TwoModels(BaseEstimator):
         Returns:
             object: self
         """
-        # TODO: check the treatment is binary
+
         check_consistent_length(X, y, treatment)
+        check_is_binary(treatment)
         self._type_of_target = type_of_target(y)
 
         X_ctrl, y_ctrl = X[treatment == 0], y[treatment == 0]
