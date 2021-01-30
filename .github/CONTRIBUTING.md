@@ -36,7 +36,7 @@ So, please make a pull request to the ``dev`` branch.
     $ git checkout -b feature/my_new_feature
     ```
     and start making changes. Always use a feature branch. It’s a good practice.
-6. Develop the feature on your feature branch on your computer, using Git to do the version control. When you’re done editing, add changed files using ``git add .`` and then ``git commit``.
+6. Develop the feature on your feature branch on your computer, using Git to do the version control. When you’re done editing, add changed files using ``git add .`` and then ``git commit``
 Then push the changes to your GitHub account with:
 
     ``` bash
