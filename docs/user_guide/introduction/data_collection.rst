@@ -11,7 +11,7 @@ There are few additional steps different from a standard data collection procedu
 
 Data collected from the marketing experiment consists of the customer's responses to the marketing offer (target).
 
-The only difference between the experiment and the future uplift model's campaign is a fact that in the first case we choose random customers to make a promotion. In the second case the choice of a customer to communicate with is based on the predicted value returned by the uplift model. If the marketing campaign significantly differs from the experiment used to collect data, the model will be less accurate.
+The only difference between the experiment and the future uplift model's campaign is a fact that in the first case we choose random customers to make a promotion. In the second case, the choice of a customer to communicate with is based on the predicted value returned by the uplift model. If the marketing campaign significantly differs from the experiment used to collect data, the model will be less accurate.
 
 There is a trick: before running the marketing campaign, it is recommended to randomly subset a small part of the customer base and divide it into a control and a treatment group again, similar to the previous experiment. Using this data, you will not only be able to accurately evaluate the effectiveness of the campaign but also collect additional data for a further model retraining.
 

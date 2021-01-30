@@ -38,7 +38,7 @@ The authors of this method proposed to use the same idea to solve the problem of
 .. hint::
     In sklift this approach corresponds to the :class:`.TwoModels` class and the **ddr_control** method.
 
-At the beginning we train the classifier based on the control data:
+At the beginning, we train the classifier based on the control data:
 
 .. math::
     P^C = P(Y=1| X, W = 0),
@@ -68,7 +68,7 @@ the :math:`P_C` classifier.
     In sklift this approach corresponds to the :class:`.TwoModels` class and the **ddr_treatment** method.
 
 There is an important remark about the data nature.
-It is important to calibrate model's scores into probabilities if treatment and control data have a different nature.
+It is important to calibrate the model's scores into probabilities if treatment and control data have a different nature.
 Model calibration techniques are well described `in the scikit-learn documentation`_.
 
 References
