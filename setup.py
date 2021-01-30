@@ -6,6 +6,7 @@ import re
 from setuptools import Command, find_packages, setup
 
 # Package meta-data.
+# feature edit
 NAME = "scikit-uplift"
 DESCRIPTION = "Classic approaches of Uplift modelling in scikit-learn style in python"
 MAINTAINER = 'Maksim Shevchenko'
