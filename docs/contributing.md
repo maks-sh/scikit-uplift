@@ -20,7 +20,7 @@ So, please make a pull request to the ``dev`` branch.
 2. Clone your fork of the scikit-uplift repo from your GitHub account to your local disk:
     ``` bash
     $ git clone git@github.com:YourLogin/scikit-uplift.git
-    $ cd scikit-learn
+    $ cd scikit-uplift 
     ```
 3. Add the upstream remote. This saves a reference to the main scikit-uplift repository, which you can use to keep your repository synchronized with the latest changes:
     ``` bash
