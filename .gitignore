@@ -213,3 +213,4 @@ notebooks/*.tmp
 
 ### PSD logo
 *.psd
+*.gz
