@@ -31,6 +31,7 @@ def uplift_curve(y_true, uplift, treatment):
 
     References:
         Devriendt, F., Guns, T., & Verbeke, W. (2020). Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
+        This is test
     """
 
     check_consistent_length(y_true, uplift, treatment)
