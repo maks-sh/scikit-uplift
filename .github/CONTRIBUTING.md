@@ -19,8 +19,8 @@ So, please make a pull request to the ``dev`` branch.
 1. Fork the [project repository](https://github.com/maks-sh/scikit-uplift).
 2. Clone your fork of the scikit-uplift repo from your GitHub account to your local disk:
     ``` bash
-    $ git clone git@github.com:YourLogin/scikit-uplift.git
-    $ cd scikit-learn
+    $ git clone https://github.com/YourName/scikit-uplift
+    $ cd scikit-uplift
     ```
 3. Add the upstream remote. This saves a reference to the main scikit-uplift repository, which you can use to keep your repository synchronized with the latest changes:
     ``` bash
@@ -36,7 +36,7 @@ So, please make a pull request to the ``dev`` branch.
     $ git checkout -b feature/my_new_feature
     ```
     and start making changes. Always use a feature branch. It’s a good practice.
-6. Develop the feature on your feature branch on your computer, using Git to do the version control. When you’re done editing, add changed files using ``git add`` and then ``git commit``.
+6. Develop the feature on your feature branch on your computer, using Git to do the version control. When you’re done editing, add changed files using ``git add .`` and then ``git commit``
 Then push the changes to your GitHub account with:
 
     ``` bash
