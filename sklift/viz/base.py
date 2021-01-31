@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.utils.validation import check_consistent_length
 
+from ..utils import check_is_binary
 from ..metrics import (
     uplift_curve, perfect_uplift_curve, uplift_auc_score,
     qini_curve, perfect_qini_curve, qini_auc_score,
@@ -24,8 +25,10 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     Returns:
         Object that stores computed values.
     """
+
     # TODO: Add k as parameter: vertical line on plots
     check_consistent_length(trmnt_preds, ctrl_preds)
+    check_is_binary(treatment)
 
     if not isinstance(bins, int) or bins <= 0:
         raise ValueError(
@@ -68,9 +71,10 @@ def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
     Returns:
         Object that stores computed values.
     """
+
     check_consistent_length(y_true, uplift, treatment)
-    y_true, uplift, treatment = np.array(
-        y_true), np.array(uplift), np.array(treatment)
+    check_is_binary(treatment)
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
 
@@ -112,9 +116,10 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
     Returns:
         Object that stores computed values.
     """
+
     check_consistent_length(y_true, uplift, treatment)
-    y_true, uplift, treatment = np.array(
-        y_true), np.array(uplift), np.array(treatment)
+    check_is_binary(treatment)
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
 
@@ -178,8 +183,9 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
     strategy_methods = ['overall', 'by_group']
     kind_methods = ['line', 'bar']
 
-    n_samples = len(y_true)
     check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
+    n_samples = len(y_true)
 
     if strategy not in strategy_methods:
         raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
@@ -278,6 +284,10 @@ def plot_treatment_balance_curve(uplift, treatment, random=True, winsize=0.1):
     Returns:
         Object that stores computed values.
     """
+
+    check_consistent_length(uplift, treatment)
+    check_is_binary(treatment)
+
     if (winsize <= 0) or (winsize >= 1):
         raise ValueError(
             'winsize should be between 0 and 1, extremes excluded')
