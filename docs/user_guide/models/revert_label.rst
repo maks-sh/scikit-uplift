@@ -13,9 +13,9 @@ The main idea is to predict a slightly changed target :math:`Z_i`:
 .. math::
     Z_i = Y_i \cdot W_i + (1 - Y_i) \cdot (1 - W_i),
 
-* :math:`Z_i` - new target for the :math:`i` customer;
+* :math:`Z_i` - a new target for the :math:`i` customer;
 
-* :math:`Y_i` - previous target for the :math:`i` customer;
+* :math:`Y_i` - a previous target for the :math:`i` customer;
 
 * :math:`W_i` - treatment flag assigned to the :math:`i` customer.
 

@@ -13,7 +13,10 @@ Quick Start
 
 See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open In Colab2|_) for details.
 
-**Train and predict your uplift model**
+Train and predict your uplift model
+====================================
+
+Use the intuitive python API to train uplift models.
 
 .. code-block:: python
     :linenos:
@@ -38,7 +41,8 @@ See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open I
     # predict uplift
     uplift_preds = tm.predict(X_val)
 
-**Evaluate your uplift model**
+Evaluate your uplift model
+===========================
 
 .. code-block:: python
     :linenos:
@@ -66,14 +70,15 @@ See the **RetailHero tutorial notebook** (`EN`_ |Open In Colab1|_, `RU`_ |Open I
     tm_wau = weighted_average_uplift(y_true=y_val, uplift=uplift_preds,
                                      treatment=treat_val)
 
-**Vizualize the results**
+Vizualize the results
+======================
 
 .. code-block:: python
     :linenos:
 
     from sklift.viz import plot_qini_curve
 
-    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
+    plot_qini_curve(y_true=y_val, uplift=uplift_preds, treatment=treat_val, negative_effect=True)
 
 .. image:: _static/images/quick_start_qini.png
     :width: 514px

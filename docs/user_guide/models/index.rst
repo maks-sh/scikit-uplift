@@ -13,6 +13,7 @@ Models
    :maxdepth: 3
    :caption: Contents
 
+   ./classification
    ./solo_model
    ./revert_label
    ./two_models
