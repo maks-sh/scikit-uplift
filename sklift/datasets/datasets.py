@@ -19,5 +19,6 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
     pass
 
 
-def clear_data_dir():
-    pass
+def clear_data_dir(path):
+    if os.path.isfile(path):
+        os.remove(path)
