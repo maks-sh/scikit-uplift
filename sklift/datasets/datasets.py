@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import requests
 
@@ -32,7 +33,7 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
     if data_home is None:
         if dest_subdir is None:
             data_dir = get_data_dir()
-        else
+        else:
             data_dir = os.path.join(get_data_dir(), dest_subdir)
     else:
         if dest_subdir is None:
@@ -51,5 +52,14 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
             raise IOError("Dataset missing")
     return dest_path
 
-def clear_data_dir(path):
-    pass
+
+def clear_data_dir(path=None):
+    """This function deletes the file.
+
+        Args:
+            path (str): File path. By default, this is the default path for datasets.
+        """
+    if path is None:
+        path = get_data_dir()
+    if os.path.isdir(path):
+        shutil.rmtree(path, ignore_errors=True)
