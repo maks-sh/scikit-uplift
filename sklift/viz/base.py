@@ -93,7 +93,7 @@ def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
 
     ax.legend(loc='lower right')
     ax.set_title(
-        f'Uplift curve\nuplift_auc_score={uplift_auc_score(y_true, uplift, treatment):.2f}')
+        f'Uplift curve\nuplift_auc_score={uplift_auc_score(y_true, uplift, treatment):.4f}')
     ax.set_xlabel('Number targeted')
     ax.set_ylabel('Gain: treatment - control')
 
@@ -139,7 +139,7 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
 
     ax.legend(loc='lower right')
     ax.set_title(
-        f'Qini curve\nqini_auc_score={qini_auc_score(y_true, uplift, treatment, negative_effect):.2f}')
+        f'Qini curve\nqini_auc_score={qini_auc_score(y_true, uplift, treatment, negative_effect):.4f}')
     ax.set_xlabel('Number targeted')
     ax.set_ylabel('Number of incremental outcome')
 
@@ -238,7 +238,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
         axes.set_xticks(percentiles)
         axes.legend(loc='upper right')
         axes.set_title(
-            f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.2f}')
+            f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.4f}')
         axes.set_xlabel('Percentile')
         axes.set_ylabel(
             'Uplift = treatment response rate - control response rate')
@@ -261,7 +261,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
         axes[0].tick_params(axis='x', bottom=False)
         axes[0].axhline(y=0, color='black', linewidth=1)
         axes[0].set_title(
-            f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.2f}')
+            f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.4f}')
 
         axes[1].set_xticks(percentiles)
         axes[1].legend(loc='upper right')
