@@ -10,7 +10,7 @@ def get_data_dir():
         Full path to a directory, which stores the datasets.
 
     """
-    return os.path.join(os.path.expanduser("~"), "scikit-uplidt-data")
+    return os.path.join(os.path.expanduser("~"), "scikit-uplift-data")
 
 
 def create_data_dir(path):
