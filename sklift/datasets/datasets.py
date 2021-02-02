@@ -4,11 +4,24 @@ import requests
 
 
 def get_data_dir():
-    pass
+    """This function join path to the file name.
+
+    Returns:
+        Full path to dataset.
+
+    """
+    return os.path.join(os.path.expanduser("~"), "file_dataset")
 
 
 def create_data_dir(path):
-    pass
+    """This function creates the directory.
+
+    Args:
+        path (str): File path.
+
+    """
+    if not os.path.isdir(path):
+        os.makedirs(path)
 
 
 def download(url, dest_path):
@@ -32,7 +45,7 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
     if data_home is None:
         if dest_subdir is None:
             data_dir = get_data_dir()
-        else
+        else:
             data_dir = os.path.join(get_data_dir(), dest_subdir)
     else:
         if dest_subdir is None:
