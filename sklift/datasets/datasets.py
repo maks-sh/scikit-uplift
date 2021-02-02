@@ -1,15 +1,29 @@
 import os
 import shutil
 
+
 import requests
 
 
 def get_data_dir():
-    pass
+    """This function returns a directory, which stores the datasets.
+
+    Returns:
+        Full path to a directory, which stores the datasets.
+
+    """
+    return os.path.join(os.path.expanduser("~"), "scikit-uplift-data")
 
 
 def create_data_dir(path):
-    pass
+    """This function creates a directory, which stores the datasets.
+
+    Args:
+        path (str): The path to the folder where datasets are stored.
+
+    """
+    if not os.path.isdir(path):
+        os.makedirs(path)
 
 
 def download(url, dest_path):
