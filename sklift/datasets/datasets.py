@@ -1,15 +1,27 @@
 import os
 import shutil
-
 import requests
 
 
 def get_data_dir():
-    pass
+    """This function join path to the file name.
+
+    Returns:
+        Full path to dataset.
+
+    """
+    return os.path.join(os.path.expanduser("~"), "file_dataset")
 
 
 def create_data_dir(path):
-    pass
+    """This function creates the directory.
+
+    Args:
+        path (str): File path.
+
+    """
+    if not os.path.isdir(path):
+        os.makedirs(path)
 
 
 def download(url, dest_path):
