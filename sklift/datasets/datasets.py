@@ -27,7 +27,24 @@ def create_data_dir(path):
 
 
 def download(url, dest_path):
-    pass
+    '''Download the file from url and save it localy
+    
+    Args:
+        url: URL address, must be a string.
+        dest_path: Destination of the file.
+
+    Returns:
+        TypeError if URL is not a string.
+    '''
+    if isinstance(url, str):
+        req = requests.get(url, stream=True)
+        req.raise_for_status()
+
+        with open(dest_path, "wb") as fd:
+            for chunk in req.iter_content(chunk_size=2**20):
+                fd.write(chunk)
+    else:
+        raise TypeError("URL must be a string")
 
 
 def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
