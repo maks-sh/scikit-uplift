@@ -12,7 +12,15 @@ def create_data_dir(path):
 
 
 def download(url, dest_path):
-    pass
+    if isinstance(url, str) and validators.url(url):
+        req = requests.get(url, stream=True)
+        req.raise_for_status()
+
+        with open(dest_path, "wb") as fd:
+            for chunk in req.iter_content(chunk_size=2**20):
+                fd.write(chunk)
+    else:
+        return 'Invalid url'
 
 
 def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
