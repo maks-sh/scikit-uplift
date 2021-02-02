@@ -4,20 +4,20 @@ import requests
 
 
 def get_data_dir():
-    """This function join path to the file name.
+    """This function returns a directory, which stores the datasets.
 
     Returns:
-        Full path to dataset.
+        Full path to a directory, which stores the datasets.
 
     """
-    return os.path.join(os.path.expanduser("~"), "file_dataset")
+    return os.path.join(os.path.expanduser("~"), "scikit-uplidt-data")
 
 
 def create_data_dir(path):
-    """This function creates the directory.
+    """This function creates a directory, which stores the datasets.
 
     Args:
-        path (str): File path.
+        path (str): The path to the folder where datasets are stored.
 
     """
     if not os.path.isdir(path):
