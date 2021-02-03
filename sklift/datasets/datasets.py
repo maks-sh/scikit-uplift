@@ -97,6 +97,12 @@ def clear_data_dir(path=None):
 
         
 def fetch_hillstorm(target):
+    """This function returns dictionary.
+
+        Args:
+            name of target. Can be chosen between visit, conversion, and spend
+        """
+    
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
     csv_path = get_data(data_home=None,
                  url=url,
