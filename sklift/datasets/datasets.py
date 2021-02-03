@@ -94,3 +94,19 @@ def clear_data_dir(path=None):
         path = get_data_dir()
     if os.path.isdir(path):
         shutil.rmtree(path, ignore_errors=True)
+
+        
+def fetch_hillstorm(target):
+    url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
+    csv_path = get_data(data_home=None,
+                 url=url,
+                 dest_subdir=None,
+                 dest_filename = 'hillstorm_no_indices.csv.gz',
+                 download_if_missing = True)
+    hillstorm = pd.read_csv(csv_path)
+    hillstorm_dict = {}
+    hillstorm_dict['treatment'] = hillstorm.segment
+    hillstorm_dict['target'] = hillstorm[target]
+    hillstorm_data = hillstorm.drop(columns=['segment',target])
+    hillstorm_dict['data'] = hillstorm_data.to_dict()
+    return hillstorm_dict
