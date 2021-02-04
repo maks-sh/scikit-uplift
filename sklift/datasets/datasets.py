@@ -98,24 +98,32 @@ def clear_data_dir(path=None):
 
 def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True,
                  treatment_feature='treatment', target_column='visit'):
-    """
-    TODO: Add description
+    """Load data from the Criteo dataset
+    TODO: Add more description
     Args:
         return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object.
                 See below for more information about the data and target object.
-        data_home (str):
+        data_home (str): Specify a download and cache folder for the datasets.
         dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
-        download_if_missing (bool, default=True):
-        treatment_feature (str, default='treatment'): {'treatment', 'exposure'}
-        target_column (str, default='visit'): {'visit', 'conversion'}
+        download_if_missing (bool, default=True): If False, raise an IOError if the data is not locally available
+                                                  instead of trying to download the data from the source site.
+        treatment_feature (str, default='treatment'): {'treatment', 'exposure'} Selects which column from dataset
+                                                      will be treatment
+        target_column (str, default='visit'): {'visit', 'conversion'} Selects which column from dataset will be target
     Returns:
-        (data, target, treatment): tuple tuple if return_X_y_t is True
+        '~sklearn.utils.Bunch': dataset
+            Dictionary-like object, with the following attributes.
+                data (DataFrame object): Dataset without target and treatment.
+                target (DataFrame object): Column target by values
+                treatment (DataFrame object): Column treatment by values
+        tuple (data, target, treatment): tuple if return_X_y_t is True
     """
     url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
     csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                         dest_filename='criteo.csv.gz',
                         download_if_missing=download_if_missing)
-    criteo_df = pd.read_csv(csv_path, compression='gzip')
+    criteo_df = pd.read_csv(csv_path, compression='gzip',
+                            dtype={'treatment': 'Int8', 'conversion': 'Int8', 'visit': 'Int8', 'exposure': 'Int8'})
 
     if treatment_feature == 'exposure':
         data = criteo_df.drop(columns=['treatment', 'conversion', 'visit', 'exposure'])
@@ -138,3 +146,4 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
     else:
         return Bunch(data=data, target=target, treatment=treatment)
     # TODO: Memory optimization
+    # TODO: Add DISCR
