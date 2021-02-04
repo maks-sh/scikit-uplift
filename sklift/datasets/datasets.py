@@ -1,8 +1,8 @@
 import os
 import shutil
-
-
+import pandas as pd
 import requests
+from sklearn.utils import Bunch
 
 
 def get_data_dir():
@@ -41,7 +41,7 @@ def download(url, dest_path):
         req.raise_for_status()
 
         with open(dest_path, "wb") as fd:
-            for chunk in req.iter_content(chunk_size=2**20):
+            for chunk in req.iter_content(chunk_size=2 ** 20):
                 fd.write(chunk)
     else:
         raise TypeError("URL must be a string")
@@ -94,3 +94,26 @@ def clear_data_dir(path=None):
         path = get_data_dir()
     if os.path.isdir(path):
         shutil.rmtree(path, ignore_errors=True)
+
+
+def fetch_x5(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True):
+    url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
+    file_clients = 'clients.csv.gz'
+    csv_clients_path = get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
+                                dest_filename=file_clients,
+                                download_if_missing=download_if_missing)
+    data = pd.read_csv(csv_clients_path)
+
+    url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
+    file_train = 'uplift_train.csv.gz'
+    csv_train_path = get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
+                              dest_filename=file_train,
+                              download_if_missing=download_if_missing)
+    data_2 = pd.read_csv(csv_train_path)
+    target = data_2['target']
+    treatment = data_2['treatment_flg']
+
+    if return_X_y_t:
+        return data, target, treatment
+
+    return Bunch(data=data, target=target, treatment=treatment)
