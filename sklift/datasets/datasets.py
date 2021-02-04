@@ -1,7 +1,6 @@
 import os
 import shutil
 
-
 import requests
 
 
@@ -95,24 +94,46 @@ def clear_data_dir(path=None):
     if os.path.isdir(path):
         shutil.rmtree(path, ignore_errors=True)
 
-        
-def fetch_hillstorm(target):
-    """This function returns dictionary.
 
-        Args:
-            name of target. Can be chosen between visit, conversion, and spend
-        """
+def fetch_hillstorm(target='visit',
+                    data_home=None,
+                    dest_subdir=None,
+                    download_if_missing=True):
+   
+    """Load the hillstorm dataset.
     
+        Parameters
+    ----------
+    target : str, dafault=visit. 
+        Can also be conversion, and spend
+    data_home : str, default=None
+        Specify another download and cache folder for the datasets.
+    dest_subdir : str, default=None
+    download_if_missing : bool, default=True
+        If False, raise a IOError if the data is not locally available
+        instead of trying to download the data from the source site.
+        
+        Returns
+    ----------
+        Dictionary-like object, with the following attributes.
+        data : {ndarray, dataframe} of shape (64000, 12)
+            The data matrix to learn. 
+        target : {ndarray, series} of shape (64000,)
+            The regression target for each sample. 
+        treatment : {ndarray, series} of shape (64000,)
+        
+        """
+
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
-    csv_path = get_data(data_home=None,
-                 url=url,
-                 dest_subdir=None,
-                 dest_filename = 'hillstorm_no_indices.csv.gz',
-                 download_if_missing = True)
+    csv_path = get_data(data_home=data_home,
+                        url=url,
+                        dest_subdir=dest_subdir,
+                        dest_filename='hillstorm_no_indices.csv.gz',
+                        download_if_missing=download_if_missing)
     hillstorm = pd.read_csv(csv_path)
     hillstorm_dict = {}
     hillstorm_dict['treatment'] = hillstorm.segment
     hillstorm_dict['target'] = hillstorm[target]
-    hillstorm_data = hillstorm.drop(columns=['segment',target])
-    hillstorm_dict['data'] = hillstorm_data.to_dict()
+    hillstorm_data = hillstorm.drop(columns=['segment', target])
+    hillstorm_dict['data'] = hillstorm_data
     return hillstorm_dict
