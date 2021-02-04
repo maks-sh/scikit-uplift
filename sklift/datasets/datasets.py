@@ -2,6 +2,7 @@ import os
 import shutil
 
 import requests
+from sklearn.utils import Bunch
 
 
 def get_data_dir():
