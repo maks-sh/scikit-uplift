@@ -1,8 +1,8 @@
 import os
 import shutil
-
 import pandas as pd
 import requests
+from sklearn.utils import Bunch
 
 
 def get_data_dir():
@@ -96,36 +96,45 @@ def clear_data_dir(path=None):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def fetch_criteo(data_home=None, download_if_missing=True, interaction_feature='treatment', target='visit', as_frame=True):
+def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True,
+                 treatment_feature='treatment', target_column='visit'):
     """
     TODO: Add description
     Args:
+        return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object.
+                See below for more information about the data and target object.
         data_home (str):
+        dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
         download_if_missing (bool, default=True):
-        interaction_feature (str, default='treatment'): {'treatment', 'exposure'}
-        target (str, default='visit'): {'visit', 'conversion'}
-        as_frame (bool, default=True):
+        treatment_feature (str, default='treatment'): {'treatment', 'exposure'}
+        target_column (str, default='visit'): {'visit', 'conversion'}
     Returns:
-        (data, target): tuple
+        (data, target, treatment): tuple tuple if return_X_y_t is True
     """
     url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
-    csv_path = get_data(data_home=data_home, url=url, dest_subdir=None,
+    csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                         dest_filename='criteo.csv.gz',
                         download_if_missing=download_if_missing)
     criteo_df = pd.read_csv(csv_path, compression='gzip')
 
-    if interaction_feature == 'exposure':
-        X_data = criteo_df.drop(columns=['treatment', 'conversion', 'visit'])
+    if treatment_feature == 'exposure':
+        data = criteo_df.drop(columns=['treatment', 'conversion', 'visit', 'exposure'])
+        treatment = criteo_df[['exposure']]
+    elif treatment_feature == 'treatment':
+        data = criteo_df.drop(columns=['treatment', 'conversion', 'visit', 'exposure'])
+        treatment = criteo_df[['treatment']]
     else:
-        X_data = criteo_df.drop(columns=['conversion', 'visit', 'exposure'])
+        raise IOError("Invalid interaction_feature value")
 
-    if target == 'conversion':
-        y_data = criteo_df[['conversion']]
+    if target_column == 'conversion':
+        target = criteo_df[['conversion']]
+    elif target_column == 'visit':
+        target = criteo_df[['visit']]
     else:
-        y_data = criteo_df[['visit']]
+        raise IOError("Invalid target_column value")
 
-    if as_frame:
-        return X_data, y_data
+    if return_X_y_t:
+        return data, target, treatment
     else:
-        return X_data.to_numpy(), y_data.to_numpy()
+        return Bunch(data=data, target=target, treatment=treatment)
     # TODO: Memory optimization
