@@ -116,6 +116,7 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
                 data (DataFrame object): Dataset without target and treatment.
                 target (DataFrame object): Column target by values
                 treatment (DataFrame object): Column treatment by values
+                DESCR (str): Description of the Criteo dataset.
         tuple (data, target, treatment): tuple if return_X_y_t is True
     """
     url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
@@ -144,6 +145,8 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
     if return_X_y_t:
         return data, target, treatment
     else:
-        return Bunch(data=data, target=target, treatment=treatment)
+        module_path = os.path.dirname(__file__)
+        with open(os.path.join(module_path, 'descr', 'criteo.rst')) as rst_file:
+            fdescr = rst_file.read()
+        return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr)
     # TODO: Memory optimization
-    # TODO: Add DISCR
