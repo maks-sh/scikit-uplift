@@ -11,7 +11,6 @@ Feel free to open an issue if you have found a bug or wish to see a feature impl
 
 ## Contributing code
 
-NOTHING
 ### How to contribute
 
 The code in the master branch should meet the current release. 

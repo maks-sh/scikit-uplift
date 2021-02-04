@@ -1,5 +1,6 @@
 import os
 import shutil
+from os.path import dirname, join
 import pandas as pd
 import requests
 from sklearn.utils import Bunch
@@ -96,24 +97,41 @@ def clear_data_dir(path=None):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def fetch_x5(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True):
+def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
+    """Fetch the X5 dataset.
+
+        Args:
+            data_home (str, unicode): The path to the folder where datasets are stored.
+            dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
+            download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
+
+        Returns:
+            '~sklearn.utils.Bunch': dataset
+                Dictionary-like object, with the following attributes.
+                data (DataFrame object): Dataset without target and treatment.
+                target (Series object): Column target by values
+                treatment (Series object): Column treatment by values
+                DESCR (str): Description of the X5 dataset.
+                train (DataFrame object): Dataset with target and treatment.
+    """
     url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
     file_clients = 'clients.csv.gz'
     csv_clients_path = get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
                                 dest_filename=file_clients,
                                 download_if_missing=download_if_missing)
-    data = pd.read_csv(csv_clients_path)
+    clients = pd.read_csv(csv_clients_path)
 
     url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
     file_train = 'uplift_train.csv.gz'
     csv_train_path = get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                               dest_filename=file_train,
                               download_if_missing=download_if_missing)
-    data_2 = pd.read_csv(csv_train_path)
-    target = data_2['target']
-    treatment = data_2['treatment_flg']
+    train = pd.read_csv(csv_train_path)
+    target = train['target']
+    treatment = train['treatment_flg']
 
-    if return_X_y_t:
-        return data, target, treatment
+    module_path = dirname(__file__)
+    with open(join(module_path, 'descr', 'x5.rst')) as rst_file:
+        fdescr = rst_file.read()
 
-    return Bunch(data=data, target=target, treatment=treatment)
+    return Bunch(data=clients, target=target, treatment=treatment, DESCR=fdescr, train=train)
