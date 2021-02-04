@@ -133,14 +133,16 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
         data = criteo_df.drop(columns=['treatment', 'conversion', 'visit', 'exposure'])
         treatment = criteo_df[['treatment']]
     else:
-        raise IOError("Invalid interaction_feature value")
+        raise ValueError("Treatment_feature value must be from %s, got"
+                         " %s." % (['treatment', 'exposure'], treatment_feature))
 
     if target_column == 'conversion':
         target = criteo_df[['conversion']]
     elif target_column == 'visit':
         target = criteo_df[['visit']]
     else:
-        raise IOError("Invalid target_column value")
+        raise ValueError("Target_column value must be from %s, got"
+                         " %s." % (['visit', 'conversion'], target_column))
 
     if return_X_y_t:
         return data, target, treatment
