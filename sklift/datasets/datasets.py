@@ -1,7 +1,7 @@
 import os
 import shutil
 
-
+import pandas as pd
 import requests
 
 
@@ -94,3 +94,38 @@ def clear_data_dir(path=None):
         path = get_data_dir()
     if os.path.isdir(path):
         shutil.rmtree(path, ignore_errors=True)
+
+
+def fetch_criteo(data_home=None, download_if_missing=True, interaction_feature='treatment', target='visit', as_frame=True):
+    """
+    TODO: Add description
+    Args:
+        data_home (str):
+        download_if_missing (bool, default=True):
+        interaction_feature (str, default='treatment'): {'treatment', 'exposure'}
+        target (str, default='visit'): {'visit', 'conversion'}
+        as_frame (bool, default=True):
+    Returns:
+        (data, target): tuple
+    """
+    url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
+    csv_path = get_data(data_home=data_home, url=url, dest_subdir=None,
+                        dest_filename='criteo.csv.gz',
+                        download_if_missing=download_if_missing)
+    criteo_df = pd.read_csv(csv_path, compression='gzip')
+
+    if interaction_feature == 'exposure':
+        X_data = criteo_df.drop(columns=['treatment', 'conversion', 'visit'])
+    else:
+        X_data = criteo_df.drop(columns=['conversion', 'visit', 'exposure'])
+
+    if target == 'conversion':
+        y_data = criteo_df[['conversion']]
+    else:
+        y_data = criteo_df[['visit']]
+
+    if as_frame:
+        return X_data, y_data
+    else:
+        return X_data.to_numpy(), y_data.to_numpy()
+    # TODO: Memory optimization
