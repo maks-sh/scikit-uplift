@@ -127,6 +127,14 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
                               dest_filename=file_train,
                               download_if_missing=download_if_missing)
     train = pd.read_csv(csv_train_path)
+
+    url_purchases = 'https://timds.s3.eu-central-1.amazonaws.com/purchases.csv.gz'
+    file_purchases = 'purchases.csv.gz'
+    csv_purchases_path = get_data(data_home=data_home, url=url_purchases, dest_subdir=dest_subdir,
+                                dest_filename=file_purchases,
+                                download_if_missing=download_if_missing)
+    purchases = pd.read_csv(csv_purchases_path)
+
     target = train['target']
     treatment = train['treatment_flg']
 
@@ -134,4 +142,4 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     with open(join(module_path, 'descr', 'x5.rst')) as rst_file:
         fdescr = rst_file.read()
 
-    return Bunch(data=clients, target=target, treatment=treatment, DESCR=fdescr, train=train)
+    return Bunch(data=Bunch(clients=clients, train=train ,purchases=purchases,), target=target, treatment=treatment, DESCR=fdescr)
