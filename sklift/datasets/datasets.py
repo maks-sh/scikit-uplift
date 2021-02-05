@@ -140,6 +140,6 @@ def fetch_hillstrom(target='visit',
     if return_X_y:
         return treatment, data, target
     
-    return Bunch(treatment=hillstrom.segment,
+    return Bunch(treatment=hillstrom['segment'],
                  target=hillstrom[target],
-                 data=hillstrom_data)
+                 data=hillstrom_data, DESCR=fdescr)
