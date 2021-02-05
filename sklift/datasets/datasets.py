@@ -81,11 +81,14 @@ def fetch_lenta(return_X_y_t=False, data_home=None, dest_subdir=None, download_i
     '''
     url='https:/winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
     filename='lentadataset.csv.gz'
-    csv_path=get_data(data_home=data_home, url=url, dest_subdir=dest_subdir, dest_filename=filename, download_if_missing=download_if_missing)
+    csv_path=get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+             dest_filename=filename,
+            download_if_missing=download_if_missing)
     data = pd.read_csv(csv_path)
     target=data['response_att']
     treatment=data['group']
     data=data.drop(['response_att', 'group'], axis=1)
+
     module_path = os.path.dirname(__file__)
     with open(os.path.join(module_path, 'descr', 'lenta.rst')) as rst_file:
         fdescr = rst_file.read()
