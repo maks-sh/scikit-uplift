@@ -96,12 +96,10 @@ def clear_data_dir(path=None):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True,
-                 percent10=True, treatment_feature='treatment', target_column='visit', as_frame=False):
+def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, percent10=True,
+                 treatment_feature='treatment', target_column='visit', return_X_y_t=False,  as_frame=False):
     """Load data from the Criteo dataset
     Args:
-        return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object.
-                See below for more information about the data and target object.
         data_home (str): Specify a download and cache folder for the datasets.
         dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
         download_if_missing (bool, default=True): If False, raise an IOError if the data is not locally available
@@ -110,14 +108,19 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
         treatment_feature (str, default='treatment'): {'treatment', 'exposure'} Selects which column from dataset
                                                       will be treatment
         target_column (str, default='visit'): {'visit', 'conversion'} Selects which column from dataset will be target
+        return_X_y_t (bool, fefault=False): If True, returns (data, target, treatment) instead of a Bunch object.
+                See below for more information about the data and target object.
         as_frame (bool, default=False):
     Returns:
         '~sklearn.utils.Bunch': dataset
             Dictionary-like object, with the following attributes.
-                data (DataFrame object): Dataset without target and treatment.
-                target (DataFrame object): Column target by values
-                treatment (DataFrame object): Column treatment by values
+                data (ndarray, DataFrame object): Dataset without target and treatment.
+                target (ndarray, series): Column target by values
+                treatment (ndarray, series): Column treatment by values
                 DESCR (str): Description of the Criteo dataset.
+                feature_names (list): The names of the future columns
+                target_name (str): The name of the target column.
+                treatment_name (str): The name of the treatment column
         tuple (data, target, treatment): tuple if return_X_y_t is True
     """
     if percent10:
@@ -144,6 +147,7 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
     else:
         raise ValueError("Treatment_feature value must be from %s, got"
                          " %s." % (['treatment', 'exposure'], treatment_feature))
+    feature_names = list(data.columns)
 
     if target_column == 'conversion':
         target = pd.read_csv(csv_path,  usecols=['conversion'], dtype={'conversion': 'Int8'})
@@ -163,10 +167,14 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
         else:
             return data.to_numpy(), target.to_numpy(), treatment.to_numpy()
     else:
+        target_name = target_column
+        treatment_name = treatment_feature
         module_path = os.path.dirname(__file__)
         with open(os.path.join(module_path, 'descr', 'criteo.rst')) as rst_file:
             fdescr = rst_file.read()
         if as_frame:
-            return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr)
+            return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr, feature_names=feature_names,
+                         target_name=target_name, treatment_name=treatment_name)
         else:
-            return Bunch(data=data.to_numpy(), target=target.to_numpy(), treatment=treatment.to_numpy(), DESCR=fdescr)
+            return Bunch(data=data.to_numpy(), target=target.to_numpy(), treatment=treatment.to_numpy(), DESCR=fdescr,
+                         feature_names=feature_names, target_name=target_name, treatment_name=treatment_name)
