@@ -97,7 +97,7 @@ def clear_data_dir(path=None):
 
 
 def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True,
-                 treatment_feature='treatment', target_column='visit'):
+                 percent10=True, treatment_feature='treatment', target_column='visit', as_frame=False):
     """Load data from the Criteo dataset
     Args:
         return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object.
@@ -106,9 +106,11 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
         dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
         download_if_missing (bool, default=True): If False, raise an IOError if the data is not locally available
                                                   instead of trying to download the data from the source site.
+        percent10 (bool, default=True): Whether to load only 10 percent of the data.
         treatment_feature (str, default='treatment'): {'treatment', 'exposure'} Selects which column from dataset
                                                       will be treatment
         target_column (str, default='visit'): {'visit', 'conversion'} Selects which column from dataset will be target
+        as_frame (bool, default=False):
     Returns:
         '~sklearn.utils.Bunch': dataset
             Dictionary-like object, with the following attributes.
@@ -118,33 +120,53 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
                 DESCR (str): Description of the Criteo dataset.
         tuple (data, target, treatment): tuple if return_X_y_t is True
     """
-    url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
-    csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+    if percent10:
+        url = 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo10.csv.gz'
+        csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+                            dest_filename='criteo10.csv.gz',
+                            download_if_missing=download_if_missing)
+    else:
+        url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
+        csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                         dest_filename='criteo.csv.gz',
                         download_if_missing=download_if_missing)
 
     if treatment_feature == 'exposure':
-        data = pd.read_csv(csv_path, compression='gzip', usecols=[i for i in range(12)])
-        treatment = pd.read_csv(csv_path, compression='gzip', usecols=['exposure'], dtype={'exposure': 'Int8'})
+        data = pd.read_csv(csv_path, usecols=[i for i in range(12)])
+        treatment = pd.read_csv(csv_path,  usecols=['exposure'], dtype={'exposure': 'Int8'})
+        if as_frame:
+            treatment = treatment['exposure']
     elif treatment_feature == 'treatment':
-        data = pd.read_csv(csv_path, compression='gzip', usecols=[i for i in range(12)])
-        treatment = pd.read_csv(csv_path, compression='gzip', usecols=['treatment'], dtype={'treatment': 'Int8'})
+        data = pd.read_csv(csv_path, usecols=[i for i in range(12)])
+        treatment = pd.read_csv(csv_path,  usecols=['treatment'], dtype={'treatment': 'Int8'})
+        if as_frame:
+            treatment = treatment['treatment']
     else:
         raise ValueError("Treatment_feature value must be from %s, got"
                          " %s." % (['treatment', 'exposure'], treatment_feature))
 
     if target_column == 'conversion':
-        target = pd.read_csv(csv_path, compression='gzip', usecols=['conversion'], dtype={'conversion': 'Int8'})
+        target = pd.read_csv(csv_path,  usecols=['conversion'], dtype={'conversion': 'Int8'})
+        if as_frame:
+            target = target['conversion']
     elif target_column == 'visit':
-        target = pd.read_csv(csv_path, compression='gzip', usecols=['visit'], dtype={'visit': 'Int8'})
+        target = pd.read_csv(csv_path,  usecols=['visit'], dtype={'visit': 'Int8'})
+        if as_frame:
+            target = target['visit']
     else:
         raise ValueError("Target_column value must be from %s, got"
                          " %s." % (['visit', 'conversion'], target_column))
 
     if return_X_y_t:
-        return data, target, treatment
+        if as_frame:
+            return data, target, treatment
+        else:
+            return data.to_numpy(), target.to_numpy(), treatment.to_numpy()
     else:
         module_path = os.path.dirname(__file__)
         with open(os.path.join(module_path, 'descr', 'criteo.rst')) as rst_file:
             fdescr = rst_file.read()
-        return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr)
+        if as_frame:
+            return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr)
+        else:
+            return Bunch(data=data.to_numpy(), target=target.to_numpy(), treatment=treatment.to_numpy(), DESCR=fdescr)
