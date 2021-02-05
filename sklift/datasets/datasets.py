@@ -99,7 +99,6 @@ def clear_data_dir(path=None):
 def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True,
                  treatment_feature='treatment', target_column='visit'):
     """Load data from the Criteo dataset
-    TODO: Add more description
     Args:
         return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object.
                 See below for more information about the data and target object.
@@ -123,23 +122,21 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
     csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                         dest_filename='criteo.csv.gz',
                         download_if_missing=download_if_missing)
-    criteo_df = pd.read_csv(csv_path, compression='gzip',
-                            dtype={'treatment': 'Int8', 'conversion': 'Int8', 'visit': 'Int8', 'exposure': 'Int8'})
 
     if treatment_feature == 'exposure':
-        data = criteo_df.drop(columns=['treatment', 'conversion', 'visit', 'exposure'])
-        treatment = criteo_df[['exposure']]
+        data = pd.read_csv(csv_path, compression='gzip', usecols=[i for i in range(12)])
+        treatment = pd.read_csv(csv_path, compression='gzip', usecols=['exposure'], dtype={'exposure': 'Int8'})
     elif treatment_feature == 'treatment':
-        data = criteo_df.drop(columns=['treatment', 'conversion', 'visit', 'exposure'])
-        treatment = criteo_df[['treatment']]
+        data = pd.read_csv(csv_path, compression='gzip', usecols=[i for i in range(12)])
+        treatment = pd.read_csv(csv_path, compression='gzip', usecols=['treatment'], dtype={'treatment': 'Int8'})
     else:
         raise ValueError("Treatment_feature value must be from %s, got"
                          " %s." % (['treatment', 'exposure'], treatment_feature))
 
     if target_column == 'conversion':
-        target = criteo_df[['conversion']]
+        target = pd.read_csv(csv_path, compression='gzip', usecols=['conversion'], dtype={'conversion': 'Int8'})
     elif target_column == 'visit':
-        target = criteo_df[['visit']]
+        target = pd.read_csv(csv_path, compression='gzip', usecols=['visit'], dtype={'visit': 'Int8'})
     else:
         raise ValueError("Target_column value must be from %s, got"
                          " %s." % (['visit', 'conversion'], target_column))
@@ -151,4 +148,3 @@ def fetch_criteo(return_X_y_t=False, data_home=None, dest_subdir=None, download_
         with open(os.path.join(module_path, 'descr', 'criteo.rst')) as rst_file:
             fdescr = rst_file.read()
         return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr)
-    # TODO: Memory optimization
