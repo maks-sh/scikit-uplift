@@ -133,8 +133,8 @@ def fetch_hillstrom(target='visit',
     hillstrom = pd.read_csv(csv_path)
     hillstrom_data = hillstrom.drop(columns=['segment', target])
     
-    module_path = dirname(__file__)
-    with open(join(module_path, 'descr', 'hillstrom.rst')) as rst_file:
+    module_path = os.path.dirname('__file__')
+    with open(os.path.join(module_path, 'descr', 'hillstrom.rst')) as rst_file:
         fdescr = rst_file.read()
     
     if return_X_y:
