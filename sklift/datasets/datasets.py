@@ -108,7 +108,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
         Returns:
             '~sklearn.utils.Bunch': dataset
                 Dictionary-like object, with the following attributes.
-                data (DataFrame object): Dataset without target and treatment.
+                data ('~sklearn.utils.Bunch'): Dataset without target and treatment.
                 target (Series object): Column target by values
                 treatment (Series object): Column treatment by values
                 DESCR (str): Description of the X5 dataset.
@@ -117,7 +117,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
     file_clients = 'clients.csv.gz'
     csv_clients_path = get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
-                                dest_fi:lename=file_clients,
+                                dest_filename=file_clients,
                                 download_if_missing=download_if_missing)
     clients = pd.read_csv(csv_clients_path)
 
@@ -142,4 +142,4 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     with open(join(module_path, 'descr', 'x5.rst')) as rst_file:
         fdescr = rst_file.read()
 
-    return Bunch(data=Bunch(clients=clients, train=train ,purchases=purchases), target=target, treatment=treatment, DESCR=fdescr)
+    return Bunch(data=Bunch(clients=clients, train=train, purchases=purchases), target=target, treatment=treatment, DESCR=fdescr)
