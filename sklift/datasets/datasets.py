@@ -96,16 +96,16 @@ def clear_data_dir(path=None):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def fetch_hillstorm(target='visit',
+def fetch_hillstrom(target='visit',
                     data_home=None,
                     dest_subdir=None,
                     download_if_missing=True,
                     return_X_y=False):
    
-    """Load the hillstorm dataset.
+    """Load the hillstrom dataset.
     
         Args:
-    target : str, dafault=visit. 
+    target : str, desfault=visit. 
         Can also be conversion, and spend
     data_home : str, default=None
         Specify another download and cache folder for the datasets.
@@ -130,16 +130,16 @@ def fetch_hillstorm(target='visit',
                         dest_subdir=dest_subdir,
                         dest_filename='hillstorm_no_indices.csv.gz',
                         download_if_missing=download_if_missing)
-    hillstorm = pd.read_csv(csv_path)
-    hillstorm_data = hillstorm.drop(columns=['segment', target])
+    hillstrom = pd.read_csv(csv_path)
+    hillstrom_data = hillstrom.drop(columns=['segment', target])
     
     module_path = dirname(__file__)
-    with open(join(module_path, 'descr', 'hillstorm.rst')) as rst_file:
+    with open(join(module_path, 'descr', 'hillstrom.rst')) as rst_file:
         fdescr = rst_file.read()
     
     if return_X_y:
         return treatment, data, target
     
-    return Bunch(treatment=hillstorm.segment,
-                 target=hillstorm[target],
-                 data=hillstorm_data)
+    return Bunch(treatment=hillstrom.segment,
+                 target=hillstrom[target],
+                 data=hillstrom_data)
