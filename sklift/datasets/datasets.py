@@ -1,5 +1,5 @@
-import os
 import shutil
+import os
 import pandas as pd
 import requests
 from sklearn.utils import Bunch
@@ -41,7 +41,7 @@ def download(url, dest_path):
         req.raise_for_status()
 
         with open(dest_path, "wb") as fd:
-            for chunk in req.iter_content(chunk_size=2**20):
+            for chunk in req.iter_content(chunk_size=2 ** 20):
                 fd.write(chunk)
     else:
         raise TypeError("URL must be a string")
@@ -95,6 +95,54 @@ def clear_data_dir(path=None):
     if os.path.isdir(path):
         shutil.rmtree(path, ignore_errors=True)
 
+
+def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
+    """Fetch the X5 dataset.
+
+        Args:
+            data_home (str, unicode): The path to the folder where datasets are stored.
+            dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
+            download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
+
+        Returns:
+            '~sklearn.utils.Bunch': dataset
+                Dictionary-like object, with the following attributes.
+                data ('~sklearn.utils.Bunch'): Dataset without target and treatment.
+                target (Series object): Column target by values
+                treatment (Series object): Column treatment by values
+                DESCR (str): Description of the X5 dataset.
+                train (DataFrame object): Dataset with target and treatment.
+    """
+    url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
+    file_clients = 'clients.csv.gz'
+    csv_clients_path = get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
+                                dest_filename=file_clients,
+                                download_if_missing=download_if_missing)
+    clients = pd.read_csv(csv_clients_path)
+
+    url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
+    file_train = 'uplift_train.csv.gz'
+    csv_train_path = get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
+                              dest_filename=file_train,
+                              download_if_missing=download_if_missing)
+    train = pd.read_csv(csv_train_path)
+
+    url_purchases = 'https://timds.s3.eu-central-1.amazonaws.com/purchases.csv.gz'
+    file_purchases = 'purchases.csv.gz'
+    csv_purchases_path = get_data(data_home=data_home, url=url_purchases, dest_subdir=dest_subdir,
+                                dest_filename=file_purchases,
+                                download_if_missing=download_if_missing)
+    purchases = pd.read_csv(csv_purchases_path)
+
+    target = train['target']
+    treatment = train['treatment_flg']
+
+    module_path = os.path.dirname(__file__)
+    with open(os.path.join(module_path, 'descr', 'x5.rst')) as rst_file:
+        fdescr = rst_file.read()
+
+    return Bunch(data=Bunch(clients=clients, train=train, purchases=purchases), 
+                 target=target, treatment=treatment, DESCR=fdescr)
 
 
 def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, percent10=True,
@@ -188,7 +236,6 @@ def fetch_hillstrom(target='visit',
                     dest_subdir=None,
                     download_if_missing=True,
                     return_X_y=False):
-   
     """Load the hillstrom dataset.
     
         Args:
@@ -208,8 +255,7 @@ def fetch_hillstrom(target='visit',
           target : {ndarray, series} of shape (64000,)
             The regression target for each sample. 
           treatment : {ndarray, series} of shape (64000,)
-        
-        """
+    """
 
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
     csv_path = get_data(data_home=data_home,
