@@ -12,6 +12,7 @@ def get_data_dir():
         Full path to a directory, which stores the datasets.
 
     """
+
     return os.path.join(os.path.expanduser("~"), "scikit-uplift-data")
 
 
@@ -22,12 +23,13 @@ def create_data_dir(path):
         path (str): The path to the folder where datasets are stored.
 
     """
+
     if not os.path.isdir(path):
         os.makedirs(path)
 
 
 def download(url, dest_path):
-    '''Download the file from url and save it localy
+    """Download the file from url and save it localy
     
     Args:
         url: URL address, must be a string.
@@ -35,7 +37,8 @@ def download(url, dest_path):
 
     Returns:
         TypeError if URL is not a string.
-    '''
+    """
+
     if isinstance(url, str):
         req = requests.get(url, stream=True)
         req.raise_for_status()
@@ -60,6 +63,7 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
     Returns:
         The path to the dataset.
     """
+
     if data_home is None:
         if dest_subdir is None:
             data_dir = get_data_dir()
@@ -86,9 +90,10 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
 def clear_data_dir(path=None):
     """This function deletes the file.
 
-        Args:
-            path (str): File path. By default, this is the default path for datasets.
-        """
+    Args:
+        path (str): File path. By default, this is the default path for datasets.
+    """
+
     if path is None:
         path = get_data_dir()
     if os.path.isdir(path):
@@ -96,29 +101,42 @@ def clear_data_dir(path=None):
 
 
 def fetch_lenta(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True):
-    '''Fetch the Lenta dataset.
+    """Load data from the Lenta dataset.
 
-        Args:
-            return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object. 
-                See below for more information about the data and target object.
-            data_home (str, unicode): The path to the folder where datasets are stored.
-            dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
-            download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
+    An uplift modeling dataset containing data about Lenta's customers grociery shopping and related marketing campaigns.
 
-        Returns:
-            * dataset ('~sklearn.utils.Bunch'): Dictionary-like object, with the following attributes.
-                * data (DataFrame object): Dataset without target and treatment.
-                * target (Series object): Column target by values.
-                * treatment (Series object): Column treatment by values.
-                * DESCR (str): Description of the Lenta dataset.
+    Major columns:
 
-            * (data,target,treatment): tuple if 'return_X_y_t' is True.
-    '''
+    - ``group`` (str): treatment/control group flag
+    - ``response_att`` (binary): target
+    - ``gender`` (str): customer gender
+    - ``age`` (float): customer age
+    - ``main_format`` (int): store type (1 - grociery store, 0 - superstore)
+
+    Args:
+        return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object.
+        See below for more information about the data and target object.
+        data_home (str, unicode): The path to the folder where datasets are stored.
+        dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
+        download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
+
+    Returns:
+        dataset ('~sklearn.utils.Bunch'): Dictionary-like object, with the following attributes.
+            * data (DataFrame object): Dataset without target and treatment.
+            * target (Series object): Column target by values.
+            * treatment (Series object): Column treatment by values.
+            * DESCR (str): Description of the Lenta dataset.
+
+        (data,target,treatment): tuple if 'return_X_y_t' is True.
+    """
+
     url='https:/winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
     filename='lentadataset.csv.gz'
+
     csv_path=get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
              dest_filename=filename,
             download_if_missing=download_if_missing)
+
     data = pd.read_csv(csv_path)
     target=data['response_att']
     treatment=data['group']
@@ -135,17 +153,30 @@ def fetch_lenta(return_X_y_t=False, data_home=None, dest_subdir=None, download_i
 
 
 def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
-    """Fetch the X5 dataset.
+    """Load the X5 dataset.
 
-        Args:
-            '~sklearn.utils.Bunch': dataset
-                Dictionary-like object, with the following attributes.
-            data ('~sklearn.utils.Bunch'): Dataset without target and treatment.
-            target (Series object): Column target by values
-            treatment (Series object): Column treatment by values
-            DESCR (str): Description of the X5 dataset.
-            train (DataFrame object): Dataset with target and treatment.
+    The dataset contains raw retail customer purchaces, raw information about products and general info about customers.
+
+    Major columns:
+
+    - ``treatment_flg`` (binary): treatment/control group flag
+    - ``target`` (binary): target
+    - ``customer_id`` (str): customer id aka primary key for joining
+
+    Args:
+        data_home (str, unicode): The path to the folder where datasets are stored.
+        dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
+        download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
+
+    Returns:
+        dataset ('~sklearn.utils.Bunch'): dataset Dictionary-like object, with the following attributes.
+            * data ('~sklearn.utils.Bunch'): Dataset without target and treatment.
+            * target (Series object): Column target by values
+            * treatment (Series object): Column treatment by values
+            * DESCR (str): Description of the X5 dataset.
+            * train (DataFrame object): Dataset with target and treatment.
     """
+
     url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
     file_clients = 'clients.csv.gz'
     csv_clients_path = get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
@@ -180,8 +211,19 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
 
 def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, percent10=True,
                  treatment_feature='treatment', target_column='visit', return_X_y_t=False,  as_frame=False):
-    """Load data from the Criteo dataset
-    
+    """Load data from the Criteo dataset.
+
+    This dataset is constructed by assembling data resulting from several incrementality tests, a particular randomized
+    trial procedure where a random part of the population is prevented from being targeted by advertising.
+
+    Major columns:
+
+    * ``treatment`` (binary): treatment
+    * ``exposure`` (binary): treatment
+    * ``visit`` (binary): target
+    * ``conversion`` (binary): target
+    * ``f0, ... , f11`` (float): feature values
+
     Args:
         data_home (string): Specify a download and cache folder for the datasets.
         dest_subdir (string, unicode): The name of the folder in which the dataset is stored.
@@ -194,7 +236,8 @@ def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, per
                                                                           will be target
         return_X_y_t (bool, default=False): If True, returns (data, target, treatment) instead of a Bunch object.
                 See below for more information about the data and target object.
-        as_frame (bool, default=False):
+        as_frame (bool, default=False): If True, return as pandas.Series
+
     Returns:
         ''~sklearn.utils.Bunch'': dataset
             Dictionary-like object, with the following attributes.
@@ -270,24 +313,33 @@ def fetch_hillstrom(target='visit',
                     download_if_missing=True,
                     return_X_y=False):
     """Load the hillstrom dataset.
+
+    This dataset contains 64,000 customers who last purchased within twelve months. The customers were involved in an e-mail test.
+
+    Major columns:
+
+    * ``Visit`` (binary): target. 1/0 indicator, 1 = Customer visited website in the following two weeks.
+    * ``Conversion`` (binary): target. 1/0 indicator, 1 = Customer purchased merchandise in the following two weeks.
+    * ``Spend`` (float): target. Actual dollars spent in the following two weeks.
+    * ``Segment`` (str): treatment. The e-mail campaign the customer received
     
-        Args:
-          target : str, desfault=visit. 
-              Can also be conversion, and spend
-          data_home : str, default=None
-              Specify another download and cache folder for the datasets.
-          dest_subdir : str, default=None
-          download_if_missing : bool, default=True
-              If False, raise a IOError if the data is not locally available
-              instead of trying to download the data from the source site.
+    Args:
+        target : str, desfault=visit.
+            Can also be conversion, and spend
+        data_home : str, default=None
+            Specify another download and cache folder for the datasets.
+        dest_subdir : str, default=None
+        download_if_missing : bool, default=True
+            If False, raise a IOError if the data is not locally available
+            instead of trying to download the data from the source site.
         
-        Returns:
-          Dictionary-like object, with the following attributes.
-          data : {ndarray, dataframe} of shape (64000, 12)
+    Returns:
+        Dictionary-like object, with the following attributes.
+        data : {ndarray, dataframe} of shape (64000, 12)
             The data matrix to learn. 
-          target : {ndarray, series} of shape (64000,)
+        target : {ndarray, series} of shape (64000,)
             The regression target for each sample. 
-          treatment : {ndarray, series} of shape (64000,)
+        treatment : {ndarray, series} of shape (64000,)
     """
 
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
@@ -296,6 +348,7 @@ def fetch_hillstrom(target='visit',
                         dest_subdir=dest_subdir,
                         dest_filename='hillstorm_no_indices.csv.gz',
                         download_if_missing=download_if_missing)
+
     hillstrom = pd.read_csv(csv_path)
     hillstrom_data = hillstrom.drop(columns=['segment', target])
     
