@@ -96,6 +96,93 @@ def clear_data_dir(path=None):
         shutil.rmtree(path, ignore_errors=True)
 
 
+
+def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, percent10=True,
+                 treatment_feature='treatment', target_column='visit', return_X_y_t=False,  as_frame=False):
+    """Load data from the Criteo dataset
+    
+    Args:
+        data_home (string): Specify a download and cache folder for the datasets.
+        dest_subdir (string, unicode): The name of the folder in which the dataset is stored.
+        download_if_missing (bool, default=True): If False, raise an IOError if the data is not locally available
+                                                  instead of trying to download the data from the source site.
+        percent10 (bool, default=True): Whether to load only 10 percent of the data.
+        treatment_feature (string,'treatment' or 'exposure' default='treatment'): Selects which column from dataset
+                                                                                  will be treatment
+        target_column (string, 'visit' or 'conversion', default='visit'): Selects which column from dataset
+                                                                          will be target
+        return_X_y_t (bool, default=False): If True, returns (data, target, treatment) instead of a Bunch object.
+                See below for more information about the data and target object.
+        as_frame (bool, default=False):
+    Returns:
+        ''~sklearn.utils.Bunch'': dataset
+            Dictionary-like object, with the following attributes.
+                data (ndarray, DataFrame object): Dataset without target and treatment.
+                target (ndarray, series): Column target by values
+                treatment (ndarray, series): Column treatment by values
+                DESCR (string): Description of the Criteo dataset.
+                feature_names (list): The names of the future columns
+                target_name (string): The name of the target column.
+                treatment_name (string): The name of the treatment column
+        tuple (data, target, treatment): tuple if return_X_y_t is True
+    """
+    if percent10:
+        url = 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo10.csv.gz'
+        csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+                            dest_filename='criteo10.csv.gz',
+                            download_if_missing=download_if_missing)
+    else:
+        url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
+        csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+                        dest_filename='criteo.csv.gz',
+                        download_if_missing=download_if_missing)
+
+    if treatment_feature == 'exposure':
+        data = pd.read_csv(csv_path, usecols=[i for i in range(12)])
+        treatment = pd.read_csv(csv_path,  usecols=['exposure'], dtype={'exposure': 'Int8'})
+        if as_frame:
+            treatment = treatment['exposure']
+    elif treatment_feature == 'treatment':
+        data = pd.read_csv(csv_path, usecols=[i for i in range(12)])
+        treatment = pd.read_csv(csv_path,  usecols=['treatment'], dtype={'treatment': 'Int8'})
+        if as_frame:
+            treatment = treatment['treatment']
+    else:
+        raise ValueError(f"Treatment_feature value must be from {['treatment', 'exposure']}. "
+                         f"Got value {treatment_feature}.")
+    feature_names = list(data.columns)
+
+    if target_column == 'conversion':
+        target = pd.read_csv(csv_path,  usecols=['conversion'], dtype={'conversion': 'Int8'})
+        if as_frame:
+            target = target['conversion']
+    elif target_column == 'visit':
+        target = pd.read_csv(csv_path,  usecols=['visit'], dtype={'visit': 'Int8'})
+        if as_frame:
+            target = target['visit']
+    else:
+        raise ValueError(f"Target_column value must be from {['visit', 'conversion']}. "
+                         f"Got value {target_column}.")
+
+    if return_X_y_t:
+        if as_frame:
+            return data, target, treatment
+        else:
+            return data.to_numpy(), target.to_numpy(), treatment.to_numpy()
+    else:
+        target_name = target_column
+        treatment_name = treatment_feature
+        module_path = os.path.dirname(__file__)
+        with open(os.path.join(module_path, 'descr', 'criteo.rst')) as rst_file:
+            fdescr = rst_file.read()
+        if as_frame:
+            return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr, feature_names=feature_names,
+                         target_name=target_name, treatment_name=treatment_name)
+        else:
+            return Bunch(data=data.to_numpy(), target=target.to_numpy(), treatment=treatment.to_numpy(), DESCR=fdescr,
+                         feature_names=feature_names, target_name=target_name, treatment_name=treatment_name)
+
+
 def fetch_hillstrom(target='visit',
                     data_home=None,
                     dest_subdir=None,
@@ -105,22 +192,22 @@ def fetch_hillstrom(target='visit',
     """Load the hillstrom dataset.
     
         Args:
-    target : str, desfault=visit. 
-        Can also be conversion, and spend
-    data_home : str, default=None
-        Specify another download and cache folder for the datasets.
-    dest_subdir : str, default=None
-    download_if_missing : bool, default=True
-        If False, raise a IOError if the data is not locally available
-        instead of trying to download the data from the source site.
+          target : str, desfault=visit. 
+              Can also be conversion, and spend
+          data_home : str, default=None
+              Specify another download and cache folder for the datasets.
+          dest_subdir : str, default=None
+          download_if_missing : bool, default=True
+              If False, raise a IOError if the data is not locally available
+              instead of trying to download the data from the source site.
         
         Returns:
-     Dictionary-like object, with the following attributes.
-     data : {ndarray, dataframe} of shape (64000, 12)
-        The data matrix to learn. 
-     target : {ndarray, series} of shape (64000,)
-        The regression target for each sample. 
-      treatment : {ndarray, series} of shape (64000,)
+          Dictionary-like object, with the following attributes.
+          data : {ndarray, dataframe} of shape (64000, 12)
+            The data matrix to learn. 
+          target : {ndarray, series} of shape (64000,)
+            The regression target for each sample. 
+          treatment : {ndarray, series} of shape (64000,)
         
         """
 
