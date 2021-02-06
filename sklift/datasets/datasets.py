@@ -1,8 +1,8 @@
 import os
 import shutil
-
-
+import pandas as pd
 import requests
+from sklearn.utils import Bunch
 
 
 def get_data_dir():
@@ -94,3 +94,52 @@ def clear_data_dir(path=None):
         path = get_data_dir()
     if os.path.isdir(path):
         shutil.rmtree(path, ignore_errors=True)
+
+
+def fetch_hillstrom(target='visit',
+                    data_home=None,
+                    dest_subdir=None,
+                    download_if_missing=True,
+                    return_X_y=False):
+   
+    """Load the hillstrom dataset.
+    
+        Args:
+    target : str, desfault=visit. 
+        Can also be conversion, and spend
+    data_home : str, default=None
+        Specify another download and cache folder for the datasets.
+    dest_subdir : str, default=None
+    download_if_missing : bool, default=True
+        If False, raise a IOError if the data is not locally available
+        instead of trying to download the data from the source site.
+        
+        Returns:
+     Dictionary-like object, with the following attributes.
+     data : {ndarray, dataframe} of shape (64000, 12)
+        The data matrix to learn. 
+     target : {ndarray, series} of shape (64000,)
+        The regression target for each sample. 
+      treatment : {ndarray, series} of shape (64000,)
+        
+        """
+
+    url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
+    csv_path = get_data(data_home=data_home,
+                        url=url,
+                        dest_subdir=dest_subdir,
+                        dest_filename='hillstorm_no_indices.csv.gz',
+                        download_if_missing=download_if_missing)
+    hillstrom = pd.read_csv(csv_path)
+    hillstrom_data = hillstrom.drop(columns=['segment', target])
+    
+    module_path = os.path.dirname('__file__')
+    with open(os.path.join(module_path, 'descr', 'hillstrom.rst')) as rst_file:
+        fdescr = rst_file.read()
+    
+    if return_X_y:
+        return treatment, data, target
+    
+    return Bunch(treatment=hillstrom['segment'],
+                 target=hillstrom[target],
+                 data=hillstrom_data, DESCR=fdescr)
