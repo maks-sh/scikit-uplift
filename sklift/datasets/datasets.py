@@ -15,7 +15,7 @@ def get_data_dir():
     return os.path.join(os.path.expanduser("~"), "scikit-uplift-data")
 
 
-def create_data_dir(path):
+def _create_data_dir(path):
     """This function creates a directory, which stores the datasets.
 
     Args:
@@ -26,7 +26,7 @@ def create_data_dir(path):
         os.makedirs(path)
 
 
-def download(url, dest_path):
+def _download(url, dest_path):
     '''Download the file from url and save it localy
     
     Args:
@@ -47,7 +47,7 @@ def download(url, dest_path):
         raise TypeError("URL must be a string")
 
 
-def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
+def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
     """Return the path to the dataset.
     
     Args:
@@ -71,13 +71,13 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
         else:
             data_dir = os.path.join(os.path.abspath(data_home), dest_subdir)
 
-    create_data_dir(data_dir)
+    _create_data_dir(data_dir)
 
     dest_path = os.path.join(data_dir, dest_filename)
 
     if not os.path.isfile(dest_path):
         if download_if_missing:
-            download(url, dest_path)
+            _download(url, dest_path)
         else:
             raise IOError("Dataset missing")
     return dest_path
@@ -118,7 +118,7 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
 
     url = 'https://winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
     filename = 'lentadataset.csv.gz'
-    csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+    csv_path = _get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                         dest_filename=filename,
                         download_if_missing=download_if_missing)
     data = pd.read_csv(csv_path)
@@ -168,7 +168,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True, as_fram
     """
     url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
     file_clients = 'clients.csv.gz'
-    csv_clients_path = get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
+    csv_clients_path = _get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
                                 dest_filename=file_clients,
                                 download_if_missing=download_if_missing)
     clients = pd.read_csv(csv_clients_path)
@@ -176,7 +176,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True, as_fram
 
     url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
     file_train = 'uplift_train.csv.gz'
-    csv_train_path = get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
+    csv_train_path = _get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                               dest_filename=file_train,
                               download_if_missing=download_if_missing)
     train = pd.read_csv(csv_train_path)
@@ -184,7 +184,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True, as_fram
 
     url_purchases = 'https://timds.s3.eu-central-1.amazonaws.com/purchases.csv.gz'
     file_purchases = 'purchases.csv.gz'
-    csv_purchases_path = get_data(data_home=data_home, url=url_purchases, dest_subdir=dest_subdir,
+    csv_purchases_path = _get_data(data_home=data_home, url=url_purchases, dest_subdir=dest_subdir,
                                 dest_filename=file_purchases,
                                 download_if_missing=download_if_missing)
     purchases = pd.read_csv(csv_purchases_path)
@@ -242,12 +242,12 @@ def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, per
     """
     if percent10:
         url = 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo10.csv.gz'
-        csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+        csv_path = _get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                             dest_filename='criteo10.csv.gz',
                             download_if_missing=download_if_missing)
     else:
         url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
-        csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+        csv_path = _get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                             dest_filename='criteo.csv.gz',
                             download_if_missing=download_if_missing)
 
@@ -326,7 +326,7 @@ def fetch_hillstrom(data_home=None, dest_subdir=None, download_if_missing=True, 
     """
 
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
-    csv_path = get_data(data_home=data_home,
+    csv_path = _get_data(data_home=data_home,
                         url=url,
                         dest_subdir=dest_subdir,
                         dest_filename='hillstorm_no_indices.csv.gz',
