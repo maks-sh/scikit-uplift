@@ -59,7 +59,6 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
 
     Returns:
         The path to the dataset.
-        
     """
     if data_home is None:
         if dest_subdir is None:
@@ -96,22 +95,56 @@ def clear_data_dir(path=None):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
-    """Fetch the X5 dataset.
+def fetch_lenta(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True):
+    '''Fetch the Lenta dataset.
 
         Args:
+            return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object. 
+                See below for more information about the data and target object.
             data_home (str, unicode): The path to the folder where datasets are stored.
             dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
             download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
 
         Returns:
+            * dataset ('~sklearn.utils.Bunch'): Dictionary-like object, with the following attributes.
+                * data (DataFrame object): Dataset without target and treatment.
+                * target (Series object): Column target by values.
+                * treatment (Series object): Column treatment by values.
+                * DESCR (str): Description of the Lenta dataset.
+
+            * (data,target,treatment): tuple if 'return_X_y_t' is True.
+    '''
+    url='https:/winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
+    filename='lentadataset.csv.gz'
+    csv_path=get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+             dest_filename=filename,
+            download_if_missing=download_if_missing)
+    data = pd.read_csv(csv_path)
+    target=data['response_att']
+    treatment=data['group']
+    data=data.drop(['response_att', 'group'], axis=1)
+
+    module_path = os.path.dirname(__file__)
+    with open(os.path.join(module_path, 'descr', 'lenta.rst')) as rst_file:
+        fdescr = rst_file.read()
+    
+    if return_X_y_t == True:
+        return data, target, treatment
+    
+    return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr)
+
+
+def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
+    """Fetch the X5 dataset.
+
+        Args:
             '~sklearn.utils.Bunch': dataset
                 Dictionary-like object, with the following attributes.
-                data ('~sklearn.utils.Bunch'): Dataset without target and treatment.
-                target (Series object): Column target by values
-                treatment (Series object): Column treatment by values
-                DESCR (str): Description of the X5 dataset.
-                train (DataFrame object): Dataset with target and treatment.
+            data ('~sklearn.utils.Bunch'): Dataset without target and treatment.
+            target (Series object): Column target by values
+            treatment (Series object): Column treatment by values
+            DESCR (str): Description of the X5 dataset.
+            train (DataFrame object): Dataset with target and treatment.
     """
     url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
     file_clients = 'clients.csv.gz'
