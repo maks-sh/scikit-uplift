@@ -145,17 +145,26 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
                  feature_names=feature_names, target_name='response_att', treatment_name='group')
 
 
-def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
+def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True, as_frame=False):
     """Fetch the X5 dataset.
 
-        Args:
-            '~sklearn.utils.Bunch': dataset
+    Args:
+        data_home (string): Specify a download and cache folder for the datasets.
+        dest_subdir (string, unicode): The name of the folder in which the dataset is stored.
+        download_if_missing (bool, default=True): If False, raise an IOError if the data is not locally available
+                                                  instead of trying to download the data from the source site.
+        as_frame (bool, default=False):
+
+    Returns:
+        '~sklearn.utils.Bunch': dataset
                 Dictionary-like object, with the following attributes.
-            data ('~sklearn.utils.Bunch'): Dataset without target and treatment.
-            target (Series object): Column target by values
-            treatment (Series object): Column treatment by values
-            DESCR (str): Description of the X5 dataset.
-            train (DataFrame object): Dataset with target and treatment.
+        data ('~sklearn.utils.Bunch'): Dataset without target and treatment.
+        target (Series object): Column target by values
+        treatment (Series object): Column treatment by values
+        DESCR (str): Description of the X5 dataset.
+        train (DataFrame object): Dataset with target and treatment.
+        data_names ('~sklearn.utils.Bunch'): Names of features.
+        treatment_name (string): The name of the treatment column.
     """
     url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
     file_clients = 'clients.csv.gz'
@@ -163,6 +172,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
                                 dest_filename=file_clients,
                                 download_if_missing=download_if_missing)
     clients = pd.read_csv(csv_clients_path)
+    clients_names = list(clients.column)
 
     url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
     file_train = 'uplift_train.csv.gz'
@@ -170,6 +180,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
                               dest_filename=file_train,
                               download_if_missing=download_if_missing)
     train = pd.read_csv(csv_train_path)
+    train_names = list(train.columns)
 
     url_purchases = 'https://timds.s3.eu-central-1.amazonaws.com/purchases.csv.gz'
     file_purchases = 'purchases.csv.gz'
@@ -177,16 +188,27 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
                                 dest_filename=file_purchases,
                                 download_if_missing=download_if_missing)
     purchases = pd.read_csv(csv_purchases_path)
+    purchases_names = list(purchases.columns)
 
-    target = train['target']
-    treatment = train['treatment_flg']
+    if as_frame:
+        target = train['target']
+        treatment = train['treatment_flg']
+    else:
+        target = train[['target']].to_numpy()
+        treatment = train[['treatment_flg']].to_numpy()
+        train = train.to_numpy()
+        clients = clients.to_numpy()
+        purchases = purchases.to_numpy()
 
     module_path = os.path.dirname(__file__)
     with open(os.path.join(module_path, 'descr', 'x5.rst')) as rst_file:
         fdescr = rst_file.read()
 
     return Bunch(data=Bunch(clients=clients, train=train, purchases=purchases), 
-                 target=target, treatment=treatment, DESCR=fdescr)
+                 target=target, treatment=treatment, DESCR=fdescr,
+                 data_names=Bunch(clients_names=clients_names, train_names=train_names,
+                                  purchases_names=purchases_names),
+                 treatment_name='treatment_flg')
 
 
 def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, percent10=True,
