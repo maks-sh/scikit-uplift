@@ -1,5 +1,12 @@
 Description of parameters.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dataset from the **BigTarget Hackathon** hosted by Lenta and Microsoft this summer.
+
+### Data description
+
+This is an uplift modeling dataset containing data about Lenta's customers grociery shopping and related marketing campaigns.
+
 .. list-table::
     :align: center
     :header-rows: 1
@@ -11,14 +18,8 @@ Description of parameters.
       - age
     * - CardHolder
       - customer id
-    * - cheque_count_12m_g*
-      - number of customer receipts collected within last 12 months
-        before campaign. g* is a product group
-    * - cheque_count_3m_g*
-      - number of customer receipts collected within last 3 months
-        before campaign. g* is a product group
-    * - cheque_count_6m_g*	                
-      - number of customer receipts collected within last 6 months
+    * - cheque_count_[3,6,12]m_g*
+      - number of customer receipts collected within last 3, 6, 12 months
         before campaign. g* is a product group
     * - children
       - number of children
