@@ -100,27 +100,28 @@ def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, per
                  treatment_feature='treatment', target_column='visit', return_X_y_t=False,  as_frame=False):
     """Load data from the Criteo dataset
     Args:
-        data_home (str): Specify a download and cache folder for the datasets.
-        dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
+        data_home (string): Specify a download and cache folder for the datasets.
+        dest_subdir (string, unicode): The name of the folder in which the dataset is stored.
         download_if_missing (bool, default=True): If False, raise an IOError if the data is not locally available
                                                   instead of trying to download the data from the source site.
         percent10 (bool, default=True): Whether to load only 10 percent of the data.
-        treatment_feature (str, default='treatment'): {'treatment', 'exposure'} Selects which column from dataset
-                                                      will be treatment
-        target_column (str, default='visit'): {'visit', 'conversion'} Selects which column from dataset will be target
-        return_X_y_t (bool, fefault=False): If True, returns (data, target, treatment) instead of a Bunch object.
+        treatment_feature (string,'treatment' or 'exposure' default='treatment'): Selects which column from dataset
+                                                                                  will be treatment
+        target_column (string, 'visit' or 'conversion', default='visit'): Selects which column from dataset
+                                                                          will be target
+        return_X_y_t (bool, default=False): If True, returns (data, target, treatment) instead of a Bunch object.
                 See below for more information about the data and target object.
         as_frame (bool, default=False):
     Returns:
-        '~sklearn.utils.Bunch': dataset
+        ''~sklearn.utils.Bunch'': dataset
             Dictionary-like object, with the following attributes.
                 data (ndarray, DataFrame object): Dataset without target and treatment.
                 target (ndarray, series): Column target by values
                 treatment (ndarray, series): Column treatment by values
-                DESCR (str): Description of the Criteo dataset.
+                DESCR (string): Description of the Criteo dataset.
                 feature_names (list): The names of the future columns
-                target_name (str): The name of the target column.
-                treatment_name (str): The name of the treatment column
+                target_name (string): The name of the target column.
+                treatment_name (string): The name of the treatment column
         tuple (data, target, treatment): tuple if return_X_y_t is True
     """
     if percent10:
