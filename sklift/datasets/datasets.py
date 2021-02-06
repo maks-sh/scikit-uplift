@@ -95,15 +95,16 @@ def clear_data_dir(path=None):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def fetch_lenta(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True):
-    '''Fetch the Lenta dataset.
+def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, return_X_y_t=False, as_frame=False):
+    """Fetch the Lenta dataset.
 
         Args:
-            return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object. 
-                See below for more information about the data and target object.
             data_home (str, unicode): The path to the folder where datasets are stored.
             dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
             download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
+            return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object.
+                                 See below for more information about the data and target object.
+            as_frame (bool):
 
         Returns:
             * dataset ('~sklearn.utils.Bunch'): Dictionary-like object, with the following attributes.
@@ -113,25 +114,35 @@ def fetch_lenta(return_X_y_t=False, data_home=None, dest_subdir=None, download_i
                 * DESCR (str): Description of the Lenta dataset.
 
             * (data,target,treatment): tuple if 'return_X_y_t' is True.
-    '''
-    url='https:/winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
-    filename='lentadataset.csv.gz'
-    csv_path=get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
-             dest_filename=filename,
-            download_if_missing=download_if_missing)
+    """
+
+    url = 'https://winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
+    filename = 'lentadataset.csv.gz'
+    csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+                        dest_filename=filename,
+                        download_if_missing=download_if_missing)
     data = pd.read_csv(csv_path)
-    target=data['response_att']
-    treatment=data['group']
-    data=data.drop(['response_att', 'group'], axis=1)
+    if as_frame:
+        target=data['response_att']
+        treatment=data['group']
+        data=data.drop(['response_att', 'group'], axis=1)
+        feature_names = list(data.columns)
+    else:
+        target = data[['response_att']].to_numpy()
+        treatment = data[['group']].to_numpy()
+        data = data.drop(['response_att', 'group'], axis=1)
+        feature_names = list(data.columns)
+        data = data.to_numpy()
 
     module_path = os.path.dirname(__file__)
     with open(os.path.join(module_path, 'descr', 'lenta.rst')) as rst_file:
         fdescr = rst_file.read()
     
-    if return_X_y_t == True:
+    if return_X_y_t:
         return data, target, treatment
     
-    return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr)
+    return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr,
+                 feature_names=feature_names, target_name='response_att', treatment_name='group')
 
 
 def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
@@ -215,8 +226,8 @@ def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, per
     else:
         url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
         csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
-                        dest_filename='criteo.csv.gz',
-                        download_if_missing=download_if_missing)
+                            dest_filename='criteo.csv.gz',
+                            download_if_missing=download_if_missing)
 
     if treatment_feature == 'exposure':
         data = pd.read_csv(csv_path, usecols=[i for i in range(12)])
