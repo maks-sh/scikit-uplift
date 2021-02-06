@@ -15,3 +15,4 @@ This is the modules reference of scikit-uplift.
    ./models/index
    ./metrics/index
    ./viz/index
+   ./datasets/index
