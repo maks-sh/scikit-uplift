@@ -264,22 +264,21 @@ def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, per
                          feature_names=feature_names, target_name=target_name, treatment_name=treatment_name)
 
 
-def fetch_hillstrom(target='visit',
-                    data_home=None,
-                    dest_subdir=None,
-                    download_if_missing=True,
-                    return_X_y=False):
+def fetch_hillstrom(data_home=None, dest_subdir=None, download_if_missing=True, target_column='visit',
+                    return_X_y_t=False, as_frame=False):
     """Load the hillstrom dataset.
     
         Args:
-          target : str, desfault=visit. 
-              Can also be conversion, and spend
           data_home : str, default=None
               Specify another download and cache folder for the datasets.
           dest_subdir : str, default=None
           download_if_missing : bool, default=True
               If False, raise a IOError if the data is not locally available
               instead of trying to download the data from the source site.
+          target_column (string, 'visit' or 'conversion' or 'spend', default='visit'): Selects which column from dataset
+                                                                                       will be target
+          return_X_y_t (bool):
+          as_frame (bool):
         
         Returns:
           Dictionary-like object, with the following attributes.
@@ -288,6 +287,9 @@ def fetch_hillstrom(target='visit',
           target : {ndarray, series} of shape (64000,)
             The regression target for each sample. 
           treatment : {ndarray, series} of shape (64000,)
+          feature_names (list): The names of the future columns
+          target_name (string): The name of the target column.
+          treatment_name (string): The name of the treatment column
     """
 
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
@@ -296,16 +298,30 @@ def fetch_hillstrom(target='visit',
                         dest_subdir=dest_subdir,
                         dest_filename='hillstorm_no_indices.csv.gz',
                         download_if_missing=download_if_missing)
-    hillstrom = pd.read_csv(csv_path)
-    hillstrom_data = hillstrom.drop(columns=['segment', target])
+
+    if target_column != ('visit' or 'conversion' or 'spend'):
+        raise ValueError(f"Target_column value must be from {['visit', 'conversion', 'spend']}. "
+                         f"Got value {target_column}.")
+
+    data = pd.read_csv(csv_path, usecols=[i for i in range(8)])
+    feature_names = list(data.columns)
+    treatment = pd.read_csv(csv_path, usecols=['segment'])
+    target = pd.read_csv(csv_path, usecols=[target_column])
+    if as_frame:
+        target = target[target_column]
+        treatment = treatment['segment']
+    else:
+        data = data.to_numpy()
+        target = target.to_numpy()
+        treatment = treatment.to_numpy()
     
     module_path = os.path.dirname('__file__')
     with open(os.path.join(module_path, 'descr', 'hillstrom.rst')) as rst_file:
         fdescr = rst_file.read()
     
-    if return_X_y:
-        return treatment, data, target
-    
-    return Bunch(treatment=hillstrom['segment'],
-                 target=hillstrom[target],
-                 data=hillstrom_data, DESCR=fdescr)
+    if return_X_y_t:
+        return data, target, treatment
+    else:
+        target_name = target_column
+        return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr,
+                     feature_names=feature_names, target_name=target_name, treatment_name='segment')
