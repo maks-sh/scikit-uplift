@@ -146,8 +146,8 @@ def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, per
         if as_frame:
             treatment = treatment['treatment']
     else:
-        raise ValueError("Treatment_feature value must be from %s, got"
-                         " %s." % (['treatment', 'exposure'], treatment_feature))
+        raise ValueError(f"Treatment_feature value must be from {['treatment', 'exposure']}. "
+                         f"Got value {treatment_feature}.")
     feature_names = list(data.columns)
 
     if target_column == 'conversion':
@@ -159,8 +159,8 @@ def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, per
         if as_frame:
             target = target['visit']
     else:
-        raise ValueError("Target_column value must be from %s, got"
-                         " %s." % (['visit', 'conversion'], target_column))
+        raise ValueError(f"Target_column value must be from {['visit', 'conversion']}. "
+                         f"Got value {target_column}.")
 
     if return_X_y_t:
         if as_frame:
