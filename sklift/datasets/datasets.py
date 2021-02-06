@@ -6,39 +6,38 @@ from sklearn.utils import Bunch
 
 
 def get_data_dir():
-    """This function returns a directory, which stores the datasets.
+    """Return the path of the scikit-uplift data dir.
+
+    This folder is used by some large dataset loaders to avoid downloading the data several times.
+
+    By default the data dir is set to a folder named ‘scikit_learn_data’ in the user home folder.
 
     Returns:
-        Full path to a directory, which stores the datasets.
+        string: The path to scikit-uplift data dir.
 
     """
-
     return os.path.join(os.path.expanduser("~"), "scikit-uplift-data")
 
 
-def create_data_dir(path):
-    """This function creates a directory, which stores the datasets.
+def _create_data_dir(path):
+    """Creates a directory, which stores the datasets.
 
     Args:
-        path (str): The path to the folder where datasets are stored.
+        path (str): The path to scikit-uplift data dir.
 
     """
-
     if not os.path.isdir(path):
         os.makedirs(path)
 
 
-def download(url, dest_path):
-    """Download the file from url and save it localy
-    
+def _download(url, dest_path):
+    """Download the file from url and save it locally.
+
     Args:
         url: URL address, must be a string.
         dest_path: Destination of the file.
 
-    Returns:
-        TypeError if URL is not a string.
     """
-
     if isinstance(url, str):
         req = requests.get(url, stream=True)
         req.raise_for_status()
@@ -50,20 +49,21 @@ def download(url, dest_path):
         raise TypeError("URL must be a string")
 
 
-def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
+def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
     """Return the path to the dataset.
     
     Args:
-        data_home (str, unicode): The path to the folder where datasets are stored.
+        data_home (str, unicode): The path to scikit-uplift data dir.
         url (str or unicode): The URL to the dataset.
         dest_subdir (str or unicode): The name of the folder in which the dataset is stored.
         dest_filename (str): The name of the dataset.
-        download_if_missing (bool): Flag if dataset is missing.
+        download_if_missing (bool): If False, raise a IOError if the data is not locally available instead of
+            trying to download the data from the source site.
 
     Returns:
-        The path to the dataset.
-    """
+        string: The path to the dataset.
 
+    """
     if data_home is None:
         if dest_subdir is None:
             data_dir = get_data_dir()
@@ -75,33 +75,34 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
         else:
             data_dir = os.path.join(os.path.abspath(data_home), dest_subdir)
 
-    create_data_dir(data_dir)
+    _create_data_dir(data_dir)
 
     dest_path = os.path.join(data_dir, dest_filename)
 
     if not os.path.isfile(dest_path):
         if download_if_missing:
-            download(url, dest_path)
+            _download(url, dest_path)
         else:
             raise IOError("Dataset missing")
     return dest_path
 
 
 def clear_data_dir(path=None):
-    """This function deletes the file.
+    """Delete all the content of the data home cache.
 
-    Args:
-        path (str): File path. By default, this is the default path for datasets.
+        Args:
+            path (str): The path to scikit-uplift data dir
+
     """
-
     if path is None:
         path = get_data_dir()
     if os.path.isdir(path):
         shutil.rmtree(path, ignore_errors=True)
 
 
+
 def fetch_lenta(return_X_y_t=False, data_home=None, dest_subdir=None, download_if_missing=True):
-    """Load data from the Lenta dataset.
+    """Load and return the Lenta dataset (classification).
 
     An uplift modeling dataset containing data about Lenta's customers grociery shopping and related marketing campaigns.
 
@@ -121,35 +122,47 @@ def fetch_lenta(return_X_y_t=False, data_home=None, dest_subdir=None, download_i
         download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
 
     Returns:
-        dataset ('~sklearn.utils.Bunch'): Dictionary-like object, with the following attributes.
-            * data (DataFrame object): Dataset without target and treatment.
-            * target (Series object): Column target by values.
-            * treatment (Series object): Column treatment by values.
-            * DESCR (str): Description of the Lenta dataset.
+        Bunch or tuple: dataset.
 
-        (data,target,treatment): tuple if 'return_X_y_t' is True.
+            By default dictionary-like object, with the following attributes:
+
+                * ``data`` (DataFrame object): Dataset without target and treatment.
+                * ``target`` (Series object): Column target by values.
+                * ``treatment`` (Series object): Column treatment by values.
+                * ``DESCR`` (str): Description of the Lenta dataset.
+
+        tuple (data, target, treatment) if `return_X_y` is True
     """
 
     url='https:/winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
     filename='lentadataset.csv.gz'
 
-    csv_path=get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+    csv_path=_get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
              dest_filename=filename,
             download_if_missing=download_if_missing)
 
     data = pd.read_csv(csv_path)
-    target=data['response_att']
-    treatment=data['group']
-    data=data.drop(['response_att', 'group'], axis=1)
+    if as_frame:
+        target=data['response_att']
+        treatment=data['group']
+        data=data.drop(['response_att', 'group'], axis=1)
+        feature_names = list(data.columns)
+    else:
+        target = data[['response_att']].to_numpy()
+        treatment = data[['group']].to_numpy()
+        data = data.drop(['response_att', 'group'], axis=1)
+        feature_names = list(data.columns)
+        data = data.to_numpy()
 
     module_path = os.path.dirname(__file__)
     with open(os.path.join(module_path, 'descr', 'lenta.rst')) as rst_file:
         fdescr = rst_file.read()
     
-    if return_X_y_t == True:
+    if return_X_y_t:
         return data, target, treatment
     
-    return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr)
+    return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr,
+                 feature_names=feature_names, target_name='response_att', treatment_name='group')
 
 
 def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
@@ -169,44 +182,59 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
         download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
 
     Returns:
-        dataset ('~sklearn.utils.Bunch'): dataset Dictionary-like object, with the following attributes.
+        Bunch: dataset Dictionary-like object, with the following attributes.
+        
             * data ('~sklearn.utils.Bunch'): Dataset without target and treatment.
             * target (Series object): Column target by values
             * treatment (Series object): Column treatment by values
             * DESCR (str): Description of the X5 dataset.
             * train (DataFrame object): Dataset with target and treatment.
+
     """
 
     url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
     file_clients = 'clients.csv.gz'
-    csv_clients_path = get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
+    csv_clients_path = _get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
                                 dest_filename=file_clients,
                                 download_if_missing=download_if_missing)
     clients = pd.read_csv(csv_clients_path)
+    clients_names = list(clients.column)
 
     url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
     file_train = 'uplift_train.csv.gz'
-    csv_train_path = get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
+    csv_train_path = _get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                               dest_filename=file_train,
                               download_if_missing=download_if_missing)
     train = pd.read_csv(csv_train_path)
+    train_names = list(train.columns)
 
     url_purchases = 'https://timds.s3.eu-central-1.amazonaws.com/purchases.csv.gz'
     file_purchases = 'purchases.csv.gz'
-    csv_purchases_path = get_data(data_home=data_home, url=url_purchases, dest_subdir=dest_subdir,
+    csv_purchases_path = _get_data(data_home=data_home, url=url_purchases, dest_subdir=dest_subdir,
                                 dest_filename=file_purchases,
                                 download_if_missing=download_if_missing)
     purchases = pd.read_csv(csv_purchases_path)
+    purchases_names = list(purchases.columns)
 
-    target = train['target']
-    treatment = train['treatment_flg']
+    if as_frame:
+        target = train['target']
+        treatment = train['treatment_flg']
+    else:
+        target = train[['target']].to_numpy()
+        treatment = train[['treatment_flg']].to_numpy()
+        train = train.to_numpy()
+        clients = clients.to_numpy()
+        purchases = purchases.to_numpy()
 
     module_path = os.path.dirname(__file__)
     with open(os.path.join(module_path, 'descr', 'x5.rst')) as rst_file:
         fdescr = rst_file.read()
 
     return Bunch(data=Bunch(clients=clients, train=train, purchases=purchases), 
-                 target=target, treatment=treatment, DESCR=fdescr)
+                 target=target, treatment=treatment, DESCR=fdescr,
+                 data_names=Bunch(clients_names=clients_names, train_names=train_names,
+                                  purchases_names=purchases_names),
+                 treatment_name='treatment_flg')
 
 
 def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, percent10=True,
@@ -252,14 +280,14 @@ def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, per
     """
     if percent10:
         url = 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo10.csv.gz'
-        csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+        csv_path = _get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                             dest_filename='criteo10.csv.gz',
                             download_if_missing=download_if_missing)
     else:
         url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
-        csv_path = get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
-                        dest_filename='criteo.csv.gz',
-                        download_if_missing=download_if_missing)
+        csv_path = _get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
+                            dest_filename='criteo.csv.gz',
+                            download_if_missing=download_if_missing)
 
     if treatment_feature == 'exposure':
         data = pd.read_csv(csv_path, usecols=[i for i in range(12)])
@@ -307,11 +335,8 @@ def fetch_criteo(data_home=None, dest_subdir=None, download_if_missing=True, per
                          feature_names=feature_names, target_name=target_name, treatment_name=treatment_name)
 
 
-def fetch_hillstrom(target='visit',
-                    data_home=None,
-                    dest_subdir=None,
-                    download_if_missing=True,
-                    return_X_y=False):
+def fetch_hillstrom(data_home=None, dest_subdir=None, download_if_missing=True, target_column='visit',
+                    return_X_y_t=False, as_frame=False):
     """Load the hillstrom dataset.
 
     This dataset contains 64,000 customers who last purchased within twelve months. The customers were involved in an e-mail test.
@@ -332,6 +357,10 @@ def fetch_hillstrom(target='visit',
         download_if_missing : bool, default=True
             If False, raise a IOError if the data is not locally available
             instead of trying to download the data from the source site.
+          target_column (string, 'visit' or 'conversion' or 'spend', default='visit'): Selects which column from dataset
+            will be target
+          return_X_y_t (bool):
+          as_frame (bool):
         
     Returns:
         Dictionary-like object, with the following attributes.
@@ -340,25 +369,42 @@ def fetch_hillstrom(target='visit',
         target : {ndarray, series} of shape (64000,)
             The regression target for each sample. 
         treatment : {ndarray, series} of shape (64000,)
+        feature_names (list): The names of the future columns
+        target_name (string): The name of the target column.
+        treatment_name (string): The name of the treatment column
+
     """
 
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
-    csv_path = get_data(data_home=data_home,
+    csv_path = _get_data(data_home=data_home,
                         url=url,
                         dest_subdir=dest_subdir,
                         dest_filename='hillstorm_no_indices.csv.gz',
                         download_if_missing=download_if_missing)
 
-    hillstrom = pd.read_csv(csv_path)
-    hillstrom_data = hillstrom.drop(columns=['segment', target])
+    if target_column != ('visit' or 'conversion' or 'spend'):
+        raise ValueError(f"Target_column value must be from {['visit', 'conversion', 'spend']}. "
+                         f"Got value {target_column}.")
+
+    data = pd.read_csv(csv_path, usecols=[i for i in range(8)])
+    feature_names = list(data.columns)
+    treatment = pd.read_csv(csv_path, usecols=['segment'])
+    target = pd.read_csv(csv_path, usecols=[target_column])
+    if as_frame:
+        target = target[target_column]
+        treatment = treatment['segment']
+    else:
+        data = data.to_numpy()
+        target = target.to_numpy()
+        treatment = treatment.to_numpy()
     
     module_path = os.path.dirname('__file__')
     with open(os.path.join(module_path, 'descr', 'hillstrom.rst')) as rst_file:
         fdescr = rst_file.read()
     
-    if return_X_y:
-        return treatment, data, target
-    
-    return Bunch(treatment=hillstrom['segment'],
-                 target=hillstrom[target],
-                 data=hillstrom_data, DESCR=fdescr)
+    if return_X_y_t:
+        return data, target, treatment
+    else:
+        target_name = target_column
+        return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr,
+                     feature_names=feature_names, target_name=target_name, treatment_name='segment')
