@@ -444,7 +444,7 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
         target = target.to_numpy()
         treatment = treatment.to_numpy()
     
-    module_path = os.path.dirname('__file__')
+    module_path = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(module_path, 'descr', 'hillstrom.rst')) as rst_file:
         fdescr = rst_file.read()
     
