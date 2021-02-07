@@ -8,16 +8,6 @@ An uplift modeling dataset containing data about Lenta's customers grociery shop
 
 Source: **BigTarget Hackathon** hosted by Lenta and Microsoft in summer 2020.
 
-
-Key figures
-################
-* Format: CSV
-* Size: 153M (compressed) 567M (uncompressed)
-* Rows: 687 029
-* Response Ratio: 0.1
-* Treatment Ratio: 0.75
-
-
 Fields
 ################
 
@@ -115,4 +105,12 @@ Major features:
     * - stdev_discount_depth_[15d,1m]
       - discount sum coefficient of variation for 15 days, 1 month
 
+Key figures
+################
+
+* Format: CSV
+* Size: 153M (compressed) 567M (uncompressed)
+* Rows: 687 029
+* Response Ratio: 0.1
+* Treatment Ratio: 0.75
 

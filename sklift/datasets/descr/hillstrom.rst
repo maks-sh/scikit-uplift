@@ -4,17 +4,20 @@ Kevin Hillstrom Dataset: MineThatData
 Data description
 ################
 
-This is a copy of `MineThatData E-Mail Analytics And Data Mining Challenge dataset <https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html/>`_.
+This is a copy of `MineThatData E-Mail Analytics And Data Mining Challenge dataset <https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html>`_.
 
-date: March 20, 2008
-
-This dataset contains 64,000 customers who last purchased within twelve months. The customers were involved in an e-mail test.
+This dataset contains 64,000 customers who last purchased within twelve months.
+The customers were involved in an e-mail test.
 
 * 1/3 were randomly chosen to receive an e-mail campaign featuring Mens merchandise.
 * 1/3 were randomly chosen to receive an e-mail campaign featuring Womens merchandise.
 * 1/3 were randomly chosen to not receive an e-mail campaign.
 
-During a period of two weeks following the e-mail campaign, results were tracked. Your job is to tell the world if the Mens or Womens e-mail campaign was successful.
+During a period of two weeks following the e-mail campaign, results were tracked.
+Your job is to tell the world if the Mens or Womens e-mail campaign was successful.
+
+Fields
+################
 
 Historical customer attributes at your disposal include:
 
@@ -30,9 +33,10 @@ Historical customer attributes at your disposal include:
 Another variable describes the e-mail campaign the customer received:
 
 * Segment
-* Mens E-Mail
-* Womens E-Mail
-* No E-Mail
+
+    * Mens E-Mail
+    * Womens E-Mail
+    * No E-Mail
 
 Finally, we have a series of variables describing activity in the two weeks following delivery of the e-mail campaign:
 
