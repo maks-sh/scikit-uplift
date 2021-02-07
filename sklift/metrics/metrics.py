@@ -4,6 +4,8 @@ from sklearn.metrics import auc
 from sklearn.utils.extmath import stable_cumsum
 from sklearn.utils.validation import check_consistent_length
 
+from ..utils import check_is_binary
+
 
 def uplift_curve(y_true, uplift, treatment):
     """Compute Uplift curve.
@@ -31,8 +33,10 @@ def uplift_curve(y_true, uplift, treatment):
         Devriendt, F., Guns, T., & Verbeke, W. (2020). Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
     """
 
-    # TODO: check the treatment is binary
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+
     desc_score_indices = np.argsort(uplift, kind="mergesort")[::-1]
     y_true, uplift, treatment = y_true[desc_score_indices], uplift[desc_score_indices], treatment[desc_score_indices]
 
@@ -84,7 +88,9 @@ def perfect_uplift_curve(y_true, treatment):
 
         :func:`.plot_uplift_curve`: Plot Uplift curves from predictions.
     """
+
     check_consistent_length(y_true, treatment)
+    check_is_binary(treatment)
     y_true, treatment = np.array(y_true), np.array(treatment)
 
     cr_num = np.sum((y_true == 1) & (treatment == 0))  # Control Responders
@@ -121,8 +127,9 @@ def uplift_auc_score(y_true, uplift, treatment):
 
         :func:`.qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
     """
-    check_consistent_length(y_true, uplift, treatment)
 
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
@@ -164,7 +171,9 @@ def qini_curve(y_true, uplift, treatment):
 
         Devriendt, F., Guns, T., & Verbeke, W. (2020). Learning to rank for uplift modeling. ArXiv, abs/2002.05897.
     """
-    # TODO: check the treatment is binary
+
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     desc_score_indices = np.argsort(uplift, kind="mergesort")[::-1]
@@ -220,7 +229,9 @@ def perfect_qini_curve(y_true, treatment, negative_effect=True):
 
         :func:`.plot_qini_curves`: Plot Qini curves from predictions..
     """
+
     check_consistent_length(y_true, treatment)
+    check_is_binary(treatment)
     n_samples = len(y_true)
 
     y_true, treatment = np.array(y_true), np.array(treatment)
@@ -274,9 +285,10 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
         Nicholas J Radcliffe. (2007). Using control groups to target on predicted lift:
         Building and assessing uplift model. Direct Marketing Analytics Journal, (3):14–21, 2007.
     """
-    # ToDO: Add Continuous Outcomes
-    check_consistent_length(y_true, uplift, treatment)
 
+    # TODO: Add Continuous Outcomes
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     if not isinstance(negative_effect, bool):
@@ -328,9 +340,10 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
 
         :func:`.qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
     """
-    # ToDo: checker that treatment is binary and all groups is not empty
-    check_consistent_length(y_true, uplift, treatment)
 
+    # TODO: checker all groups is not empty
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     strategy_methods = ['overall', 'by_group']
@@ -424,12 +437,14 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
         variance of the response rate at each percentile,
         group size at each percentile.
     """
-    
+
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
+
     group_types = ['treatment', 'control']
     strategy_methods = ['overall', 'by_group']
     
     n_samples = len(y_true)
-    check_consistent_length(y_true, uplift, treatment)
     
     if group not in group_types:
         raise ValueError(f'Response rate supports only group types in {group_types},'
@@ -494,10 +509,12 @@ def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=
         float: Weighted average uplift.
     """
 
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
+
     strategy_methods = ['overall', 'by_group']
 
     n_samples = len(y_true)
-    check_consistent_length(y_true, uplift, treatment)
 
     if strategy not in strategy_methods:
         raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
@@ -559,10 +576,12 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
         pandas.DataFrame: DataFrame where metrics are by columns and percentiles are by rows.
     """
 
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
+
     strategy_methods = ['overall', 'by_group']
 
     n_samples = len(y_true)
-    check_consistent_length(y_true, uplift, treatment)
 
     if strategy not in strategy_methods:
         raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
@@ -612,10 +631,8 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
         response_rate_ctrl_total, variance_ctrl_total, n_ctrl_total = response_rate_by_percentile(
             y_true, uplift, treatment, strategy=strategy, group='control', bins=1)
 
-        weighted_avg_uplift = 1 / n_trmnt_total * np.dot(n_trmnt, uplift_scores)
-
         df.loc[-1, :] = ['total', n_trmnt_total, n_ctrl_total, response_rate_trmnt_total,
-                         response_rate_ctrl_total, weighted_avg_uplift]
+                         response_rate_ctrl_total, response_rate_trmnt_total - response_rate_ctrl_total]
 
     if std:
         std_treatment = np.sqrt(variance_trmnt)
@@ -649,6 +666,9 @@ def treatment_balance_curve(uplift, treatment, winsize):
     Returns:
         array (shape = [>2]), array (shape = [>2]): Points on a curve.
     """
+
+    check_consistent_length(uplift, treatment)
+    check_is_binary(treatment)
     uplift, treatment = np.array(uplift), np.array(treatment)
 
     desc_score_indices = np.argsort(uplift, kind="mergesort")[::-1]

@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.utils.validation import check_consistent_length
 
+from ..utils import check_is_binary
 from ..metrics import (
     uplift_curve, perfect_uplift_curve, uplift_auc_score,
     qini_curve, perfect_qini_curve, qini_auc_score,
@@ -15,8 +16,8 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     Args:
         trmnt_preds (1d array-like): Predictions for all observations if they are treatment.
         ctrl_preds (1d array-like): Predictions for all observations if they are control.
-        log (bool, default False): Logarithm of source samples. Default is False.
-        bins (integer or sequence, default 100): Number of histogram bins to be used.
+        log (bool): Logarithm of source samples. Default is False.
+        bins (integer or sequence): Number of histogram bins to be used. Default is 100.
             If an integer is given, bins + 1 bin edges are calculated and returned.
             If bins is a sequence, gives bin edges, including left edge of first bin and right edge of last bin.
             In this case, bins is returned unmodified. Default is 100.
@@ -24,11 +25,14 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     Returns:
         Object that stores computed values.
     """
+
     # TODO: Add k as parameter: vertical line on plots
     check_consistent_length(trmnt_preds, ctrl_preds)
+    check_is_binary(treatment)
 
     if not isinstance(bins, int) or bins <= 0:
-        raise ValueError(f'Bins should be positive integer. Invalid value for bins: {bins}')
+        raise ValueError(
+            f'Bins should be positive integer. Invalid value for bins: {bins}')
 
     if log:
         trmnt_preds = np.log(trmnt_preds + 1)
@@ -61,13 +65,15 @@ def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
         y_true (1d array-like): Ground truth (correct) labels.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
-        random (bool, default True): Draw a random curve. Default is True.
-        perfect (bool, default False): Draw a perfect curve. Default is True.
+        random (bool): Draw a random curve. Default is True.
+        perfect (bool): Draw a perfect curve. Default is True.
 
     Returns:
         Object that stores computed values.
     """
+
     check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
@@ -76,7 +82,8 @@ def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
     ax.plot(x_actual, y_actual, label='Model', color='blue')
 
     if random:
-        x_baseline, y_baseline = x_actual, x_actual * y_actual[-1] / len(y_true)
+        x_baseline, y_baseline = x_actual, x_actual * \
+            y_actual[-1] / len(y_true)
         ax.plot(x_baseline, y_baseline, label='Random', color='black')
         ax.fill_between(x_actual, y_actual, y_baseline, alpha=0.2, color='b')
 
@@ -85,7 +92,8 @@ def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
         ax.plot(x_perfect, y_perfect, label='Perfect', color='Red')
 
     ax.legend(loc='lower right')
-    ax.set_title(f'Uplift curve\nuplift_auc_score={uplift_auc_score(y_true, uplift, treatment):.2f}')
+    ax.set_title(
+        f'Uplift curve\nuplift_auc_score={uplift_auc_score(y_true, uplift, treatment):.4f}')
     ax.set_xlabel('Number targeted')
     ax.set_ylabel('Gain: treatment - control')
 
@@ -99,8 +107,8 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
         y_true (1d array-like): Ground truth (correct) labels.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
-        random (bool, default True): Draw a random curve. Default is True.
-        perfect (bool, default False): Draw a perfect curve. Default is True.
+        random (bool): Draw a random curve. Default is True.
+        perfect (bool): Draw a perfect curve. Default is True.
         negative_effect (bool): If True, optimum Qini Curve contains the negative effects
             (negative uplift because of campaign). Otherwise, optimum Qini Curve will not
             contain the negative effects. Default is True.
@@ -108,7 +116,9 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
     Returns:
         Object that stores computed values.
     """
+
     check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
@@ -117,16 +127,19 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
     ax.plot(x_actual, y_actual, label='Model', color='blue')
 
     if random:
-        x_baseline, y_baseline = x_actual, x_actual * y_actual[-1] / len(y_true)
+        x_baseline, y_baseline = x_actual, x_actual * \
+            y_actual[-1] / len(y_true)
         ax.plot(x_baseline, y_baseline, label='Random', color='black')
         ax.fill_between(x_actual, y_actual, y_baseline, alpha=0.2, color='b')
 
     if perfect:
-        x_perfect, y_perfect = perfect_qini_curve(y_true, treatment, negative_effect)
+        x_perfect, y_perfect = perfect_qini_curve(
+            y_true, treatment, negative_effect)
         ax.plot(x_perfect, y_perfect, label='Perfect', color='Red')
 
     ax.legend(loc='lower right')
-    ax.set_title(f'Qini curve\nqini_auc_score={qini_auc_score(y_true, uplift, treatment, negative_effect):.2f}')
+    ax.set_title(
+        f'Qini curve\nqini_auc_score={qini_auc_score(y_true, uplift, treatment, negative_effect):.4f}')
     ax.set_xlabel('Number targeted')
     ax.set_ylabel('Number of incremental outcome')
 
@@ -170,8 +183,9 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
     strategy_methods = ['overall', 'by_group']
     kind_methods = ['line', 'bar']
 
-    n_samples = len(y_true)
     check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
+    n_samples = len(y_true)
 
     if strategy not in strategy_methods:
         raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
@@ -182,10 +196,12 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
                          f' got {kind}.')
 
     if not isinstance(bins, int) or bins <= 0:
-        raise ValueError(f'Bins should be positive integer. Invalid value bins: {bins}')
+        raise ValueError(
+            f'Bins should be positive integer. Invalid value bins: {bins}')
 
     if bins >= n_samples:
-        raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
+        raise ValueError(
+            f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
 
     df = uplift_by_percentile(y_true, uplift, treatment, strategy=strategy,
                               std=True, total=True, bins=bins)
@@ -214,19 +230,23 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
                       linewidth=2, color='orange', label='control\nresponse rate')
         axes.errorbar(percentiles, uplift_score, yerr=std_uplift,
                       linewidth=2, color='red', label='uplift')
-        axes.fill_between(percentiles, response_rate_trmnt, response_rate_ctrl, alpha=0.1, color='red')
+        axes.fill_between(percentiles, response_rate_trmnt,
+                          response_rate_ctrl, alpha=0.1, color='red')
 
         if np.amin(uplift_score) < 0:
             axes.axhline(y=0, color='black', linewidth=1)
         axes.set_xticks(percentiles)
         axes.legend(loc='upper right')
-        axes.set_title(f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.2f}')
+        axes.set_title(
+            f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.4f}')
         axes.set_xlabel('Percentile')
-        axes.set_ylabel('Uplift = treatment response rate - control response rate')
+        axes.set_ylabel(
+            'Uplift = treatment response rate - control response rate')
 
     else:  # kind == 'bar'
         delta = percentiles[0]
-        fig, axes = plt.subplots(ncols=1, nrows=2, figsize=(8, 6), sharex=True, sharey=True)
+        fig, axes = plt.subplots(ncols=1, nrows=2, figsize=(
+            8, 6), sharex=True, sharey=True)
         fig.text(0.04, 0.5, 'Uplift = treatment response rate - control response rate',
                  va='center', ha='center', rotation='vertical')
 
@@ -240,7 +260,8 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
         axes[0].legend(loc='upper right')
         axes[0].tick_params(axis='x', bottom=False)
         axes[0].axhline(y=0, color='black', linewidth=1)
-        axes[0].set_title(f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.2f}')
+        axes[0].set_title(
+            f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.4f}')
 
         axes[1].set_xticks(percentiles)
         axes[1].legend(loc='upper right')
@@ -257,16 +278,22 @@ def plot_treatment_balance_curve(uplift, treatment, random=True, winsize=0.1):
     Args:
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
-        random (bool, default True): Draw a random curve.
-        winsize (float, default 0.1): Size of the sliding window to apply. Should be between 0 and 1, extremes excluded.
+        random (bool): Draw a random curve. Default is True.
+        winsize (float): Size of the sliding window to apply. Should be between 0 and 1, extremes excluded. Default is 0.1.
 
     Returns:
         Object that stores computed values.
     """
-    if (winsize <= 0) or (winsize >= 1):
-        raise ValueError('winsize should be between 0 and 1, extremes excluded')
 
-    x_tb, y_tb = treatment_balance_curve(uplift, treatment, winsize=int(len(uplift)*winsize))
+    check_consistent_length(uplift, treatment)
+    check_is_binary(treatment)
+
+    if (winsize <= 0) or (winsize >= 1):
+        raise ValueError(
+            'winsize should be between 0 and 1, extremes excluded')
+
+    x_tb, y_tb = treatment_balance_curve(
+        uplift, treatment, winsize=int(len(uplift) * winsize))
 
     _, ax = plt.subplots(ncols=1, nrows=1, figsize=(14, 7))
 

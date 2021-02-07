@@ -2,7 +2,7 @@
 Types of customers
 ******************************************
 
-We can determine 4 types of customers based on a response to a treatment:
+We can determine 4 types of customers based on a response to treatment:
 
 .. image:: ../../_static/images/user_guide/ug_clients_types.jpg
    :alt: Classification of customers based on their response to a treatment
@@ -10,10 +10,10 @@ We can determine 4 types of customers based on a response to a treatment:
    :height: 282 px
    :align: center
 
-- :guilabel:`Do-Not-Disturbs` *(a.k.a. Sleeping-dogs)* have a strong negative response to a marketing communication. They are going to purchase if *NOT* treated and will *NOT* purchase *IF* treated. It is not only a wasted marketing budget but also a negative impact. For instance, customers targeted could result in rejecting current products or services. In terms of math: :math:`W_i = 1, Y_i = 0` or :math:`W_i = 0, Y_i = 1`.
+- :guilabel:`Do-Not-Disturbs` *(a.k.a. Sleeping-dogs)* have a strong negative response to marketing communication. They are going to purchase if *NOT* treated and will *NOT* purchase *IF* treated. It is not only a wasted marketing budget but also a negative impact. For instance, customers targeted could result in rejecting current products or services. In terms of math: :math:`W_i = 1, Y_i = 0` or :math:`W_i = 0, Y_i = 1`.
 - :guilabel:`Lost Causes` will *NOT* purchase the product *NO MATTER* they are contacted or not. The marketing budget in this case is also wasted because it has no effect. In terms of math: :math:`W_i = 1, Y_i = 0` or :math:`W_i = 0, Y_i = 0`.
 - :guilabel:`Sure Things` will purchase *ANYWAY* no matter they are contacted or not. There is no motivation to spend the budget because it also has no effect. In terms of math: :math:`W_i = 1, Y_i = 1` or :math:`W_i = 0, Y_i = 1`.
-- :guilabel:`Persuadables` will always respond *POSITIVE* to the marketing communication. They is going to purchase *ONLY* if contacted (or sometimes they purchase *MORE* or *EARLIER* only if contacted). This customer's type should be the only target for the marketing campaign. In terms of math: :math:`W_i = 0, Y_i = 0` or :math:`W_i = 1, Y_i = 1`.
+- :guilabel:`Persuadables` will always respond *POSITIVE* to marketing communication. They are going to purchase *ONLY* if contacted (or sometimes they purchase *MORE* or *EARLIER* only if contacted). This customer's type should be the only target for the marketing campaign. In terms of math: :math:`W_i = 0, Y_i = 0` or :math:`W_i = 1, Y_i = 1`.
 
 Because we can't communicate and not communicate with the customer at the same time, we will never be able to observe exactly which type a particular customer belongs to.
 
