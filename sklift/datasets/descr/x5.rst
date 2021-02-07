@@ -3,9 +3,10 @@ X5 RetailHero Uplift Modeling Dataset
 
 The dataset is provided by X5 Retail Group at the RetailHero hackaton hosted in winter 2019.
 
-The dataset contains raw retail customer purchaces, raw information about products and general info about customers.
+The dataset contains raw retail customer purchases, raw information about products and general info about customers.
 
-`Hackaton website <https://ods.ai/competitions/x5-retailhero-uplift-modeling/data/>`_.
+
+`Machine learning competition website <https://ods.ai/competitions/x5-retailhero-uplift-modeling/data/>`_.
 
 Data description
 ################
@@ -14,7 +15,6 @@ Data contains several parts:
 
 * train.csv: a subset of clients for training. The column *treatment_flg* indicates if there was a communication. The column *target* shows if there was a purchase afterward;
 * clients.csv: general info about clients;
-* products.csv: general info about stock items;
 * purchases.csv: clients’ purchase history prior to communication.
 
 Fields
