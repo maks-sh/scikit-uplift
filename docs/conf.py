@@ -51,8 +51,11 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "recommonmark",
-    "sphinx.ext.intersphinx"
+    "sphinx.ext.intersphinx",
+    "sphinxcontrib.bibtex"
 ]
+
+bibtex_bibfiles = ['refs.bib']
 
 master_doc = 'index'
 
