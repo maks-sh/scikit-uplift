@@ -114,7 +114,7 @@ def fetch_lenta(return_X_y_t=False, data_home=None, dest_subdir=None, download_i
 
             * (data,target,treatment): tuple if 'return_X_y_t' is True.
     '''
-    url='https:/winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
+    url='https://winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
     filename='lentadataset.csv.gz'
     csv_path=get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
              dest_filename=filename,
