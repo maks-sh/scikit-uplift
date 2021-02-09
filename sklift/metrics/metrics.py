@@ -613,10 +613,12 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
     uplift_scores = response_rate_trmnt - response_rate_ctrl
     uplift_variance = variance_trmnt + variance_ctrl
 
-    percentiles = [round(p * 100 / bins, 1) for p in range(1, bins + 1)]
+    percentiles = [round(p * 100 / bins) for p in range(1, bins + 1)]
+    string_percentiles = [f"0-{percentiles[0]}"] + \
+        [f"{percentiles[i]}-{percentiles[i + 1]}" for i in range(len(percentiles) - 1)]
 
     df = pd.DataFrame({
-        'percentile': percentiles,
+        'percentile': string_percentiles,
         'n_treatment': n_trmnt,
         'n_control': n_ctrl,
         'response_rate_treatment': response_rate_trmnt,
