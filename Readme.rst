@@ -182,8 +182,8 @@ Important links
 - Issue tracker: https://github.com/maks-sh/scikit-uplift/issues
 - Documentation: https://www.uplift-modeling.com/en/latest/
 - User Guide: https://www.uplift-modeling.com/en/latest/user_guide/index.html
-- Contributing guide:https://www.uplift-modeling.com/en/latest/contributing.html
-- Release History:https://www.uplift-modeling.com/en/latest/changelog.html
+- Contributing guide: https://www.uplift-modeling.com/en/latest/contributing.html
+- Release History: https://www.uplift-modeling.com/en/latest/changelog.html
 
 ===============
 
