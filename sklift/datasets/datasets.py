@@ -144,7 +144,7 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
 
     """
 
-    url = 'https:/winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
+    url = 'https://winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
     filename = 'lentadataset.csv.gz'
 
     csv_path = _get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
