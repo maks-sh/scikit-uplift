@@ -9,7 +9,7 @@
 .. _PyPi: https://badge.fury.io/py/scikit-uplift
 
 .. |Docs| image:: https://readthedocs.org/projects/scikit-uplift/badge/?version=latest
-.. _Docs: https://scikit-uplift.readthedocs.io/en/latest/
+.. _Docs: https://www.uplift-modeling.com/en/latest/
 
 .. |License| image:: https://img.shields.io/badge/license-MIT-green
 .. _License: https://github.com/maks-sh/scikit-uplift/blob/master/LICENSE
@@ -26,7 +26,7 @@
 .. |Open In Colab4| image:: https://colab.research.google.com/assets/colab-badge.svg
 .. _Open In Colab4: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb
 
-.. _scikit-uplift.readthedocs.io: https://scikit-uplift.readthedocs.io/en/latest/
+.. _uplift-modeling.com: https://www.uplift-modeling.com/en/latest/
 
 .. image:: https://raw.githubusercontent.com/maks-sh/scikit-uplift/dev/docs/_static/sklift-github-logo.png
     :align: center
@@ -48,7 +48,7 @@ Uplift modeling estimates a causal effect of treatment and uses it to effectivel
 
 * Select a tiny group of customers in the campaign where a price per customer is high.
 
-Read more about uplift modeling problem in `User Guide <https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html>`__,
+Read more about uplift modeling problem in `User Guide <https://www.uplift-modeling.com/en/latest/user_guide/index.html>`__.
 
 Articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
 and `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__.
@@ -87,7 +87,7 @@ Or install from source:
 Documentation
 --------------
 
-The full documentation is available at `scikit-uplift.readthedocs.io`_.
+The full documentation is available at `uplift-modeling.com`_.
 
 Or you can build the documentation locally using `Sphinx <http://sphinx-doc.org/>`_ 1.4 or later:
 
@@ -170,55 +170,20 @@ Development
 
 We welcome new contributors of all experience levels.
 
-- Please see our `Contributing Guide <https://scikit-uplift.readthedocs.io/en/latest/contributing.html>`_ for more details.
+- Please see our `Contributing Guide <https://www.uplift-modeling.com/en/latest/contributing.html>`_ for more details.
 - By participating in this project, you agree to abide by its `Code of Conduct <https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md>`__.
 
 If you have any questions, please contact us at team@uplift-modeling.com
-
-Contributing
-~~~~~~~~~~~~~~~
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/0
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/0
-   :alt: Top contributor 1
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/1
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/1
-   :alt: Top contributor 2
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/2
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/2
-   :alt: Top contributor 3
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/3
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/3
-   :alt: Top contributor 4
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
-   :alt: Top contributor 5
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
-   :alt: Top contributor 6
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/6
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/6
-   :alt: Top contributor 7
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/7
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/7
-   :alt: Legend
 
 Important links
 ~~~~~~~~~~~~~~~
 
 - Official source code repo: https://github.com/maks-sh/scikit-uplift/
 - Issue tracker: https://github.com/maks-sh/scikit-uplift/issues
-- Documentation: https://scikit-uplift.readthedocs.io/en/latest/
-- User Guide: https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html
-- Contributing guide: https://scikit-uplift.readthedocs.io/en/latest/contributing.html
-- Release History: https://scikit-uplift.readthedocs.io/en/latest/changelog.html
+- Documentation: https://www.uplift-modeling.com/en/latest/
+- User Guide: https://www.uplift-modeling.com/en/latest/user_guide/index.html
+- Contributing guide: https://www.uplift-modeling.com/en/latest/contributing.html
+- Release History: https://www.uplift-modeling.com/en/latest/changelog.html
 
 ===============
 

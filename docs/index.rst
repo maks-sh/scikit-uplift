@@ -22,7 +22,7 @@ The main idea is to provide easy-to-use and fast python package for uplift model
 
 * Select a tiny group of customers in the campaign where a price per customer is high.
 
-Read more about *uplift modeling* problem in `User Guide <https://scikit-uplift.readthedocs.io/en/latest/user_guide/index.html>`__,
+Read more about *uplift modeling* problem in `User Guide <https://www.uplift-modeling.com/en/latest/user_guide/index.html>`__,
 
 Articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
 and `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__.
@@ -74,38 +74,6 @@ Sklift is being actively maintained and welcomes new contributors of all experie
 - By participating in this project, you agree to abide by its `Code of Conduct <https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md>`__.
 
 If you have any questions, please contact us at team@uplift-modeling.com
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/0
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/0
-   :alt: Top contributor 1
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/1
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/1
-   :alt: Top contributor 2
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/2
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/2
-   :alt: Top contributor 3
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/3
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/3
-   :alt: Top contributor 4
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/4
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/4
-   :alt: Top contributor 5
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/5
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/5
-   :alt: Top contributor 6
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/6
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/6
-   :alt: Top contributor 7
-
-.. image:: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/images/7
-   :target: https://sourcerer.io/fame/maks-sh/maks-sh/scikit-uplift/links/7
-   :alt: Legend
 
 .. toctree::
    :hidden:
