@@ -382,10 +382,10 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
 
     Major columns:
 
-    * ``Visit`` (binary): target. 1/0 indicator, 1 = Customer visited website in the following two weeks.
-    * ``Conversion`` (binary): target. 1/0 indicator, 1 = Customer purchased merchandise in the following two weeks.
-    * ``Spend`` (float): target. Actual dollars spent in the following two weeks.
-    * ``Segment`` (str): treatment. The e-mail campaign the customer received
+    * ``visit`` (binary): target. 1/0 indicator, 1 = Customer visited website in the following two weeks.
+    * ``conversion`` (binary): target. 1/0 indicator, 1 = Customer purchased merchandise in the following two weeks.
+    * ``spend`` (float): target. Actual dollars spent in the following two weeks.
+    * ``segment`` (str): treatment. The e-mail campaign the customer received
 
     Read more in the :ref:`docs <Hillstrom>`.
 
@@ -428,7 +428,7 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
                         dest_filename='hillstorm_no_indices.csv.gz',
                         download_if_missing=download_if_missing)
 
-    if target_col != ('visit' or 'conversion' or 'spend'):
+    if not target_col in ['visit', 'conversion', 'spend']:
         raise ValueError(f"target_col value must be from {['visit', 'conversion', 'spend']}. "
                          f"Got value {target_col}.")
 
