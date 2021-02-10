@@ -1,0 +1,3 @@
+include *.rst
+recursive-include sklift/datasets/ *.rst
+include MANIFEST.in
