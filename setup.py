@@ -77,6 +77,7 @@ setup(
     maintainer=MAINTAINER,
     url=URL,
     packages=find_packages(exclude=["tests", "docs", "images"]),
+    include_package_data=True,
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     classifiers=[
