@@ -205,6 +205,10 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
         raise ValueError(
             f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
 
+    if not isinstance(string_percentiles, bool):
+        raise ValueError(f'string_percentiles flag should be bool: True or False.'
+                         f' Invalid value string_percentiles: {string_percentiles}')
+
     df = uplift_by_percentile(y_true, uplift, treatment, strategy=strategy,
                               std=True, total=True, bins=bins, string_percentiles=False)
 
