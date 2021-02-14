@@ -540,7 +540,8 @@ def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=
     return weighted_avg_uplift
 
 
-def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10, std=False, total=False):
+def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
+                         bins=10, std=False, total=False, string_percentiles=True):
     """Compute metrics: uplift, group size, group response rate, standard deviation at each percentile.
 
     Metrics in columns and percentiles in rows of pandas DataFrame:
@@ -614,11 +615,14 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
     uplift_variance = variance_trmnt + variance_ctrl
 
     percentiles = [round(p * 100 / bins) for p in range(1, bins + 1)]
-    string_percentiles = [f"0-{percentiles[0]}"] + \
-        [f"{percentiles[i]}-{percentiles[i + 1]}" for i in range(len(percentiles) - 1)]
+
+    if string_percentiles:
+        percentiles = [f"0-{percentiles[0]}"] + \
+            [f"{percentiles[i]}-{percentiles[i + 1]}" for i in range(len(percentiles) - 1)]
+
 
     df = pd.DataFrame({
-        'percentile': string_percentiles,
+        'percentile': percentiles,
         'n_treatment': n_trmnt,
         'n_control': n_ctrl,
         'response_rate_treatment': response_rate_trmnt,

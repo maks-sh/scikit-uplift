@@ -146,7 +146,8 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
     return ax
 
 
-def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kind='line', bins=10):
+def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
+                              kind='line', bins=10, string_percentiles=True):
     """Plot uplift score, treatment response rate and control response rate at each percentile.
 
     Treatment response rate ia a target mean in the treatment group.
@@ -204,8 +205,12 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
             f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
 
     df = uplift_by_percentile(y_true, uplift, treatment, strategy=strategy,
-                              std=True, total=True, bins=bins)
+                              std=True, total=True, bins=bins, string_percentiles=False)
 
+    # TODO: rotate,
+    #  bins=1 no labels,
+    #  bins=15 last not correct,
+    #  round
     percentiles = df.index[:bins].values.astype(float)
 
     response_rate_trmnt = df.loc[percentiles, 'response_rate_treatment'].values
@@ -219,7 +224,8 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
 
     uplift_weighted_avg = df.loc['total', 'uplift']
 
-    check_consistent_length(percentiles, response_rate_trmnt, response_rate_ctrl, uplift_score,
+    check_consistent_length(percentiles, response_rate_trmnt,
+                            response_rate_ctrl, uplift_score,
                             std_trmnt, std_ctrl, std_uplift)
 
     if kind == 'line':
@@ -235,7 +241,15 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
 
         if np.amin(uplift_score) < 0:
             axes.axhline(y=0, color='black', linewidth=1)
-        axes.set_xticks(percentiles)
+
+        if string_percentiles:  # string percentiles for plotting
+            percentiles_str = [f"0-{percentiles[0]:.0f}"] + \
+                              [f"{percentiles[i]:.0f}-{percentiles[i + 1]:.0f}" for i in range(len(percentiles) - 1)]
+            axes.set_xticks(percentiles)
+            axes.set_xticklabels(percentiles_str, rotation=45)
+        else:
+            axes.set_xticks(percentiles)
+
         axes.legend(loc='upper right')
         axes.set_title(
             f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.4f}')
@@ -245,8 +259,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
 
     else:  # kind == 'bar'
         delta = percentiles[0]
-        fig, axes = plt.subplots(ncols=1, nrows=2, figsize=(
-            8, 6), sharex=True, sharey=True)
+        fig, axes = plt.subplots(ncols=1, nrows=2, figsize=(8, 6), sharex=True, sharey=True)
         fig.text(0.04, 0.5, 'Uplift = treatment response rate - control response rate',
                  va='center', ha='center', rotation='vertical')
 
@@ -263,7 +276,15 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall', kin
         axes[0].set_title(
             f'Uplift by percentile\nweighted average uplift = {uplift_weighted_avg:.4f}')
 
-        axes[1].set_xticks(percentiles)
+        if string_percentiles:  # string percentiles for plotting
+            percentiles_str = [f"0-{percentiles[0]:.0f}"] + \
+                          [f"{percentiles[i]:.0f}-{percentiles[i + 1]:.0f}" for i in range(len(percentiles) - 1)]
+            axes[1].set_xticks(percentiles)
+            axes[1].set_xticklabels(percentiles_str, rotation=45)
+
+        else:
+            axes[1].set_xticks(percentiles)
+
         axes[1].legend(loc='upper right')
         axes[1].axhline(y=0, color='black', linewidth=1)
         axes[1].set_xlabel('Percentile')
