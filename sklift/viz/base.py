@@ -176,6 +176,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
                 Generates a traditional bar-style plot.
 
         bins (int): Determines а number of bins (and the relative percentile) in the test data. Default is 10.
+        string_percentiles (bool): type of xticks: float or string to plot. Default is True (string).
 
     Returns:
         Object that stores computed values.
@@ -207,10 +208,6 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
     df = uplift_by_percentile(y_true, uplift, treatment, strategy=strategy,
                               std=True, total=True, bins=bins, string_percentiles=False)
 
-    # TODO: rotate,
-    #  bins=1 no labels,
-    #  bins=15 last not correct,
-    #  round
     percentiles = df.index[:bins].values.astype(float)
 
     response_rate_trmnt = df.loc[percentiles, 'response_rate_treatment'].values
