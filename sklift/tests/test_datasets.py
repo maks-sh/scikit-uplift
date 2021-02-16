@@ -1,9 +1,12 @@
 import pytest
 
+from functools import partial
+
 from ..datasets import (
-    fetch_hillstrom
+    fetch_hillstrom, fetch_lenta, fetch_criteo
 )
 
+fetch_criteo10 = partial(fetch_criteo, percent10=True)
 
 def check_return_X_y_t(bunch, dataset_func):
     X_y_t_tuple = dataset_func(return_X_y_t=True)
@@ -24,7 +27,7 @@ def test_fetch_hillstrom(
     assert data.treatment.shape == (64_000,)
 
 
-def test_fetch_hillstrom_return_X_y_t():
-    fetch_func = fetch_hillstrom
+@pytest.mark.parametrize("fetch_func", [fetch_hillstrom, fetch_lenta, fetch_criteo10])
+def test_return_X_y_t(fetch_func):
     data = fetch_func()
     check_return_X_y_t(data, fetch_func)
