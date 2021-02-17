@@ -101,7 +101,7 @@ def clear_data_dir(path=None):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, return_X_y_t=False, as_frame=True):
+def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, return_X_y_t=False):
     """Load and return the Lenta dataset (classification).
 
     An uplift modeling dataset containing data about Lenta's customers grociery shopping and
@@ -122,8 +122,6 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
         dest_subdir (str): The name of the folder in which the dataset is stored.
         download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
         return_X_y_t (bool): If True, returns (data, target, treatment) instead of a Bunch object.
-        as_frame (bool): If True, returns a pandas Dataframe or Series for the data, target and treatment objects
-            in the Bunch returned object; Bunch return object will also have a frame member.
 
     Returns:
         Bunch or tuple: dataset.
@@ -131,7 +129,7 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
         Bunch:
             By default dictionary-like object, with the following attributes:
 
-                * ``data`` (ndarray or DataFrame object): Dataset without target and treatment.
+                * ``data`` (DataFrame object): Dataset without target and treatment.
                 * ``target`` (Series object): Column target by values.
                 * ``treatment`` (Series object): Column treatment by values.
                 * ``DESCR`` (str): Description of the Lenta dataset.
@@ -154,13 +152,10 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
     treatment_col = 'group'
 
     data = pd.read_csv(csv_path)
-    target = data[target_col]
-    treatment = data[treatment_col]
+    treatment, target = data[treatment_col], data[target_col]
+
     data = data.drop([target_col, treatment_col], axis=1)
     feature_names = list(data.columns)
-
-    if not as_frame:
-        data, target, treatment = data.to_numpy(), target.to_numpy().flatten(), treatment.to_numpy().flatten()
 
     if return_X_y_t:
         return data, target, treatment
@@ -173,25 +168,23 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
                  feature_names=feature_names, target_name=target_col, treatment_name=treatment_col)
 
 
-def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True, as_frame=True):
+def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     """Load and return the X5 RetailHero dataset (classification).
 
-    The dataset contains raw retail customer purchaces, raw information about products and general info about customers.
+    The dataset contains raw retail customer purchases, raw information about products and general info about customers.
 
     Major columns:
 
     - ``treatment_flg`` (binary): treatment/control group flag
     - ``target`` (binary): target
-    - ``customer_id`` (str): customer id aka primary key for joining
+    - ``customer_id`` (str): customer id - primary key for joining
 
     Read more in the :ref:`docs <X5>`.
 
     Args:
         data_home (str, unicode): The path to the folder where datasets are stored.
         dest_subdir (str, unicode): The name of the folder in which the dataset is stored.
-        download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
-        as_frame (bool): If True, returns a pandas Dataframe or Series for the data, target and treatment objects
-            in the Bunch returned object; Bunch return object will also have a frame member.
+        download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing
 
     Returns:
         Bunch: dataset.
@@ -212,56 +205,53 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True, as_fram
 
     References:
         https://ods.ai/competitions/x5-retailhero-uplift-modeling/data
+
     """
-
-    url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
-    file_clients = 'clients.csv.gz'
-    csv_clients_path = _get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
-                                 dest_filename=file_clients,
-                                 download_if_missing=download_if_missing)
-    clients = pd.read_csv(csv_clients_path)
-    clients_names = list(clients.column)
-
     url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
-    file_train = 'uplift_train.csv.gz'
+    file_train = url_train.split('/')[-1]
     csv_train_path = _get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                                dest_filename=file_train,
                                download_if_missing=download_if_missing)
     train = pd.read_csv(csv_train_path)
-    train_names = list(train.columns)
+    train_features = list(train.columns)
+
+    target_col = 'target'
+    treatment_col = 'treatment_flg'
+
+    treatment, target = train[treatment_col], train[target_col]
+
+    train = train.drop([target_col, treatment_col], axis=1)
+
+    url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
+    file_clients = url_clients.split('/')[-1]
+    csv_clients_path = _get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
+                                 dest_filename=file_clients,
+                                 download_if_missing=download_if_missing)
+    clients = pd.read_csv(csv_clients_path)
+    clients_features = list(clients.column)
 
     url_purchases = 'https://timds.s3.eu-central-1.amazonaws.com/purchases.csv.gz'
-    file_purchases = 'purchases.csv.gz'
+    file_purchases = url_purchases.split('/')[-1]
     csv_purchases_path = _get_data(data_home=data_home, url=url_purchases, dest_subdir=dest_subdir,
                                    dest_filename=file_purchases,
                                    download_if_missing=download_if_missing)
     purchases = pd.read_csv(csv_purchases_path)
-    purchases_names = list(purchases.columns)
-
-    if as_frame:
-        target = train['target']
-        treatment = train['treatment_flg']
-    else:
-        target = train[['target']].to_numpy()
-        treatment = train[['treatment_flg']].to_numpy()
-        train = train.to_numpy()
-        clients = clients.to_numpy()
-        purchases = purchases.to_numpy()
+    purchases_features = list(purchases.columns)
 
     data = Bunch(clients=clients, train=train, purchases=purchases)
-    data_names = Bunch(clients_names=clients_names, train_names=train_names,
-                       purchases_names=purchases_names)
+    feature_names = Bunch(train_features=train_features, clients_features=clients_features,
+                          purchases_features=purchases_features)
 
     module_path = os.path.dirname(__file__)
     with open(os.path.join(module_path, 'descr', 'x5.rst')) as rst_file:
         fdescr = rst_file.read()
 
     return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr,
-                 data_names=data_names, target_name='target', treatment_name='treatment_flg')
+                 feature_names=feature_names, target_name='target', treatment_name='treatment_flg')
 
 
 def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, dest_subdir=None,
-                 download_if_missing=True, percent10=False, return_X_y_t=False, as_frame=True):
+                 download_if_missing=True, percent10=False, return_X_y_t=False):
     """Load and return the Criteo Uplift Prediction Dataset (classification).
 
     This dataset is constructed by assembling data resulting from several incrementality tests, a particular randomized
@@ -278,18 +268,16 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
     Read more in the :ref:`docs <Criteo>`.
 
     Args:
-        target_col (string, 'visit' or 'conversion', default='visit'): Selects which column from dataset
-            will be target.
-        treatment_col (string,'treatment' or 'exposure' default='treatment'): Selects which column from dataset
-            will be treatment.
+        target_col (string, 'visit', 'conversion' or 'all', default='visit'): Selects which column from dataset
+            will be target. If 'all', return a DataFrame with all targets cols.
+        treatment_col (string,'treatment', 'exposure' or 'all', default='treatment'): Selects which column from dataset
+            will be treatment. If 'all', return a DataFrame with all treatment cols.
         data_home (string): Specify a download and cache folder for the datasets.
         dest_subdir (string): The name of the folder in which the dataset is stored.
         download_if_missing (bool, default=True): If False, raise an IOError if the data is not locally available
             instead of trying to download the data from the source site.
         percent10 (bool, default=False): Whether to load only 10 percent of the data.
         return_X_y_t (bool, default=False): If True, returns (data, target, treatment) instead of a Bunch object.
-        as_frame (bool): If True, returns a pandas Dataframe or Series for the data, target and treatment objects
-            in the Bunch returned object; Bunch return object will also have a frame member.
 
     Returns:
         Bunch or tuple: dataset.
@@ -297,13 +285,13 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
         Bunch:
             By default dictionary-like object, with the following attributes:
 
-                * ``data`` (ndarray or DataFrame object): Dataset without target and treatment.
-                * ``target`` (Series object): Column target by values.
-                * ``treatment`` (Series object): Column treatment by values.
+                * ``data`` (DataFrame object): Dataset without target and treatment.
+                * ``target`` (Series or DataFrame object): Column target by values.
+                * ``treatment`` (Series or DataFrame object): Column treatment by values.
                 * ``DESCR`` (str): Description of the Lenta dataset.
                 * ``feature_names`` (list): Names of the features.
-                * ``target_name`` (str): Name of the target.
-                * ``treatment_name`` (str): Name of the treatment.
+                * ``target_name`` (str list): Name of the target.
+                * ``treatment_name`` (str or list): Name of the treatment.
 
         Tuple:
             tuple (data, target, treatment) if `return_X_y` is True
@@ -313,13 +301,17 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
         Eustache Diemert, Artem Betlei, Christophe Renaudin; (Criteo AI Lab), Massih-Reza Amini (LIG, Grenoble INP)
     """
     treatment_cols = ['exposure', 'treatment']
-    if treatment_col not in treatment_cols:
-        raise ValueError(f"treatment_col value must be in {treatment_cols}. "
+    if treatment_col == 'all':
+        treatment_col = treatment_cols
+    elif treatment_col not in treatment_cols:
+        raise ValueError(f"treatment_col value must be in {treatment_cols + ['all']}. "
                          f"Got value {treatment_col}.")
 
     target_cols = ['visit', 'conversion']
-    if target_col not in target_cols:
-        raise ValueError(f"target_col value must be from {target_cols}. "
+    if target_col == 'all':
+        target_col = target_cols
+    elif target_col not in target_cols:
+        raise ValueError(f"target_col value must be from {target_cols + ['all']}. "
                          f"Got value {target_col}.")
 
     if percent10:
@@ -341,14 +333,12 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
     data = pd.read_csv(csv_path, dtype=dtypes)
     treatment, target = data[treatment_col], data[target_col]
 
-    data = data.drop(treatment_cols + treatment_cols, axis=1)
-    feature_names = list(data.columns)
-
-    if not as_frame:
-        data, target, treatment = data.to_numpy(), target.to_numpy().flatten(), treatment.to_numpy().flatten()
+    data = data.drop(target_cols + treatment_cols, axis=1)
 
     if return_X_y_t:
         return data, target, treatment
+
+    feature_names = list(data.columns)
 
     module_path = os.path.dirname(__file__)
     with open(os.path.join(module_path, 'descr', 'criteo.rst')) as rst_file:
@@ -359,7 +349,7 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
 
 
 def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, download_if_missing=True,
-                    return_X_y_t=False, as_frame=True):
+                    return_X_y_t=False):
     """Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).
 
     This dataset contains 64,000 customers who last purchased within twelve months.
@@ -375,14 +365,12 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
     Read more in the :ref:`docs <Hillstrom>`.
 
     Args:
-        target_col (string, 'visit' or 'conversion' or 'spend', default='visit'): Selects which column from dataset
+        target_col (string, 'visit' or 'conversion', 'spend' or 'all', default='visit'): Selects which column from dataset
             will be target
         data_home (str): The path to the folder where datasets are stored.
         dest_subdir (str): The name of the folder in which the dataset is stored.
         download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
         return_X_y_t (bool, default=False): If True, returns (data, target, treatment) instead of a Bunch object.
-        as_frame (bool): If True, returns a pandas Dataframe for the data, target and treatment objects
-            in the Bunch returned object; Bunch return object will also have a frame member.
         
     Returns:
         Bunch or tuple: dataset.
@@ -390,12 +378,12 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
         Bunch:
             By default dictionary-like object, with the following attributes:
 
-                * ``data`` (ndarray or DataFrame object): Dataset without target and treatment.
-                * ``target`` (Series object): Column target by values.
+                * ``data`` (DataFrame object): Dataset without target and treatment.
+                * ``target`` (Series or DataFrame object): Column target by values.
                 * ``treatment`` (Series object): Column treatment by values.
                 * ``DESCR`` (str): Description of the Lenta dataset.
                 * ``feature_names`` (list): Names of the features.
-                * ``target_name`` (str): Name of the target.
+                * ``target_name`` (str or list): Name of the target.
                 * ``treatment_name`` (str): Name of the treatment.
 
         Tuple:
@@ -406,9 +394,11 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
 
     """
     target_cols = ['visit', 'conversion', 'spend']
-    if target_col not in target_cols:
-        raise ValueError(f"target_col value must be from {target_cols}. "
-                         f"Got value {target_col}.")
+    if target_col == 'all':
+        target_col = target_cols
+    elif target_col not in target_cols:
+        raise ValueError(f"target_col value must be from {target_cols + ['all']}. "
+                         f"Got value {target_col + ['all']}.")
 
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
     filename = url.split('/')[-1]
@@ -422,18 +412,15 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
     treatment, target = data[treatment_col], data[target_col]
 
     data = data.drop(target_cols + [treatment_col], axis=1)
-    feature_names = list(data.columns)
-
-
-    if not as_frame:
-        data, target, treatment = data.to_numpy(), target.to_numpy().flatten(), treatment.to_numpy().flatten()
 
     if return_X_y_t:
         return data, target, treatment
+
+    feature_names = list(data.columns)
 
     module_path = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(module_path, 'descr', 'hillstrom.rst')) as rst_file:
         fdescr = rst_file.read()
 
     return Bunch(data=data, target=target, treatment=treatment, DESCR=fdescr,
-                 feature_names=feature_names, target_name=target_col, treatment_name='segment')
+                 feature_names=feature_names, target_name=target_col, treatment_name=treatment_col)
