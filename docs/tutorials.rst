@@ -35,6 +35,19 @@ It is better to start scikit-uplift from the basic tutorials.
       - `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb>`__
       - `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero.ipynb>`__
 
+`Uplift modeling metrics`_
+----------------------------------------------------------------------------------
+
+.. list-table::
+    :align: center
+    :widths: 12 15 10 8
+
+    * - In English 🇬🇧
+      - |Open In Colab1|
+      - `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/uplift_metrics_tutorial.ipynb>`__
+      - `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/uplift_metrics_tutorial.ipynb>`__
+
+
 `Example of usage model from sklift.models in sklearn.pipeline`_
 ----------------------------------------------------------------------------------
 
