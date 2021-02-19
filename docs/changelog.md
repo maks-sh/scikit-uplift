@@ -8,6 +8,20 @@
 * 🔨 something that previously didn’t work as documentated – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
+## Version 0.3.1
+
+### [sklift.datasets](https://www.uplift-modeling.com/en/v0.3.1/api/datasets/index.html)
+
+* 🔨 Fix bugs in [sklift.datasets](https://www.uplift-modeling.com/en/v0.3.1/api/datasets/index.html) 
+
+### [sklift.metrics](https://www.uplift-modeling.com/en/v0.3.1/api/index/metrics.html)
+
+* 📝 Imporve [uplift_by_percentile](https://www.uplift-modeling.com/en/v0.3.1/api/metrics/uplift_by_percentile.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
+
+### Miscellaneous
+
+* 💥 Add tutorial ["Uplift modeling metrics"](https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/uplift_metrics_tutorial.ipynb) by [@ElisovaIra](https://github.com/ElisovaIra).
+
 ## Version 0.3.0
 
 ### [sklift.datasets](https://www.uplift-modeling.com/en/v0.3.0/api/datasets/index.html)
