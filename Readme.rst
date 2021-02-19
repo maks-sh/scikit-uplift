@@ -106,6 +106,8 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
 
 **Train and predict uplift model**
 
+Use the intuitive python API to train uplift models with `sklift.models  <https://www.uplift-modeling.com/en/latest/api/models/index.html>`__.
+
 .. code-block:: python
 
     # import approaches
@@ -130,6 +132,8 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
 
 **Evaluate your uplift model**
 
+Uplift model evaluation metrics are available in `sklift.metrics  <https://www.uplift-modeling.com/en/latest/api/metrics/index.html>`__.
+
 .. code-block:: python
 
     # import metrics to evaluate your model
@@ -152,6 +156,8 @@ See the **RetailHero tutorial notebook** (`EN <https://nbviewer.jupyter.org/gith
     tm_wau = weighted_average_uplift(y_true=y_val, uplift=uplift_preds,  treatment=treat_val)
 
 **Vizualize the results**
+
+Visualize performance metrics with `sklift.viz  <https://www.uplift-modeling.com/en/latest/api/viz/index.html>`__.
 
 .. code-block:: python
 
