@@ -540,7 +540,8 @@ def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=
     return weighted_avg_uplift
 
 
-def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10, std=False, total=False):
+def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
+                         bins=10, std=False, total=False, string_percentiles=True):
     """Compute metrics: uplift, group size, group response rate, standard deviation at each percentile.
 
     Metrics in columns and percentiles in rows of pandas DataFrame:
@@ -571,6 +572,7 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
             The total uplift is a weighted average uplift. See :func:`.weighted_average_uplift`.
             The total response rate is a response rate on the full data amount.
         bins (int): Determines the number of bins (and the relative percentile) in the data. Default is 10.
+        string_percentiles (bool): type of percentiles in the index: float or string. Default is True (string).
 
     Returns:
         pandas.DataFrame: DataFrame where metrics are by columns and percentiles are by rows.
@@ -602,6 +604,10 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
     if bins >= n_samples:
         raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
 
+    if not isinstance(string_percentiles, bool):
+        raise ValueError(f'string_percentiles flag should be bool: True or False.'
+                         f' Invalid value string_percentiles: {string_percentiles}')
+
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     response_rate_trmnt, variance_trmnt, n_trmnt = response_rate_by_percentile(
@@ -613,7 +619,12 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall', bins=10,
     uplift_scores = response_rate_trmnt - response_rate_ctrl
     uplift_variance = variance_trmnt + variance_ctrl
 
-    percentiles = [round(p * 100 / bins, 1) for p in range(1, bins + 1)]
+    percentiles = [round(p * 100 / bins) for p in range(1, bins + 1)]
+
+    if string_percentiles:
+        percentiles = [f"0-{percentiles[0]}"] + \
+            [f"{percentiles[i]}-{percentiles[i + 1]}" for i in range(len(percentiles) - 1)]
+
 
     df = pd.DataFrame({
         'percentile': percentiles,
