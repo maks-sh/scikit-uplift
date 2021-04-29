@@ -228,7 +228,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
                                  dest_filename=file_clients,
                                  download_if_missing=download_if_missing)
     clients = pd.read_csv(csv_clients_path)
-    clients_features = list(clients.column)
+    clients_features = list(clients.columns)
 
     url_purchases = 'https://timds.s3.eu-central-1.amazonaws.com/purchases.csv.gz'
     file_purchases = url_purchases.split('/')[-1]
