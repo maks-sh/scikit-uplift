@@ -24,8 +24,9 @@ The main idea is to provide easy-to-use and fast python package for uplift model
 
 Read more about *uplift modeling* problem in `User Guide <https://www.uplift-modeling.com/en/latest/user_guide/index.html>`__,
 
-Articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__
-and `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__.
+Articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__ ,
+`Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__
+and `Part 3 <https://habr.com/ru/company/ru_mts/blog/538934/>`__.
 
 Features
 #########
