@@ -8,6 +8,24 @@
 * 🔨 something that previously didn’t work as documentated – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
+## Version 0.3.2
+
+### [sklift.datasets](https://www.uplift-modeling.com/en/v0.3.1/api/datasets/index.html)
+
+* 🔨 Fix bug in [fetch_x5](https://www.uplift-modeling.com/en/v0.3.1/api/datasets/fetch_x5.html) function by [@Muhamob](https://github.com/Muhamob).
+
+### [sklift.metrics](https://www.uplift-modeling.com/en/v0.3.1/api/index/metrics.html)
+
+* 📝 Fix docstring in [uplift_by_percentile](https://www.uplift-modeling.com/en/v0.3.1/api/metrics/uplift_by_percentile.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
+
+### [sklift.viz](https://www.uplift-modeling.com/en/v0.3.1/api/viz/index.html)
+
+* 🔨 Fix bug in [plot_uplift_preds](https://www.uplift-modeling.com/en/v0.3.1/api/viz/plot_uplift_preds.html) function by [@bwbelljr](https://github.com/bwbelljr).
+
+### Miscellaneous
+
+* 📝 Change some images in ["RetailHero tutorial"](https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb).
+
 ## Version 0.3.1
 
 ### [sklift.datasets](https://www.uplift-modeling.com/en/v0.3.1/api/datasets/index.html)
