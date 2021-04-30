@@ -569,7 +569,7 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
         std (bool): If True, add columns with the uplift standard deviation and the response rate standard deviation.
             Default is False.
         total (bool): If True, add the last row with the total values. Default is False.
-            The total uplift is a weighted average uplift. See :func:`.weighted_average_uplift`.
+            The total uplift computes as a total response rate treatment - a total response rate control.
             The total response rate is a response rate on the full data amount.
         bins (int): Determines the number of bins (and the relative percentile) in the data. Default is 10.
         string_percentiles (bool): type of percentiles in the index: float or string. Default is True (string).

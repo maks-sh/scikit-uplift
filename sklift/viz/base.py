@@ -28,7 +28,6 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
 
     # TODO: Add k as parameter: vertical line on plots
     check_consistent_length(trmnt_preds, ctrl_preds)
-    check_is_binary(treatment)
 
     if not isinstance(bins, int) or bins <= 0:
         raise ValueError(
