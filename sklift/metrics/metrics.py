@@ -430,7 +430,7 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
                 sorted by uplift predictions. Then the difference between these conversions is calculated.
 
         bins (int): Determines the number of bins (and relative percentile) in the data. Default is 10.
-        
+
     Returns:
         array (shape = [>2]), array (shape = [>2]), array (shape = [>2]):
         response rate at each percentile for control or treatment group,
@@ -443,44 +443,46 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
 
     group_types = ['treatment', 'control']
     strategy_methods = ['overall', 'by_group']
-    
+
     n_samples = len(y_true)
-    
+
     if group not in group_types:
         raise ValueError(f'Response rate supports only group types in {group_types},'
-                         f' got {group}.') 
+                         f' got {group}.')
 
     if strategy not in strategy_methods:
         raise ValueError(f'Response rate supports only calculating methods in {strategy_methods},'
                          f' got {strategy}.')
-    
+
     if not isinstance(bins, int) or bins <= 0:
         raise ValueError(f'Bins should be positive integer. Invalid value bins: {bins}')
 
     if bins >= n_samples:
         raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
-    
+
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
     order = np.argsort(uplift, kind='mergesort')[::-1]
+    predicted_uplift_bin = np.array_split(uplift[order], bins)
+    mean_predicted_uplift_by_bin = np.array([np.mean(current_bin_uplft) for current_bin_uplft in predicted_uplift_bin])
 
     trmnt_flag = 1 if group == 'treatment' else 0
-    
+
     if strategy == 'overall':
         y_true_bin = np.array_split(y_true[order], bins)
         trmnt_bin = np.array_split(treatment[order], bins)
-        
+
         group_size = np.array([len(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
         response_rate = np.array([np.mean(y[trmnt == trmnt_flag]) for y, trmnt in zip(y_true_bin, trmnt_bin)])
 
     else:  # strategy == 'by_group'
         y_bin = np.array_split(y_true[order][treatment[order] == trmnt_flag], bins)
-        
+
         group_size = np.array([len(y) for y in y_bin])
         response_rate = np.array([np.mean(y) for y in y_bin])
 
     variance = np.multiply(response_rate, np.divide((1 - response_rate), group_size))
 
-    return response_rate, variance, group_size
+    return response_rate, variance, group_size, mean_predicted_uplift_by_bin
 
 
 def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=10):
@@ -527,10 +529,10 @@ def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=
     if bins >= n_samples:
         raise ValueError(f'Number of bins = {bins} should be smaller than the length of y_true {n_samples}')
 
-    response_rate_trmnt, variance_trmnt, n_trmnt = response_rate_by_percentile(
+    response_rate_trmnt, variance_trmnt, n_trmnt, *_ = response_rate_by_percentile(
         y_true, uplift, treatment, group='treatment', strategy=strategy, bins=bins)
 
-    response_rate_ctrl, variance_ctrl, n_ctrl = response_rate_by_percentile(
+    response_rate_ctrl, variance_ctrl, n_ctrl, *_ = response_rate_by_percentile(
         y_true, uplift, treatment, group='control', strategy=strategy, bins=bins)
 
     uplift_scores = response_rate_trmnt - response_rate_ctrl
@@ -541,7 +543,7 @@ def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=
 
 
 def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
-                         bins=10, std=False, total=False, string_percentiles=True):
+                         bins=10, std=False, total=False, string_percentiles=True, add_predicted_uplift: bool = False):
     """Compute metrics: uplift, group size, group response rate, standard deviation at each percentile.
 
     Metrics in columns and percentiles in rows of pandas DataFrame:
@@ -573,7 +575,8 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
             The total response rate is a response rate on the full data amount.
         bins (int): Determines the number of bins (and the relative percentile) in the data. Default is 10.
         string_percentiles (bool): type of percentiles in the index: float or string. Default is True (string).
-
+        add_predicted_uplift (bool): if True, concats another column to resulting dataframe
+            (column with mean predicted uplift in bin)
     Returns:
         pandas.DataFrame: DataFrame where metrics are by columns and percentiles are by rows.
     """
@@ -610,10 +613,10 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
 
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
-    response_rate_trmnt, variance_trmnt, n_trmnt = response_rate_by_percentile(
+    response_rate_trmnt, variance_trmnt, n_trmnt, mean_predicted_uplift = response_rate_by_percentile(
         y_true, uplift, treatment, group='treatment', strategy=strategy, bins=bins)
 
-    response_rate_ctrl, variance_ctrl, n_ctrl = response_rate_by_percentile(
+    response_rate_ctrl, variance_ctrl, n_ctrl, *_ = response_rate_by_percentile(
         y_true, uplift, treatment, group='control', strategy=strategy, bins=bins)
 
     uplift_scores = response_rate_trmnt - response_rate_ctrl
@@ -623,8 +626,7 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
 
     if string_percentiles:
         percentiles = [f"0-{percentiles[0]}"] + \
-            [f"{percentiles[i]}-{percentiles[i + 1]}" for i in range(len(percentiles) - 1)]
-
+                      [f"{percentiles[i]}-{percentiles[i + 1]}" for i in range(len(percentiles) - 1)]
 
     df = pd.DataFrame({
         'percentile': percentiles,
@@ -636,10 +638,10 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
     })
 
     if total:
-        response_rate_trmnt_total, variance_trmnt_total, n_trmnt_total = response_rate_by_percentile(
+        response_rate_trmnt_total, variance_trmnt_total, n_trmnt_total, *_ = response_rate_by_percentile(
             y_true, uplift, treatment, strategy=strategy, group='treatment', bins=1)
 
-        response_rate_ctrl_total, variance_ctrl_total, n_ctrl_total = response_rate_by_percentile(
+        response_rate_ctrl_total, variance_ctrl_total, n_ctrl_total, *_ = response_rate_by_percentile(
             y_true, uplift, treatment, strategy=strategy, group='control', bins=1)
 
         df.loc[-1, :] = ['total', n_trmnt_total, n_ctrl_total, response_rate_trmnt_total,
@@ -662,6 +664,13 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
     df = df \
         .set_index('percentile', drop=True, inplace=False) \
         .astype({'n_treatment': 'int32', 'n_control': 'int32'})
+
+    if add_predicted_uplift:
+        # add column: mean_predicted_uplift ---------------------------------------------------------------------------
+        predicted_uplift_df = pd.DataFrame(mean_predicted_uplift_by_bin, columns=['mean_predicted_uplift'])
+        predicted_uplift_df.set_index(df.index[:bins], inplace=True)
+        # -------------------------------------------------------------------------------------------------------------
+        df = pd.concat([df, predicted_uplift_df], axis=1)
 
     return df
 
