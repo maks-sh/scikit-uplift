@@ -114,15 +114,15 @@ class UpliftCurveDisplay:
         self.perfect = perfect
         self.estimator_name = estimator_name
 
-    def plot(self,qini_auc_score, ax=None, name=None, **kwargs):
+    def plot(self,auc_score, ax=None, name=None, title=None, **kwargs):
         
         name = self.estimator_name if name is None else name
 
         line_kwargs = {}
-        if qini_auc_score is not None and name is not None:
-            line_kwargs["label"] = f"{name} (qini_auc_score = {qini_auc_score:0.2f})"
-        elif qini_auc_score is not None:
-            line_kwargs["label"] = f"quni_auc_score = {qini_auc_score:0.2f}"
+        if auc_score is not None and name is not None:
+            line_kwargs["label"] = f"{name} ({title} = {auc_score:0.2f})"
+        elif auc_score is not None:
+            line_kwargs["label"] = f"{title} = {auc_score:0.2f}"
         elif name is not None:
             line_kwargs["label"] = name
             
@@ -170,6 +170,8 @@ def plot_qini_curve(y_true, uplift, treatment,
         negative_effect (bool): If True, optimum Qini Curve contains the negative effects
             (negative uplift because of campaign). Otherwise, optimum Qini Curve will not
             contain the negative effects. Default is True.
+        ax (object): The graph on which the function will be built. Default is None.
+        name (string): The name of the function. Default is None.
 
     Returns:
         Object that stores computed values.
@@ -200,7 +202,52 @@ def plot_qini_curve(y_true, uplift, treatment,
         estimator_name = name,
     )
 
-    return viz.plot(qini_auc_score(y_true, uplift, treatment, negative_effect),ax=ax)
+    return viz.plot(qini_auc_score(y_true, uplift, treatment, negative_effect),ax=ax, title="plot_qini_curve")
+
+
+def plot_uplift_curve(y_true, uplift, treatment,
+        random=True, perfect=True, ax=None, name=None):
+    
+    """Plot Uplift curves from predictions.
+
+    Args:
+        y_true (1d array-like): Ground truth (correct) labels.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+        random (bool): Draw a random curve. Default is True.
+        perfect (bool): Draw a perfect curve. Default is True.
+        ax (object): The graph on which the function will be built. Default is None.
+        name (string): The name of the function. Default is None.
+
+    Returns:
+        Object that stores computed values.
+    """
+
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
+
+    if random:
+        x_baseline, y_baseline = x_actual, x_actual * \
+            y_actual[-1] / len(y_true)
+
+    if perfect:
+        x_perfect, y_perfect = perfect_uplift_curve(y_true, treatment)
+
+    viz = UpliftCurveDisplay(
+        x_actual= x_actual,
+        y_actual=y_actual,
+        x_baseline = x_baseline,
+        y_baseline = y_baseline,
+        x_perfect = x_perfect,
+        y_perfect = y_perfect,
+        random = random,
+        perfect = perfect,
+        estimator_name = name,
+    )
+
+    return viz.plot(uplift_auc_score(y_true, uplift, treatment),ax=ax, title="plot_uplift_curve")
 
 
 def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
