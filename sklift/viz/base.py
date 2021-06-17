@@ -99,7 +99,66 @@ def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
     return ax
 
 
-def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negative_effect=True):
+class UpliftCurveDisplay:
+    
+    def __init__(self, x_actual, y_actual, x_baseline=None, 
+                y_baseline=None, x_perfect=None, y_perfect=None,
+                random=None, perfect=None, estimator_name=None):
+        self.x_actual = x_actual
+        self.y_actual = y_actual
+        self.x_baseline = x_baseline
+        self.y_baseline = y_baseline
+        self.x_perfect = x_perfect
+        self.y_perfect = y_perfect
+        self.random = random
+        self.perfect = perfect
+        self.estimator_name = estimator_name
+
+    def plot(self,qini_auc_score, ax=None, name=None, **kwargs):
+        
+        name = self.estimator_name if name is None else name
+
+        line_kwargs = {}
+        if qini_auc_score is not None and name is not None:
+            line_kwargs["label"] = f"{name} (qini_auc_score = {qini_auc_score:0.2f})"
+        elif qini_auc_score is not None:
+            line_kwargs["label"] = f"quni_auc_score = {qini_auc_score:0.2f}"
+        elif name is not None:
+            line_kwargs["label"] = name
+            
+        line_kwargs.update(**kwargs)
+        
+        if ax is None:
+            fig, ax = plt.subplots()
+            
+        self.line_, = ax.plot(self.x_actual, self.y_actual, **line_kwargs)
+        
+        if self.random:
+            ax.plot(self.x_baseline, self.y_baseline, label = "Random")
+            ax.fill_between(self.x_actual, self.y_actual, self.y_baseline, alpha=0.2)
+
+        if self.perfect:
+            ax.plot(self.x_perfect, self.y_perfect, label = "Perfect")
+
+        ax.set_xlabel('Number targeted')
+        ax.set_ylabel('Number of incremental outcome')
+        
+        if len(ax.lines) > 3:
+            ax.lines.pop(len(ax.lines) - 1)
+            ax.lines.pop(len(ax.lines) - 1)
+            
+        if "label" in line_kwargs:
+            ax.legend(loc=u'upper left', bbox_to_anchor=(1, 1))
+            
+        self.ax_ = ax
+        self.figure_ = ax.figure
+        
+        return self
+
+
+def plot_qini_curve(y_true, uplift, treatment,
+        random=True, perfect=True, negative_effect=True, ax=None, name=None):
+    
     """Plot Qini curves from predictions.
 
     Args:
@@ -119,30 +178,29 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
-
-    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
-
     x_actual, y_actual = qini_curve(y_true, uplift, treatment)
-    ax.plot(x_actual, y_actual, label='Model', color='blue')
 
     if random:
         x_baseline, y_baseline = x_actual, x_actual * \
             y_actual[-1] / len(y_true)
-        ax.plot(x_baseline, y_baseline, label='Random', color='black')
-        ax.fill_between(x_actual, y_actual, y_baseline, alpha=0.2, color='b')
 
     if perfect:
         x_perfect, y_perfect = perfect_qini_curve(
             y_true, treatment, negative_effect)
-        ax.plot(x_perfect, y_perfect, label='Perfect', color='Red')
 
-    ax.legend(loc='lower right')
-    ax.set_title(
-        f'Qini curve\nqini_auc_score={qini_auc_score(y_true, uplift, treatment, negative_effect):.4f}')
-    ax.set_xlabel('Number targeted')
-    ax.set_ylabel('Number of incremental outcome')
+    viz = UpliftCurveDisplay(
+        x_actual= x_actual,
+        y_actual=y_actual,
+        x_baseline = x_baseline,
+        y_baseline = y_baseline,
+        x_perfect = x_perfect,
+        y_perfect = y_perfect,
+        random = random,
+        perfect = perfect,
+        estimator_name = name,
+    )
 
-    return ax
+    return viz.plot(qini_auc_score(y_true, uplift, treatment, negative_effect),ax=ax)
 
 
 def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
