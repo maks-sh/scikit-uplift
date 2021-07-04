@@ -25,7 +25,7 @@ except FileNotFoundError:
     REQUIRED = []
 
 # What packages are optional?
-EXTRAS = ["pytest", "pytest-cov"]
+EXTRAS = {"test": ["pytest", "pytest-cov"]}
 
 
 def get_version():
