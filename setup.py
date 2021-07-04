@@ -1,7 +1,7 @@
 import os
+import re
 import sys
 from shutil import rmtree
-import re
 
 from setuptools import Command, find_packages, setup
 
@@ -25,7 +25,7 @@ except FileNotFoundError:
     REQUIRED = []
 
 # What packages are optional?
-EXTRAS = {"test": ["pytest", "pytest-cov"]}
+EXTRAS = ["pytest", "pytest-cov"]
 
 
 def get_version():
