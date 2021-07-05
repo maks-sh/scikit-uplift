@@ -100,7 +100,16 @@ def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
 
 
 class UpliftCurveDisplay:
+    """Qini and Uplift curve visualization.
     
+    Args:
+        x_actual, y_actual (array (shape = [>2]), array (shape = [>2])): Points on a curve
+        x_baseline, y_baseline (array (shape = [>2]), array (shape = [>2])): Points on a random curve
+        x_perfect, y_perfect (array (shape = [>2]), array (shape = [>2])): Points on a perfect curve
+        random (bool): Plotting a random curve
+        perfect (bool): Plotting a perfect curve
+        estimator_name (str): Name of estimator. If None, the estimator name is not shown.
+    """
     def __init__(self, x_actual, y_actual, x_baseline=None, 
                 y_baseline=None, x_perfect=None, y_perfect=None,
                 random=None, perfect=None, estimator_name=None):
@@ -115,7 +124,16 @@ class UpliftCurveDisplay:
         self.estimator_name = estimator_name
 
     def plot(self,auc_score, ax=None, name=None, title=None, **kwargs):
-        
+        """Plot visualization
+
+        Args:
+            ax (matplotlib axes): Axes object to plot on. If `None`, a new figure and axes is created. Default is None.
+            name (str): Name of ROC Curve for labeling. If `None`, use the name of the estimator. Default is None.
+            title (str): Title plot. Default is None.
+
+        Returns:
+            Object that stores computed values
+        """
         name = self.estimator_name if name is None else name
 
         line_kwargs = {}
