@@ -4,7 +4,7 @@ import shutil
 import pandas as pd
 import requests
 from sklearn.utils import Bunch
-
+from tqdm.auto import tqdm
 
 def get_data_dir():
     """Return the path of the scikit-uplift data dir.
@@ -31,7 +31,7 @@ def _create_data_dir(path):
         os.makedirs(path)
 
 
-def _download(url, dest_path):
+def _download(url, dest_path, content_length_header_key='Content-Length'):
     """Download the file from url and save it locally.
 
     Args:
@@ -44,15 +44,18 @@ def _download(url, dest_path):
         req.raise_for_status()
 
         with open(dest_path, "wb") as fd:
+            total_size_in_bytes = int(req.headers.get(content_length_header_key, 0))
+            progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True)
             for chunk in req.iter_content(chunk_size=2 ** 20):
+                progress_bar.update(len(chunk))
                 fd.write(chunk)
     else:
         raise TypeError("URL must be a string")
 
 
-def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
+def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing, content_length_header_key='Content-Length'):
     """Return the path to the dataset.
-    
+
     Args:
         data_home (str): The path to scikit-uplift data dir.
         url (str): The URL to the dataset.
@@ -60,6 +63,7 @@ def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
         dest_filename (str): The name of the dataset.
         download_if_missing (bool): If False, raise a IOError if the data is not locally available instead of
             trying to download the data from the source site.
+        content_length_header (str): The key in the HTTP response headers that lists the response size in bytes. Used for progress bar.
 
     Returns:
         string: The path to the dataset.
@@ -371,7 +375,7 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
         dest_subdir (str): The name of the folder in which the dataset is stored.
         download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
         return_X_y_t (bool, default=False): If True, returns (data, target, treatment) instead of a Bunch object.
-        
+
     Returns:
         Bunch or tuple: dataset.
 
