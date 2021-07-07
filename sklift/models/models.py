@@ -23,7 +23,7 @@ class SoloModel(BaseEstimator):
     Args:
         estimator (estimator object implementing 'fit'): The object to use to fit the data.
         method (string, ’dummy’ or ’treatment_interaction’, default='dummy'): Specifies the approach:
-        
+
             * ``'dummy'``:
                 Single model;
             * ``'treatment_interaction'``:
@@ -273,6 +273,135 @@ class ClassTransformation(BaseEstimator):
             array (shape (n_samples,)): uplift
         """
         uplift = 2 * self.estimator.predict_proba(X)[:, 1] - 1
+        return uplift
+
+class ClassTransformationReg(BaseEstimator):
+    """aka CATE (Conditional Average Treatment Effect) generating transformation approach for continuous labels.
+
+    Redefine target variable, which indicates that treatment make some impact on target or
+    did target is negative without treatment: ``Z = Y * (W - p)/(p * (1 - p))``,
+
+    where ``Y`` - target vector, ``W`` - vector of binary communication flags, and ``p`` is a propensity score (the probabilty that each y_i is assigned to the treatment group.).
+
+    Then, train a regressor on ``Z`` to predict uplift.
+
+    Returns uplift predictions and optionally propensity predictions.
+
+    The propensity score can be a scalar value (e.g. p = 0.5), which would mean that every subject has identical probability of being assigned to the treatment group.
+
+    Alternatively, the propensity can be learned using a Classifier model. In this case, the model predicts the probability that a given subject would be assigned to the treatment group.
+
+    Read more in the :ref:`User Guide <ClassTransformationReg>`.
+
+    Args:
+        estimator (estimator object implementing 'fit'): The object to use to fit the data.
+        propensity_val (float): A constant propensity value, which assumes every subject has equal probability of assignment to the treatment group.
+        propensity_estimator (estimator object with `predict_proba`): The object used to predict the propensity score if `propensity_val` is not given.
+
+
+    Example::
+
+        # import approach
+        from sklift.models import ClassTransformationReg
+        # import any estimator adheres to scikit-learn conventions
+        from sklearn.linear_model import LinearRegression, LogisticRegression
+
+
+        # define approach
+        ct = ClassTransformationReg(estimator=LinearRegression, propensity_estimator=LogisticRegression())
+        # fit the model
+        ct = ct.fit(X_train, y_train, treat_train)
+        # predict uplift
+        uplift_ct = ct.predict(X_val)
+
+    References:
+        Maciej Jaskowski and Szymon Jaroszewicz. Uplift modeling for clinical trial data.
+        ICML Workshop on Clinical Data Analysis, 2012.
+
+    See Also:
+
+        **Other approaches:**
+
+        * :class:`.SoloModel`: Single model approach.
+        * :class:`.TwoModels`: Double classifier approach.
+        * :classL1`.ClassTransformation`: Binary classifier transformation approach.
+    """
+
+    def __init__(self, estimator, propensity_val=None, propensity_estimator=None):
+
+        if (propensity_val is None) and (propensity_estimator is None):
+            raise ValueError('`propensity_val` and `propensity_estimator` cannot both be equal to `None`. Both arguments are currently null.')
+        elif (propensity_val is not None) and (propensity_estimator is not None):
+            raise ValueError('Exactly one of (`propensity_val`, `propensity_estimator`) must be None, and the other must be defined. Both arguments are currently non-null.')
+
+        self.estimator = estimator
+        self.propensity_val = propensity_val
+        self.propensity_estimator = propensity_estimator
+
+        self._type_of_target = None
+
+    def fit(self, X, y, treatment, estimator_fit_params=None):
+        """Fit the model according to the given training data.
+
+        Args:
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples and
+                n_features is the number of features.
+            y (array-like, shape (n_samples,)): Target vector relative to X.
+            treatment (array-like, shape (n_samples,)): Binary treatment vector relative to X.
+            estimator_fit_params (dict, optional): Parameters to pass to the fit method of the estimator.
+
+        Returns:
+            object: self
+        """
+
+        check_consistent_length(X, y, treatment)
+        check_is_binary(treatment)
+        self._type_of_target = type_of_target(y)
+
+        if self.propensity_val is not None:
+            p = self.propensity_val
+        elif self.propensity_estimator is not None:
+            self.propensity_estimator.fit(X, treatment)
+            p = self.propensity_estimator.predict_proba(X)[:, 1]
+
+        y_mod = y * ((treatment - p) / (p * (1 - p))).reshape(-1, 1)
+
+        if estimator_fit_params is None:
+                estimator_fit_params = {}
+
+        self.estimator.fit(X, y_mod, **estimator_fit_params)
+
+        return self
+
+
+    def predict_propensity(self, X):
+        """Predict propensity values.
+
+        Args:
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples
+                and n_features is the number of features.
+
+        Returns:
+            array (shape (n_samples,)): propensity
+        """
+
+        if self.propensity_estimator is not None:
+            return self.propensity_estimator.predict_proba(X)
+        else:
+            return self.propensity_val
+
+    def predict(self, X):
+        """Perform uplift on samples in X.
+
+        Args:
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples
+                and n_features is the number of features.
+
+        Returns:
+            array (shape (n_samples,)): uplift
+        """
+
+        uplift = self.estimator.predict(X)
         return uplift
 
 
