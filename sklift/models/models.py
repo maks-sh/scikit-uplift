@@ -275,6 +275,7 @@ class ClassTransformation(BaseEstimator):
         uplift = 2 * self.estimator.predict_proba(X)[:, 1] - 1
         return uplift
 
+
 class ClassTransformationReg(BaseEstimator):
     """aka CATE (Conditional Average Treatment Effect) generating transformation approach for continuous labels.
 
@@ -360,6 +361,7 @@ class ClassTransformationReg(BaseEstimator):
 
         if self.propensity_val is not None:
             p = self.propensity_val
+
         elif self.propensity_estimator is not None:
             self.propensity_estimator.fit(X, treatment)
             p = self.propensity_estimator.predict_proba(X)[:, 1]
@@ -386,7 +388,7 @@ class ClassTransformationReg(BaseEstimator):
         """
 
         if self.propensity_estimator is not None:
-            return self.propensity_estimator.predict_proba(X)
+            return self.propensity_estimator.predict_proba(X)[:, 1]
         else:
             return self.propensity_val
 
