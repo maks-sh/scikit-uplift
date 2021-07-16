@@ -276,6 +276,85 @@ class ClassTransformation(BaseEstimator):
         return uplift
 
 
+
+class ClassTransformationReg(BaseEstimator):
+    """aka Class Variable Transformation for regression.
+    Redefine target variable, which indicates that treatment make some impact on target or
+    did target is negative without treatment: ``Z = Y * (W - p) / (p * (1 - p))``,
+    where ``Y`` - target vector, ``W`` - vector of binary communication flags,
+    ``p`` - propensity score or probability of being classified as the target group
+    p = P(W_i = 1 | X_i = x)
+    Returns only uplift predictions.
+    Read more in the :ref:`User Guide <ClassTransformationReg>`.
+    Args:
+        estimator (estimator object implementing 'fit'): The object to use to fit the data.
+    Example::
+        # import approach
+        from sklift.models import ClassTransformationReg
+        # import any estimator adheres to scikit-learn conventions
+        from catboost import CatBoostClassifier, CatBoostRegressor
+        # define approach
+        ct = ClassTransformationReg(CatBoostRegressor(verbose=200, random_state=111))
+        p_ct = CatBoostClassifier(verbose=100, random_state=777)
+        # fit the model
+        ct = ct.fit(X_train, y_train, treat_train, p_classifier=p_ct, estimator_fit_params={{'plot': True})
+        # predict uplift
+        uplift_ct = ct.predict(X_val)
+    References:
+         P. Richard Hahn, Jared S. Murray, and Carlos Carvalho. Bayesian regression
+         tree models for causal inference: regularization, confounding, and
+         heterogeneous effects. 2019.
+    See Also:
+        **Other approaches:**
+        * :class:`.SoloModel`: Single model approach.
+        * :class:`.TwoModels`: Double classifier approach.
+        * :class:`.ClassTransformation`: Class Variable Transformation approach.
+    """
+    def __init__(self, estimator):
+        self.estimator = estimator
+        if 'predict_proba' in dir(self.estimator):
+            raise TypeError("Your estimator isn't regressor.")
+
+    def fit(self, X, y, treatment, p_classifier=None, estimator_fit_params=None):
+        """Fit the model according to the given training data.
+        Args:
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples and
+                n_features is the number of features.
+            y (array-like, shape (n_samples,)): Target vector relative to X.
+            treatment (array-like, shape (n_samples,)): Binary treatment vector relative to X.
+            p_classifier :  if None - propensity score will be a constant(share of W = 1 in treatment)
+                            if classifier - p_classifier will estimate propensity score as function of X
+            estimator_fit_params (dict, optional): Parameters to pass to the fit method of the estimator.
+        Returns:
+            object: self
+        """
+
+        check_consistent_length(X, y, treatment)
+        check_is_binary(treatment)
+        if p_classifier is None:
+            p = np.sum(treatment == 1) / len(treatment)
+        else:
+            p = p_classifier.predict_proba(X)[:, 1]
+
+        y_mod = np.array(y) * ((np.array(treatment) - p) / (p * (1 - p)))
+        if estimator_fit_params == None:
+            estimator_fit_params = {}
+        self.estimator.fit(X=X, y=y_mod, **estimator_fit_params)
+        return self
+
+
+    def predict(self, X):
+        """Perform uplift on samples in X.
+        Args:
+            X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of samples
+                and n_features is the number of features.
+        Returns:
+            array (shape (n_samples,)): uplift
+        """
+        uplift = self.estimator.predict(X)
+        return uplift
+
+
 class TwoModels(BaseEstimator):
     """aka naïve approach, or difference score method, or double classifier approach.
 
