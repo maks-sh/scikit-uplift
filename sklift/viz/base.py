@@ -57,48 +57,6 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     return axes
 
 
-def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
-    """Plot Uplift curves from predictions.
-
-    Args:
-        y_true (1d array-like): Ground truth (correct) labels.
-        uplift (1d array-like): Predicted uplift, as returned by a model.
-        treatment (1d array-like): Treatment labels.
-        random (bool): Draw a random curve. Default is True.
-        perfect (bool): Draw a perfect curve. Default is True.
-
-    Returns:
-        Object that stores computed values.
-    """
-
-    check_consistent_length(y_true, uplift, treatment)
-    check_is_binary(treatment)
-    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
-
-    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
-
-    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
-    ax.plot(x_actual, y_actual, label='Model', color='blue')
-
-    if random:
-        x_baseline, y_baseline = x_actual, x_actual * \
-            y_actual[-1] / len(y_true)
-        ax.plot(x_baseline, y_baseline, label='Random', color='black')
-        ax.fill_between(x_actual, y_actual, y_baseline, alpha=0.2, color='b')
-
-    if perfect:
-        x_perfect, y_perfect = perfect_uplift_curve(y_true, treatment)
-        ax.plot(x_perfect, y_perfect, label='Perfect', color='Red')
-
-    ax.legend(loc='lower right')
-    ax.set_title(
-        f'Uplift curve\nuplift_auc_score={uplift_auc_score(y_true, uplift, treatment):.4f}')
-    ax.set_xlabel('Number targeted')
-    ax.set_ylabel('Gain: treatment - control')
-
-    return ax
-
-
 class UpliftCurveDisplay:
     """Qini and Uplift curve visualization.
     
@@ -203,10 +161,14 @@ def plot_qini_curve(y_true, uplift, treatment,
     if random:
         x_baseline, y_baseline = x_actual, x_actual * \
             y_actual[-1] / len(y_true)
+    else:
+        x_baseline, y_baseline = None, None
 
     if perfect:
         x_perfect, y_perfect = perfect_qini_curve(
             y_true, treatment, negative_effect)
+    else:
+        x_perfect, y_perfect = None, None
 
     viz = UpliftCurveDisplay(
         x_actual= x_actual,
