@@ -23,9 +23,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies and lints
-      run: pip install pytest .[tests]
+      run: pip install . -r test_requirements.txt -r requirements.txt
     - name: Run PyTest
-      run: pytest
+      run: pytest | tee pytest-coverage.txt
+    - name: Comment coverage
+      uses: coroo/pytest-coverage-commentator@v1.0.2
 
   check_sphinx_build:
     name: Check Sphinx build for docs
