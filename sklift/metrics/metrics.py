@@ -3,8 +3,51 @@ import pandas as pd
 from sklearn.metrics import auc
 from sklearn.utils.extmath import stable_cumsum
 from sklearn.utils.validation import check_consistent_length
+from sklearn.metrics import make_scorer
 
 from ..utils import check_is_binary
+
+
+def make_uplift_scorer(metric_name, treatment, **kwargs):
+    """Create uplift scorer which can be used with same API as
+        sklearn.metrics.make_scorer.
+
+    Args:
+        metric_name (string): Name of desirable uplift metric. Raise ValueError
+            if invalid.
+        treatment (pandas.Series): A Series from original dataframe which
+            contains original index and treatment group column.
+
+    Keyword args:
+        negative_effect (bool): Parameter used in specific metrics.
+        strategy (string, ['overall', 'by_group']): Parameter used in specific
+            metics.
+        k (float or int): Parameter used in specific metrics.
+
+    Returns:
+        sklearn.metrics.make_scorer() object: An uplift scorer with passed
+            treatment variable (and kwargs, optionally).
+    """
+    metrics_dict = {
+        'uplift_curve': uplift_curve,
+        'perfect_uplift_curve': perfect_uplift_curve,
+        'uplift_auc_score': uplift_auc_score,
+        'qini_curve': qini_curve,
+        'perfect_qini_curve': perfect_qini_curve,
+        'qini_auc_score': qini_auc_score,
+        'uplift_at_k': uplift_at_k,
+        'response_rate_by_percentile': response_rate_by_percentile,
+        'weighted_average_uplift': weighted_average_uplift,
+        'uplift_by_percentile': uplift_by_percentile
+    }
+    if metric_name not in metrics_dict.keys():
+        raise ValueError("metric_name correspond to no metric in uplift.metrics module!")
+
+    def scorer(y_true, uplift, treatment_value, **kwargs):
+        t = treatment_value.loc[y_true.index]
+        return metrics_dict[metric_name](y_true, uplift, t, **kwargs)
+
+    return make_scorer(scorer, treatment_value=treatment, **kwargs)
 
 
 def uplift_curve(y_true, uplift, treatment):
