@@ -211,9 +211,13 @@ def plot_uplift_curve(y_true, uplift, treatment,
     if random:
         x_baseline, y_baseline = x_actual, x_actual * \
             y_actual[-1] / len(y_true)
+    else:
+        x_baseline, y_baseline = None, None
 
     if perfect:
         x_perfect, y_perfect = perfect_uplift_curve(y_true, treatment)
+    else:
+        x_perfect, y_perfect = None, None
 
     viz = UpliftCurveDisplay(
         x_actual= x_actual,
