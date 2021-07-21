@@ -14,7 +14,8 @@ from ..models import SoloModel
 @pytest.mark.parametrize("perfect", [True,False])
 def test_plot_uplift_curve(random, perfect):
 
-    X_train, y_train, treat_train = np.array([[5.1, 3.5, 1.4, 0.2],[4.9, 3.0, 1.4, 0.2],[4.7, 3.2, 1.3, 0.2]]), np.array([0.0,0.0,1.0]), np.array([0.0,1.0,1.0])
+    X_train, y_train, treat_train = (np.array([[5.1, 3.5, 1.4, 0.2],[4.9, 3.0, 1.4, 0.2],[4.7, 3.2, 1.3, 0.2]]),
+                                        np.array([0.0,0.0,1.0]), np.array([0.0,1.0,1.0]))
     X_val, y_val, treat_val = np.array([[5.1, 3.4, 1.5, 0.2],[5.0, 3.5, 1.3, 0.3],[4.5, 2.3, 1.3, 0.3]]), np.array([0.0,1.0,0.0]), np.array([0.0,1.0,1.0])
 
     model = DecisionTreeClassifier()
