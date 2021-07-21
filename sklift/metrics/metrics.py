@@ -8,8 +8,8 @@ from sklearn.metrics import make_scorer
 from ..utils import check_is_binary
 
 
-def make_uplift_scorer(metric_name, treatment, **kwargs):
-    """Create uplift scorer which can be used with same API as
+def get_scorer(metric_name, treatment, **kwargs):
+    """Get uplift scorer which can be used with same API as
         sklearn.metrics.make_scorer.
 
     Args:
@@ -27,6 +27,31 @@ def make_uplift_scorer(metric_name, treatment, **kwargs):
     Returns:
         sklearn.metrics.make_scorer() object: An uplift scorer with passed
             treatment variable (and kwargs, optionally).
+
+    Raises:
+        ValueError: if "metric_name" passed does not present in metrics list of
+            this module.
+
+    Example:
+        Import this function:
+            ```from sklift.metrics import get_scorer```
+
+        Use it to initialize new sklearn.metrics.make_scorer() object:
+            ```uplift_scorer = get_scorer("qini_auc_score", trmnt_cv)```
+            or
+            ```uplift_scorer = get_scorer("uplift_at_k", trmnt_cv, strategy='overall', k=0.5)```
+
+        Use this object in model selection functions:
+            ```cross_validate(slearner,
+                   X=X_cv,
+                   y=y_cv,
+                   scoring=uplift_scorer,
+                   return_estimator=True,
+                   cv=cv_gen,
+                   n_jobs=-1,
+                   fit_params={'treatment': trmnt_cv}
+               )
+            ```
     """
     metrics_dict = {
         'uplift_curve': uplift_curve,
@@ -41,7 +66,14 @@ def make_uplift_scorer(metric_name, treatment, **kwargs):
         'uplift_by_percentile': uplift_by_percentile
     }
     if metric_name not in metrics_dict.keys():
-        raise ValueError("metric_name correspond to no metric in uplift.metrics module!")
+        raise ValueError("metric_name correspond to no metric in uplift.metrics module! \n \
+List of valid metrics: 'uplift_curve', \
+'perfect_uplift_curve', 'uplift_auc_score, 'qini_curve', \
+'perfect_qini_curve', 'qini_auc_score', \
+'uplift_at_k', 'response_rate_by_percentile', \
+'weighted_average_uplift', 'uplift_by_percentile'")
+    if not isinstance(treatment, pd.Series):
+        raise ValueError("treatment variable should be pandas Series!")
 
     def scorer(y_true, uplift, treatment_value, **kwargs):
         t = treatment_value.loc[y_true.index]
