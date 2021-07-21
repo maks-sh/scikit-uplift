@@ -99,12 +99,6 @@ class SoloModel(BaseEstimator):
         if len(treatment_values) != 2:
             raise ValueError("Expected only two unique values in treatment vector, got %s" % len(treatment_values))
 
-        check_is_binary(y)
-        target_values = np.unique(y)
-
-        if len(target_values) != 2:
-            raise ValueError("Expected only two unique values in target vector, got %s" % len(target_values))
-
         if self.method == 'dummy':
             if isinstance(X, np.ndarray):
                 X_mod = np.column_stack((X, treatment))
