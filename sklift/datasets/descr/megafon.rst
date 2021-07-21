@@ -19,4 +19,12 @@ Fields
 * treatment_group (str): treatment/control group flag
 * conversion (binary): customer purchasing
 
+Key figures
+################
+* Format: CSV
+* Size: 554M 
+* Rows: 600 000
+* Average Conversion Rate: .2
+* Treatment Ratio: .5
+
 

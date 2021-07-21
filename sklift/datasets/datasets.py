@@ -426,7 +426,7 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
                  feature_names=feature_names, target_name=target_col, treatment_name=treatment_col)
 
 
-def fetch_megafon(target_col='conversion', data_home=None, dest_subdir=None, download_if_missing=True,
+def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
                     return_X_y_t=False):
     """Load and return the MegaFon Uplift Competition dataset (classification).
 
