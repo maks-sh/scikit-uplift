@@ -31,6 +31,7 @@ def get_scorer(metric_name, treatment, **kwargs):
     Raises:
         ValueError: if "metric_name" passed does not present in metrics list of
             this module.
+        ValueError: if "treatment" passed is not pandas Series.
 
     Example:
         Import this function:
