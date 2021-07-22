@@ -691,9 +691,8 @@ def treatment_balance_curve(uplift, treatment, winsize):
     return idx, balance
 
 
-def average_squared_deviation(y_true_train, uplift_train, treatment_train,
-                              y_true_val, uplift_val, treatment_val,
-                              strategy='overall', bins=10):
+def average_squared_deviation(y_true_train, uplift_train, treatment_train, y_true_val,
+                              uplift_val, treatment_val, strategy='overall', bins=10):
     """Compute the average squared deviation.
 
     The average squared deviation (ASD) is a model stability metric that shows how much the model overfits
