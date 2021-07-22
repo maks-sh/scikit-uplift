@@ -9,11 +9,15 @@ on:
 jobs:
   test:
     name: Check tests
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ${{ matrix.os }}
+    env:
+      USING_COVERAGE_PY: '3.8'
+      USING_COVERAGE_OS: 'ubuntu-latest'
+
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+        python-version: ['3.6', '3.7', '3.8', '3.9']
       fail-fast: false
 
     steps:
@@ -27,7 +31,11 @@ jobs:
     - name: Run PyTest
       run: pytest | tee pytest-coverage.txt
     - name: Comment coverage
-      uses: coroo/pytest-coverage-commentator@v1.0.2
+      if: contains(env.USING_COVERAGE_PY, matrix.python-version) && contains(env.USING_COVERAGE_OS, matrix.os)
+      uses: MishaKav/pytest-coverage-comment@v1.1.5
+      with:
+        pytest-coverage-path: ./pytest-coverage.txt
+        junitxml-path: ./pytest.xml
 
   check_sphinx_build:
     name: Check Sphinx build for docs
