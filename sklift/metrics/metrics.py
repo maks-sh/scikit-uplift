@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import auc
+from sklearn.metrics import auc, mean_squared_error
 from sklearn.utils.extmath import stable_cumsum
 from sklearn.utils.validation import check_consistent_length
 
@@ -689,3 +689,30 @@ def treatment_balance_curve(uplift, treatment, winsize):
     balance = np.convolve(treatment, np.ones(winsize), 'valid') / winsize
     idx = np.linspace(1, 100, len(balance))
     return idx, balance
+
+
+def average_squared_deviation(y_true_train, uplift_train, treatment_train,
+                              y_true_val, uplift_val, treatment_val,
+                              strategy='overall', bins=10):
+    """Compute the average squared deviation
+
+    Args:
+        y_true_train:
+        uplift_train:
+        treatment_train:
+        y_true_val:
+        uplift_val:
+        treatment_val:
+        strategy:
+        bins:
+
+    Returns:
+
+    """
+    uplift_by_percentile_train = uplift_by_percentile(y_true_train, uplift_train, treatment_train,
+                                                      strategy=strategy, bins=bins)
+    uplift_by_percentile_val = uplift_by_percentile(y_true_val, uplift_val, treatment_val,
+                                                    strategy=strategy, bins=bins)
+    diff = uplift_by_percentile_train['uplift'] - uplift_by_percentile_val['uplift']
+    asd = (diff ** 2).mean()
+    return asd
