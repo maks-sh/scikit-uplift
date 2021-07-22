@@ -25,9 +25,12 @@ jobs:
     - name: Install dependencies and lints
       run: pip install . -r test_requirements.txt -r requirements.txt
     - name: Run PyTest
-      run: pytest | tee pytest-coverage.txt
+      run: pytest --junitxml=pytest.xml | tee pytest-coverage.txt
     - name: Comment coverage
-      uses: coroo/pytest-coverage-commentator@v1.0.2
+      uses: MishaKav/pytest-coverage-comment@v1.1.5
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
 
   check_sphinx_build:
     name: Check Sphinx build for docs
