@@ -720,6 +720,9 @@ def average_squared_deviation(y_true_train, uplift_train, treatment_train,
 
     Returns:
         float: average squared deviation
+
+    References:
+        René Michel, Igor Schnakenburg, Tobias von Martens. Targeting Uplift. An Introduction to Net Scores.
     """
     check_consistent_length(y_true_train, uplift_train, treatment_train)
     check_is_binary(treatment_train)
