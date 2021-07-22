@@ -1,9 +1,9 @@
-name: Python package
+name: Run tests
 
 on:
   push:
     branches: [ master ]
-  pull_request:
+  pull_request_target:
     
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
     - name: Run PyTest
       run: pytest | tee pytest-coverage.txt
     - name: Comment coverage
-      if: contains(env.USING_COVERAGE_PY, matrix.python-version) && contains(env.USING_COVERAGE_OS, matrix.os)
+      if: github.event_name == 'pull_request_target' && contains(env.USING_COVERAGE_PY, matrix.python-version) && contains(env.USING_COVERAGE_OS, matrix.os)
       uses: MishaKav/pytest-coverage-comment@v1.1.5
       with:
         pytest-coverage-path: ./pytest-coverage.txt
