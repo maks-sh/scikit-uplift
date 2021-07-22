@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import auc, mean_squared_error
+from sklearn.metrics import auc
 from sklearn.utils.extmath import stable_cumsum
 from sklearn.utils.validation import check_consistent_length
 
