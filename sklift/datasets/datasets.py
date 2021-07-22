@@ -463,6 +463,24 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
         Tuple:
             tuple (data, target, treatment) if `return_X_y` is True
 
+    Example::
+    
+        from sklift.datasets import fetch_megafon
+        dataset = fetch_megafon()
+        data, treatment, target = dataset.data, dataset.treatment, dataset.target
+
+
+
+    See Also:
+
+        :func:`.fetch_lenta`: Load and return the Lenta dataset (classification).
+
+        :func:`.fetch_x5`: Load and return the X5 RetailHero dataset (classification). 
+
+        :func:`.fetch_criteo`: Load and return the Criteo Uplift Prediction Dataset (classification).
+
+        :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).  
+
     """
     url_train = 'https://storage.yandexcloud.net/datasouls-ods/static/competitions/megafon_fest2021/train.csv'
     file_train = url_train.split('/')[-1]
