@@ -4,7 +4,7 @@ import shutil
 import pandas as pd
 import requests
 from sklearn.utils import Bunch
-from tqdm.auto import tqdm
+
 
 def get_data_dir():
     """Return the path of the scikit-uplift data dir.
@@ -31,7 +31,7 @@ def _create_data_dir(path):
         os.makedirs(path)
 
 
-def _download(url, dest_path, content_length_header_key='Content-Length'):
+def _download(url, dest_path):
     """Download the file from url and save it locally.
 
     Args:
@@ -44,18 +44,15 @@ def _download(url, dest_path, content_length_header_key='Content-Length'):
         req.raise_for_status()
 
         with open(dest_path, "wb") as fd:
-            total_size_in_bytes = int(req.headers.get(content_length_header_key, 0))
-            progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True)
             for chunk in req.iter_content(chunk_size=2 ** 20):
-                progress_bar.update(len(chunk))
                 fd.write(chunk)
     else:
         raise TypeError("URL must be a string")
 
 
-def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing, content_length_header_key='Content-Length'):
+def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
     """Return the path to the dataset.
-
+    
     Args:
         data_home (str): The path to scikit-uplift data dir.
         url (str): The URL to the dataset.
@@ -63,7 +60,6 @@ def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing, c
         dest_filename (str): The name of the dataset.
         download_if_missing (bool): If False, raise a IOError if the data is not locally available instead of
             trying to download the data from the source site.
-        content_length_header (str): The key in the HTTP response headers that lists the response size in bytes. Used for progress bar.
 
     Returns:
         string: The path to the dataset.
@@ -144,6 +140,22 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
         Tuple:
             tuple (data, target, treatment) if `return_X_y` is True
 
+    Example::
+    
+        from sklift.datasets import fetch_lenta
+        dataset = fetch_lenta()
+        data, target, treatment = dataset.data, dataset.target, dataset.treatment
+
+
+    See Also:
+
+        :func:`.fetch_x5`: Load and return the X5 RetailHero dataset (classification). 
+
+        :func:`.fetch_criteo`: Load and return the Criteo Uplift Prediction Dataset (classification).
+
+        :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).  
+
+
     """
 
     url = 'https://winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
@@ -209,6 +221,23 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
 
     References:
         https://ods.ai/competitions/x5-retailhero-uplift-modeling/data
+
+
+    Example::
+    
+        from sklift.datasets import fetch_x5
+        dataset = fetch_x5()
+        data, target, treatment = dataset.data, dataset.target, dataset.treatment
+
+
+    See Also:
+
+        :func:`.fetch_lenta`: Load and return the Lenta dataset (classification).
+
+        :func:`.fetch_criteo`: Load and return the Criteo Uplift Prediction Dataset (classification).
+
+        :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).  
+
 
     """
     url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
@@ -303,6 +332,24 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
     References:
         “A Large Scale Benchmark for Uplift Modeling”
         Eustache Diemert, Artem Betlei, Christophe Renaudin; (Criteo AI Lab), Massih-Reza Amini (LIG, Grenoble INP)
+    
+    Example::
+    
+        from sklift.datasets import fetch_criteo
+        dataset = fetch_criteo()
+        data, target, treatment = dataset.data, dataset.target, dataset.treatment
+
+
+    See Also:
+
+        :func:`.fetch_lenta`: Load and return the Lenta dataset (classification).
+
+        :func:`.fetch_x5`: Load and return the X5 RetailHero dataset (classification). 
+
+        :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).  
+
+
+    
     """
     treatment_cols = ['exposure', 'treatment']
     if treatment_col == 'all':
@@ -375,7 +422,7 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
         dest_subdir (str): The name of the folder in which the dataset is stored.
         download_if_missing (bool): Download the data if not present. Raises an IOError if False and data is missing.
         return_X_y_t (bool, default=False): If True, returns (data, target, treatment) instead of a Bunch object.
-
+        
     Returns:
         Bunch or tuple: dataset.
 
@@ -395,6 +442,22 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
 
     References:
         https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html
+
+    
+    Example::
+    
+        from sklift.datasets import fetch_hillstrom
+        dataset = fetch_hillstrom()
+        data, target, treatment = dataset.data, dataset.target, dataset.treatment
+
+
+    See Also:
+
+        :func:`.fetch_lenta`: Load and return the Lenta dataset (classification).
+
+        :func:`.fetch_x5`: Load and return the X5 RetailHero dataset (classification). 
+
+        :func:`.fetch_criteo`: Load and return the Criteo Uplift Prediction Dataset (classification).
 
     """
     target_cols = ['visit', 'conversion', 'spend']
