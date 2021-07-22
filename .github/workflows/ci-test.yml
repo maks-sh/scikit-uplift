@@ -4,6 +4,7 @@ on:
   push:
     branches: [ master ]
   pull_request_target:
+    types: [assigned, opened, synchronize, edited, reopened]
 
   workflow_dispatch:
 
