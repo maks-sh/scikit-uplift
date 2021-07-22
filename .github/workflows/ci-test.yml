@@ -23,15 +23,15 @@ jobs:
       fail-fast: false
 
     steps:
-      - name: Checkout merge commit
-        uses: actions/checkout@v2
-        if: github.event_name == 'pull_request_target'
-        with:
-          ref: 'refs/pull/${{ github.event.number }}/merge'
-          persist-credentials: false
-      - name: Checkout head commit
-        uses: actions/checkout@v2
-        if: github.event_name != 'pull_request_target'
+    - name: Checkout merge commit
+      uses: actions/checkout@v2
+      if: github.event_name == 'pull_request_target'
+      with:
+        ref: 'refs/pull/${{ github.event.number }}/merge'
+        persist-credentials: false
+    - name: Checkout head commit
+      uses: actions/checkout@v2
+      if: github.event_name != 'pull_request_target'
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
