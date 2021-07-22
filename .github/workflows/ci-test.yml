@@ -28,9 +28,9 @@ jobs:
       run: pytest --junitxml=pytest.xml | tee pytest-coverage.txt
     - name: Comment coverage
       uses: MishaKav/pytest-coverage-comment@v1.1.5
-        with:
-          pytest-coverage-path: ./pytest-coverage.txt
-          junitxml-path: ./pytest.xml
+      with:
+        pytest-coverage-path: ./pytest-coverage.txt
+        junitxml-path: ./pytest.xml
 
   check_sphinx_build:
     name: Check Sphinx build for docs
