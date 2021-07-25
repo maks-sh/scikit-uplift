@@ -297,8 +297,9 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
             tuple (data, target, treatment) if `return_X_y` is True
 
     References:
-        “A Large Scale Benchmark for Uplift Modeling”
-        Eustache Diemert, Artem Betlei, Christophe Renaudin; (Criteo AI Lab), Massih-Reza Amini (LIG, Grenoble INP)
+        :cite:t:`Diemert2018`
+
+        .. bibliography::
     """
     treatment_cols = ['exposure', 'treatment']
     if treatment_col == 'all':
