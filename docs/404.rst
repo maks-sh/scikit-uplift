@@ -1,0 +1,13 @@
+.. |Open In Colab3| image:: https://colab.research.google.com/assets/colab-badge.svg
+.. _Open In Colab3: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb
+
+.. |Open In Colab4| image:: https://colab.research.google.com/assets/colab-badge.svg
+.. _Open In Colab4: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb
+
+**************
+Not Found
+**************
+
+Sorry, we couldn't find that page.
+
+Try using the search box or go to the `homepage <https://www.uplift-modeling.com/en/latest/index.html>`__.
