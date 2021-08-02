@@ -9,8 +9,7 @@ from ..utils import check_is_binary
 
 
 def get_scorer(metric_name, treatment, **kwargs):
-    """Get uplift scorer which can be used with same API as
-        sklearn.metrics.make_scorer.
+    """Get uplift scorer which can be used with same API as sklearn.metrics.make_scorer.
 
     Args:
         metric_name (string): Name of desirable uplift metric. Raise ValueError
@@ -25,15 +24,15 @@ def get_scorer(metric_name, treatment, **kwargs):
         k (float or int): Parameter used in specific metrics.
 
     Returns:
-        sklearn.metrics.make_scorer() object: An uplift scorer with passed
-            treatment variable (and kwargs, optionally).
+        sklearn.metrics.make_scorer() object: An uplift scorer with passed treatment variable (and kwargs, optionally).
 
     Raises:
         ValueError: if "metric_name" passed does not present in metrics list of
             this module.
         ValueError: if "treatment" passed is not pandas Series.
 
-    Example:
+    Example::
+
         Import this function:
             ```from sklift.metrics import get_scorer```
 
@@ -68,11 +67,7 @@ def get_scorer(metric_name, treatment, **kwargs):
     }
     if metric_name not in metrics_dict.keys():
         raise ValueError("metric_name correspond to no metric in uplift.metrics module! \n \
-List of valid metrics: 'uplift_curve', \
-'perfect_uplift_curve', 'uplift_auc_score, 'qini_curve', \
-'perfect_qini_curve', 'qini_auc_score', \
-'uplift_at_k', 'response_rate_by_percentile', \
-'weighted_average_uplift', 'uplift_by_percentile'")
+List of valid metrics: %s " % list(metrics_dict.keys()))
     if not isinstance(treatment, pd.Series):
         raise ValueError("treatment variable should be pandas Series!")
 

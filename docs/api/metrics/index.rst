@@ -16,3 +16,4 @@
    ./uplift_by_percentile
    ./response_rate_by_percentile
    ./treatment_balance_curve
+   ./get_scorer
