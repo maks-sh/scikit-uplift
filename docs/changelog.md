@@ -5,7 +5,7 @@
 * 🔥 something big that you couldn’t do before.
 * 💥 something that you couldn’t do before.
 * 📝 a miscellaneous minor improvement.
-* 🔨 something that previously didn’t work as documentated – or according to reasonable expectations – should now work.
+* 🔨 something that previously didn’t work as documented – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
 ## Version 0.3.2
