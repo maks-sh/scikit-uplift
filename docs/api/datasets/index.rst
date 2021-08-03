@@ -11,3 +11,4 @@
    ./fetch_x5
    ./fetch_criteo
    ./fetch_hillstrom
+   ./fetch_megafon
