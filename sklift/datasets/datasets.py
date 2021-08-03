@@ -6,6 +6,7 @@ import requests
 from sklearn.utils import Bunch
 from tqdm.auto import tqdm
 
+
 def get_data_dir():
     """Return the path of the scikit-uplift data dir.
 
@@ -37,7 +38,8 @@ def _download(url, dest_path, content_length_header_key='Content-Length'):
     Args:
         url (str): URL address, must be a string.
         dest_path (str): Destination of the file.
-
+        content_length_header_key (str): The key in the HTTP response headers that lists the response size in bytes.
+            Used for progress bar.
     """
     if isinstance(url, str):
         req = requests.get(url, stream=True)
@@ -53,7 +55,8 @@ def _download(url, dest_path, content_length_header_key='Content-Length'):
         raise TypeError("URL must be a string")
 
 
-def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing, content_length_header_key='Content-Length'):
+def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing,
+              content_length_header_key='Content-Length'):
     """Return the path to the dataset.
 
     Args:
@@ -63,7 +66,8 @@ def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing, c
         dest_filename (str): The name of the dataset.
         download_if_missing (bool): If False, raise a IOError if the data is not locally available instead of
             trying to download the data from the source site.
-        content_length_header (str): The key in the HTTP response headers that lists the response size in bytes. Used for progress bar.
+        content_length_header (str): The key in the HTTP response headers that lists the response size in bytes.
+            Used for progress bar.
 
     Returns:
         string: The path to the dataset.
@@ -86,7 +90,7 @@ def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing, c
 
     if not os.path.isfile(dest_path):
         if download_if_missing:
-            _download(url, dest_path)
+            _download(url, dest_path, content_length_header_key)
         else:
             raise IOError("Dataset missing")
     return dest_path
@@ -142,14 +146,18 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
                 * ``treatment_name`` (str): Name of the treatment.
 
         Tuple:
-            tuple (data, target, treatment) if `return_X_y` is True
+            tuple (data, target, treatment) if `return_X_y_t` is True
 
     Example::
 
         from sklift.datasets import fetch_lenta
+
+
         dataset = fetch_lenta()
         data, target, treatment = dataset.data, dataset.target, dataset.treatment
 
+        # alternative option
+        data, target, treatment = fetch_lenta(return_X_y_t=True)
 
     See Also:
 
@@ -159,7 +167,7 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
 
         :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).
 
-
+        :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification).
     """
 
     url = 'https://winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
@@ -226,13 +234,23 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     References:
         https://ods.ai/competitions/x5-retailhero-uplift-modeling/data
 
-
     Example::
 
         from sklift.datasets import fetch_x5
+
+
         dataset = fetch_x5()
         data, target, treatment = dataset.data, dataset.target, dataset.treatment
 
+        # data - dictionary-like object
+        # data contains general info about clients:
+        clients = data.clients
+
+        # data contains a subset of clients for training:
+        train = data.train
+
+        # data contains a clients’ purchase history prior to communication.
+        purchases = data.purchases
 
     See Also:
 
@@ -242,7 +260,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
 
         :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).
 
-
+        :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification).
     """
     url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
     file_train = url_train.split('/')[-1]
@@ -336,8 +354,13 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
     Example::
 
         from sklift.datasets import fetch_criteo
-        dataset = fetch_criteo()
+
+
+        dataset = fetch_criteo(target_col='conversion', treatment_col='exposure')
         data, target, treatment = dataset.data, dataset.target, dataset.treatment
+
+        # alternative option
+        data, target, treatment = fetch_criteo(target_col='conversion', treatment_col='exposure', return_X_y_t=True)
 
     References:
         :cite:t:`Diemert2018`
@@ -352,6 +375,7 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
 
         :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).
 
+        :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification).
     """
     treatment_cols = ['exposure', 'treatment']
     if treatment_col == 'all':
@@ -445,13 +469,16 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
     References:
         https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html
 
-
     Example::
 
         from sklift.datasets import fetch_hillstrom
-        dataset = fetch_hillstrom()
+
+
+        dataset = fetch_hillstrom(target_col='visit')
         data, target, treatment = dataset.data, dataset.target, dataset.treatment
 
+        # alternative option
+        data, target, treatment = fetch_hillstrom(target_col='visit', return_X_y_t=True)
 
     See Also:
 
@@ -461,6 +488,7 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
 
         :func:`.fetch_criteo`: Load and return the Criteo Uplift Prediction Dataset (classification).
 
+        :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification)
     """
     target_cols = ['visit', 'conversion', 'spend']
     if target_col == 'all':
@@ -496,7 +524,7 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
 
 
 def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
-                    return_X_y_t=False):
+                  return_X_y_t=False):
     """Load and return the MegaFon Uplift Competition dataset (classification).
 
     An uplift modeling dataset containing synthetic data generated by telecom companies, trying to bring them closer to the real case that they encountered.
@@ -535,10 +563,13 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
     Example::
 
         from sklift.datasets import fetch_megafon
+
+
         dataset = fetch_megafon()
         data, treatment, target = dataset.data, dataset.treatment, dataset.target
 
-
+        # alternative option
+        data, target, treatment = fetch_megafon(return_X_y_t=True)
 
     See Also:
 
