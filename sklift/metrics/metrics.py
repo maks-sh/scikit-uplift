@@ -753,6 +753,6 @@ def average_squared_deviation(y_true_train, uplift_train, treatment_train, y_tru
                                                       strategy=strategy, bins=bins)
     uplift_by_percentile_val = uplift_by_percentile(y_true_val, uplift_val, treatment_val,
                                                     strategy=strategy, bins=bins)
-    diff = uplift_by_percentile_train['uplift'] - uplift_by_percentile_val['uplift']
-    asd = (diff ** 2).mean()
-    return asd
+    
+    return np.mean(np.square(uplift_by_percentile_train['uplift'] - uplift_by_percentile_val['uplift']))
+    
