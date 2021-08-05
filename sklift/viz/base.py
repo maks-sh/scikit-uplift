@@ -61,7 +61,7 @@ def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
     """Plot Uplift curves from predictions.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Ground truth (correct) binary labels.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         random (bool): Draw a random curve. Default is True.
@@ -73,6 +73,7 @@ def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
@@ -103,7 +104,7 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
     """Plot Qini curves from predictions.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Ground truth (correct) binary labels.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         random (bool): Draw a random curve. Default is True.
@@ -118,6 +119,7 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
@@ -154,7 +156,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
     Uplift score is a difference between treatment response rate and control response rate.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Default is 'overall'.
@@ -186,6 +188,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     n_samples = len(y_true)
 
     if strategy not in strategy_methods:

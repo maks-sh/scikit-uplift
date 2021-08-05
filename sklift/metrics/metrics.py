@@ -13,7 +13,7 @@ def uplift_curve(y_true, uplift, treatment):
     For computing the area under the Uplift Curve, see :func:`.uplift_auc_score`.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -35,6 +35,8 @@ def uplift_curve(y_true, uplift, treatment):
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
+
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     desc_score_indices = np.argsort(uplift, kind="mergesort")[::-1]
@@ -75,7 +77,7 @@ def perfect_uplift_curve(y_true, treatment):
     area under the Uplift Curve, see :func:`.uplift_auc_score`.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         treatment (1d array-like): Treatment labels.
 
     Returns:
@@ -91,6 +93,7 @@ def perfect_uplift_curve(y_true, treatment):
 
     check_consistent_length(y_true, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     y_true, treatment = np.array(y_true), np.array(treatment)
 
     cr_num = np.sum((y_true == 1) & (treatment == 0))  # Control Responders
@@ -111,7 +114,7 @@ def uplift_auc_score(y_true, uplift, treatment):
     the optimum Uplift Curve.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -130,6 +133,7 @@ def uplift_auc_score(y_true, uplift, treatment):
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
@@ -149,7 +153,7 @@ def qini_curve(y_true, uplift, treatment):
     For computing the area under the Qini Curve, see :func:`.qini_auc_score`.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
 
@@ -174,6 +178,7 @@ def qini_curve(y_true, uplift, treatment):
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     desc_score_indices = np.argsort(uplift, kind="mergesort")[::-1]
@@ -214,7 +219,7 @@ def perfect_qini_curve(y_true, treatment, negative_effect=True):
     For computing the area under the Qini Curve, see :func:`.qini_auc_score`.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         treatment (1d array-like): Treatment labels.
         negative_effect (bool): If True, optimum Qini Curve contains the negative effects
             (negative uplift because of campaign). Otherwise, optimum Qini Curve will not
@@ -232,6 +237,7 @@ def perfect_qini_curve(y_true, treatment, negative_effect=True):
 
     check_consistent_length(y_true, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     n_samples = len(y_true)
 
     y_true, treatment = np.array(y_true), np.array(treatment)
@@ -261,7 +267,7 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
     the optimum Qini curve.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         negative_effect (bool): If True, optimum Qini Curve contains the negative effects
@@ -289,6 +295,7 @@ def qini_auc_score(y_true, uplift, treatment, negative_effect=True):
     # TODO: Add Continuous Outcomes
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     if not isinstance(negative_effect, bool):
@@ -309,7 +316,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     """Compute uplift at first k observations by uplift of the total sample.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         k (float or int): If float, should be between 0.0 and 1.0 and represent the proportion of the dataset
@@ -344,6 +351,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
     # TODO: checker all groups is not empty
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
 
     strategy_methods = ['overall', 'by_group']
@@ -409,7 +417,7 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
     """Compute response rate (target mean in the control or treatment group) at each percentile.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         group (string, ['treatment', 'control']): Group type for computing response rate: treatment or control.
@@ -440,7 +448,7 @@ def response_rate_by_percentile(y_true, uplift, treatment, group, strategy='over
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
-
+    check_is_binary(y_true)
     group_types = ['treatment', 'control']
     strategy_methods = ['overall', 'by_group']
     
@@ -490,7 +498,7 @@ def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=
     Weights are sizes of the treatment group by percentile.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Default is 'overall'.
@@ -511,6 +519,7 @@ def weighted_average_uplift(y_true, uplift, treatment, strategy='overall', bins=
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
 
     strategy_methods = ['overall', 'by_group']
 
@@ -553,7 +562,7 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
         - ``std_uplift`` - (optional) uplift standard deviation.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Default is 'overall'.
@@ -580,6 +589,7 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
 
     strategy_methods = ['overall', 'by_group']
 
@@ -689,3 +699,70 @@ def treatment_balance_curve(uplift, treatment, winsize):
     balance = np.convolve(treatment, np.ones(winsize), 'valid') / winsize
     idx = np.linspace(1, 100, len(balance))
     return idx, balance
+
+
+def average_squared_deviation(y_true_train, uplift_train, treatment_train, y_true_val,
+                              uplift_val, treatment_val, strategy='overall', bins=10):
+    """Compute the average squared deviation.
+
+    The average squared deviation (ASD) is a model stability metric that shows how much the model overfits
+    the training data. Larger values of ASD mean greater overfit.
+
+    Args:
+        y_true_train (1d array-like): Correct (true) target values for training set.
+        uplift_train (1d array-like): Predicted uplift for training set, as returned by a model.
+        treatment_train (1d array-like): Treatment labels for training set.
+        y_true_val (1d array-like): Correct (true) target values for validation set.
+        uplift_val (1d array-like): Predicted uplift for validation set, as returned by a model.
+        treatment_val (1d array-like): Treatment labels for validation set.
+        strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Default is 'overall'.
+
+            * ``'overall'``:
+                The first step is taking the first k observations of all test data ordered by uplift prediction
+                (overall both groups - control and treatment) and conversions in treatment and control groups
+                calculated only on them. Then the difference between these conversions is calculated.
+            * ``'by_group'``:
+                Separately calculates conversions in top k observations in each group (control and treatment)
+                sorted by uplift predictions. Then the difference between these conversions is calculated
+
+        bins (int): Determines the number of bins (and the relative percentile) in the data. Default is 10.
+
+    Returns:
+        float: average squared deviation
+
+    References:
+        René Michel, Igor Schnakenburg, Tobias von Martens. Targeting Uplift. An Introduction to Net Scores.
+    """
+    check_consistent_length(y_true_train, uplift_train, treatment_train)
+    check_is_binary(treatment_train)
+
+    check_consistent_length(y_true_val, uplift_val, treatment_val)
+    check_is_binary(treatment_val)
+
+    strategy_methods = ['overall', 'by_group']
+
+    n_samples_train = len(y_true_train)
+    n_samples_val = len(y_true_val)
+    min_n_samples = min(n_samples_train, n_samples_val)
+
+    if strategy not in strategy_methods:
+        raise ValueError(
+            f'Response rate supports only calculating methods in {strategy_methods},'
+            f' got {strategy}.')
+
+    if not isinstance(bins, int) or bins <= 0:
+        raise ValueError(
+            f'Bins should be positive integer. Invalid value bins: {bins}')
+
+    if bins >= min_n_samples:
+        raise ValueError(
+            f'Number of bins = {bins} should be smaller than the length of y_true_train {n_samples_train}'
+            f'and length of y_true_val {n_samples_val}')
+
+    uplift_by_percentile_train = uplift_by_percentile(y_true_train, uplift_train, treatment_train,
+                                                      strategy=strategy, bins=bins)
+    uplift_by_percentile_val = uplift_by_percentile(y_true_val, uplift_val, treatment_val,
+                                                    strategy=strategy, bins=bins)
+    
+    return np.mean(np.square(uplift_by_percentile_train['uplift'] - uplift_by_percentile_val['uplift']))
+    

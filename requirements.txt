@@ -3,3 +3,4 @@ numpy>=1.16
 pandas
 matplotlib
 requests
+tqdm

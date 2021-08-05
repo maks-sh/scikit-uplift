@@ -1,10 +1,10 @@
 import pytest
+import sklearn
 
 from functools import partial
 
-from ..datasets import (
-    fetch_hillstrom, fetch_lenta, fetch_criteo
-)
+from ..datasets import (fetch_lenta, fetch_x5,
+                        fetch_criteo, fetch_hillstrom)
 
 
 fetch_criteo10 = partial(fetch_criteo, percent10=True)
@@ -16,6 +16,41 @@ def check_return_X_y_t(bunch, dataset_func):
     assert X_y_t_tuple[0].shape == bunch.data.shape
     assert X_y_t_tuple[1].shape == bunch.target.shape
     assert X_y_t_tuple[2].shape == bunch.treatment.shape
+
+
+@pytest.fixture
+def lenta_dataset() -> dict:
+    data = {'keys': ['data', 'target', 'treatment', 'DESCR', 'feature_names', 'target_name', 'treatment_name'],
+            'data.shape': (687029, 193), 'target.shape': (687029,), 'treatment.shape': (687029,)}
+    return data
+
+
+def test_fetch_lenta(lenta_dataset):
+    data = fetch_lenta()
+    assert isinstance(data, sklearn.utils.Bunch)
+    assert set(data.keys()) == set(lenta_dataset['keys'])
+    assert data.data.shape == lenta_dataset['data.shape']
+    assert data.target.shape == lenta_dataset['target.shape']
+    assert data.treatment.shape == lenta_dataset['treatment.shape']
+
+
+@pytest.fixture
+def x5_dataset() -> dict:
+    data = {'keys': ['data', 'target', 'treatment', 'DESCR', 'feature_names', 'target_name', 'treatment_name'],
+            'data.keys': ['clients', 'train', 'purchases'], 'clients.shape': (400162, 5),
+            'train.shape': (200039, 1), 'target.shape': (200039,), 'treatment.shape': (200039,)}
+    return data
+
+
+def test_fetch_x5(x5_dataset):
+    data = fetch_x5()
+    assert isinstance(data, sklearn.utils.Bunch)
+    assert set(data.keys()) == set(x5_dataset['keys'])
+    assert set(data.data.keys()) == set(x5_dataset['data.keys'])
+    assert data.data.clients.shape == x5_dataset['clients.shape']
+    assert data.data.train.shape == x5_dataset['train.shape']
+    assert data.target.shape == x5_dataset['target.shape']
+    assert data.treatment.shape == x5_dataset['treatment.shape']
 
 
 @pytest.mark.parametrize(
