@@ -138,7 +138,7 @@ class UpliftCurveDisplay:
 
 
 def plot_qini_curve(y_true, uplift, treatment,
-                    random=True, perfect=True, negative_effect=True, ax=None, name=None):
+                    random=True, perfect=True, negative_effect=True, ax=None, name=None, **kwargs):
     """Plot Qini curves from predictions.
 
     Args:
@@ -189,11 +189,11 @@ def plot_qini_curve(y_true, uplift, treatment,
 
     auc = qini_auc_score(y_true, uplift, treatment, negative_effect)
 
-    return viz.plot(auc, ax=ax, title="plot_qini_curve")
+    return viz.plot(auc, ax=ax, title="plot_qini_curve", **kwargs)
 
 
 def plot_uplift_curve(y_true, uplift, treatment,
-                      random=True, perfect=True, ax=None, name=None):
+                      random=True, perfect=True, ax=None, name=None, **kwargs):
     """Plot Uplift curves from predictions.
 
     Args:
@@ -240,7 +240,7 @@ def plot_uplift_curve(y_true, uplift, treatment,
 
     auc = uplift_auc_score(y_true, uplift, treatment)
 
-    return viz.plot(auc, ax=ax, title="plot_uplift_curve")
+    return viz.plot(auc, ax=ax, title="plot_uplift_curve", **kwargs)
 
 
 def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
