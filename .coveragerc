@@ -1,0 +1,2 @@
+[run]
+omit = sklift/tests/*,*__init__.py*

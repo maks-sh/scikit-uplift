@@ -1,7 +1,7 @@
 import os
+import re
 import sys
 from shutil import rmtree
-import re
 
 from setuptools import Command, find_packages, setup
 
@@ -14,7 +14,7 @@ REQUIRES_PYTHON = ">=3.4.0"
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(here, 'Readme.rst')) as f:
+with open(os.path.join(here, 'Readme.rst'), encoding="utf-8") as f:
     LONG_DESCRIPTION = f.read()
 
 # What packages are required for this module to be executed?
@@ -25,7 +25,7 @@ except FileNotFoundError:
     REQUIRED = []
 
 # What packages are optional?
-EXTRAS = {"test": ["pytest"]}
+EXTRAS = {"test": ["pytest", "pytest-cov"]}
 
 
 def get_version():

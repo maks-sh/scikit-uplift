@@ -2,18 +2,20 @@ name: Python package
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    
+  pull_request_target:
 
 jobs:
   test:
     name: Check tests
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ${{ matrix.os }}
+    env:
+      USING_COVERAGE_PY: '3.8'
+      USING_COVERAGE_OS: 'ubuntu-latest'
+
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+        python-version: ['3.6', '3.7', '3.8', '3.9']
       fail-fast: false
 
     steps:
@@ -23,9 +25,15 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies and lints
-      run: pip install pytest .[tests]
+      run: pip install . -r test_requirements.txt -r requirements.txt
     - name: Run PyTest
-      run: pytest
+      run: pytest | tee pytest-coverage.txt
+    - name: Comment coverage
+      if: contains(env.USING_COVERAGE_PY, matrix.python-version) && contains(env.USING_COVERAGE_OS, matrix.os)
+      uses: MishaKav/pytest-coverage-comment@v1.1.5
+      with:
+        pytest-coverage-path: ./pytest-coverage.txt
+        junitxml-path: ./pytest.xml
 
   check_sphinx_build:
     name: Check Sphinx build for docs
