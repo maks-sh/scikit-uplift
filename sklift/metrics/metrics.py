@@ -699,3 +699,70 @@ def treatment_balance_curve(uplift, treatment, winsize):
     balance = np.convolve(treatment, np.ones(winsize), 'valid') / winsize
     idx = np.linspace(1, 100, len(balance))
     return idx, balance
+
+
+def average_squared_deviation(y_true_train, uplift_train, treatment_train, y_true_val,
+                              uplift_val, treatment_val, strategy='overall', bins=10):
+    """Compute the average squared deviation.
+
+    The average squared deviation (ASD) is a model stability metric that shows how much the model overfits
+    the training data. Larger values of ASD mean greater overfit.
+
+    Args:
+        y_true_train (1d array-like): Correct (true) target values for training set.
+        uplift_train (1d array-like): Predicted uplift for training set, as returned by a model.
+        treatment_train (1d array-like): Treatment labels for training set.
+        y_true_val (1d array-like): Correct (true) target values for validation set.
+        uplift_val (1d array-like): Predicted uplift for validation set, as returned by a model.
+        treatment_val (1d array-like): Treatment labels for validation set.
+        strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Default is 'overall'.
+
+            * ``'overall'``:
+                The first step is taking the first k observations of all test data ordered by uplift prediction
+                (overall both groups - control and treatment) and conversions in treatment and control groups
+                calculated only on them. Then the difference between these conversions is calculated.
+            * ``'by_group'``:
+                Separately calculates conversions in top k observations in each group (control and treatment)
+                sorted by uplift predictions. Then the difference between these conversions is calculated
+
+        bins (int): Determines the number of bins (and the relative percentile) in the data. Default is 10.
+
+    Returns:
+        float: average squared deviation
+
+    References:
+        René Michel, Igor Schnakenburg, Tobias von Martens. Targeting Uplift. An Introduction to Net Scores.
+    """
+    check_consistent_length(y_true_train, uplift_train, treatment_train)
+    check_is_binary(treatment_train)
+
+    check_consistent_length(y_true_val, uplift_val, treatment_val)
+    check_is_binary(treatment_val)
+
+    strategy_methods = ['overall', 'by_group']
+
+    n_samples_train = len(y_true_train)
+    n_samples_val = len(y_true_val)
+    min_n_samples = min(n_samples_train, n_samples_val)
+
+    if strategy not in strategy_methods:
+        raise ValueError(
+            f'Response rate supports only calculating methods in {strategy_methods},'
+            f' got {strategy}.')
+
+    if not isinstance(bins, int) or bins <= 0:
+        raise ValueError(
+            f'Bins should be positive integer. Invalid value bins: {bins}')
+
+    if bins >= min_n_samples:
+        raise ValueError(
+            f'Number of bins = {bins} should be smaller than the length of y_true_train {n_samples_train}'
+            f'and length of y_true_val {n_samples_val}')
+
+    uplift_by_percentile_train = uplift_by_percentile(y_true_train, uplift_train, treatment_train,
+                                                      strategy=strategy, bins=bins)
+    uplift_by_percentile_val = uplift_by_percentile(y_true_val, uplift_val, treatment_val,
+                                                    strategy=strategy, bins=bins)
+    
+    return np.mean(np.square(uplift_by_percentile_train['uplift'] - uplift_by_percentile_val['uplift']))
+    
