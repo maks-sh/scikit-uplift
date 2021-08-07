@@ -84,7 +84,7 @@ class SoloModel(BaseEstimator):
         Args:
             X (array-like, shape (n_samples, n_features)): Training vector, where n_samples is the number of
                 samples and n_features is the number of features.
-            y (array-like, shape (n_samples,)): Target vector relative to X.
+            y (array-like, shape (n_samples,)): Binary target vector relative to X.
             treatment (array-like, shape (n_samples,)): Binary treatment vector relative to X.
             estimator_fit_params (dict, optional): Parameters to pass to the fit method of the estimator.
 
@@ -97,7 +97,7 @@ class SoloModel(BaseEstimator):
         treatment_values = np.unique(treatment)
 
         if len(treatment_values) != 2:
-            raise ValueError("Expected only two unique values, got %s" % len(treatment_values))
+            raise ValueError("Expected only two unique values in treatment vector, got %s" % len(treatment_values))
 
         if self.method == 'dummy':
             if isinstance(X, np.ndarray):

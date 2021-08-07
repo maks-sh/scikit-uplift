@@ -1,0 +1,13 @@
+*******************
+404 Page Not Found
+*******************
+
+.. image:: ../../_static/images/sklift_404.png
+   :alt: 404 Page not found
+   :align: center
+   :width: 250 px
+   :height: 250 px
+
+Sorry, we couldn't find that page.
+
+Try using the search box or go to the `homepage <https://www.uplift-modeling.com/en/latest/index.html>`__.
