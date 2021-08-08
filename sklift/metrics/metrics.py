@@ -8,68 +8,58 @@ from sklearn.metrics import make_scorer
 from ..utils import check_is_binary
 
 
-def get_scorer(metric_name, treatment, **kwargs):
-    """Get uplift scorer which can be used with same API as sklearn.metrics.make_scorer.
+def make_uplift_scorer(metric_name, treatment, **kwargs):
+    """Make uplift scorer which can be used with the same API as ``sklearn.metrics.make_scorer``.
 
     Args:
-        metric_name (string): Name of desirable uplift metric. Raise ValueError
-            if invalid.
-        treatment (pandas.Series): A Series from original dataframe which
+        metric_name (string): Name of desirable uplift metric. Raise ValueError if invalid.
+        treatment (pandas.Series): A Series from original DataFrame which
             contains original index and treatment group column.
-
-    Keyword args:
-        negative_effect (bool): Parameter used in specific metrics.
-        strategy (string, ['overall', 'by_group']): Parameter used in specific
-            metics.
-        k (float or int): Parameter used in specific metrics.
+        kwargs (additional arguments): Additional parameters to be passed to metric func.
+            For example: `negative_effect`, `strategy`, `k` or somtething else.
 
     Returns:
-        sklearn.metrics.make_scorer() object: An uplift scorer with passed treatment variable (and kwargs, optionally).
+        scorer (callable): An uplift scorer with passed treatment variable (and kwargs, optionally) that returns a scalar score.
 
     Raises:
-        ValueError: if "metric_name" passed does not present in metrics list of
-            this module.
-        ValueError: if "treatment" passed is not pandas Series.
+        ValueError: if `metric_name` does not present in metrics list.
+        ValueError: if `treatment` is not a pandas Series.
 
     Example::
 
-        Import this function:
-            ```from sklift.metrics import get_scorer```
+        from sklearn.model_selection import cross_validate
+        from sklift.metrics import make_uplift_scorer
 
-        Use it to initialize new sklearn.metrics.make_scorer() object:
-            ```uplift_scorer = get_scorer("qini_auc_score", trmnt_cv)```
-            or
-            ```uplift_scorer = get_scorer("uplift_at_k", trmnt_cv, strategy='overall', k=0.5)```
+        # define X_cv, y_cv, trmnt_cv and estimator
 
-        Use this object in model selection functions:
-            ```cross_validate(slearner,
-                   X=X_cv,
-                   y=y_cv,
-                   scoring=uplift_scorer,
-                   return_estimator=True,
-                   cv=cv_gen,
-                   n_jobs=-1,
-                   fit_params={'treatment': trmnt_cv}
-               )
-            ```
+        # Use make_uplift_scorer to initialize new `sklearn.metrics.make_scorer` object
+        qini_scorer = make_uplift_scorer("qini_auc_score", trmnt_cv)
+        # or pass additional parameters if necessary
+        uplift50_scorer = make_uplift_scorer("uplift_at_k", trmnt_cv, strategy='overall', k=0.5)
+
+        # Use this object in model selection functions
+        cross_validate(estimator,
+           X=X_cv,
+           y=y_cv,
+           fit_params={'treatment': trmnt_cv}
+           scoring=qini_scorer,
+        )
     """
     metrics_dict = {
-        'uplift_curve': uplift_curve,
-        'perfect_uplift_curve': perfect_uplift_curve,
         'uplift_auc_score': uplift_auc_score,
-        'qini_curve': qini_curve,
-        'perfect_qini_curve': perfect_qini_curve,
         'qini_auc_score': qini_auc_score,
         'uplift_at_k': uplift_at_k,
-        'response_rate_by_percentile': response_rate_by_percentile,
         'weighted_average_uplift': weighted_average_uplift,
-        'uplift_by_percentile': uplift_by_percentile
     }
+
     if metric_name not in metrics_dict.keys():
-        raise ValueError("metric_name correspond to no metric in uplift.metrics module! \n \
-List of valid metrics: %s " % list(metrics_dict.keys()))
+        raise ValueError(
+            f"'{metric_name}' is not a valid scoring value. "
+            f"List of valid metrics: {list(metrics_dict.keys())}"
+        )
+
     if not isinstance(treatment, pd.Series):
-        raise ValueError("treatment variable should be pandas Series!")
+        raise TypeError("Expected pandas.Series in treatment vector, got %s" % type(treatment))
 
     def scorer(y_true, uplift, treatment_value, **kwargs):
         t = treatment_value.loc[y_true.index]
@@ -836,4 +826,3 @@ def average_squared_deviation(y_true_train, uplift_train, treatment_train, y_tru
                                                     strategy=strategy, bins=bins)
     
     return np.mean(np.square(uplift_by_percentile_train['uplift'] - uplift_by_percentile_val['uplift']))
-    
