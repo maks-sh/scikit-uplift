@@ -43,3 +43,12 @@ Finally, we have a series of variables describing activity in the two weeks foll
 * Visit: 1/0 indicator, 1 = Customer visited website in the following two weeks.
 * Conversion: 1/0 indicator, 1 = Customer purchased merchandise in the following two weeks.
 * Spend: Actual dollars spent in the following two weeks.
+
+Key figures
+################
+
+* Format: CSV
+* Size: 433KB (compressed) 4935KB (uncompressed)
+* Rows: 64000
+* Response Ratio: part in the 'visit' column: 0.15, part in the "conversion" column: 0.009, the values in the 'spend' column are unevenly distributed from 0.0 to 499.0
+* Treatment Ratio: The parts are distributed evenly between the three classes

@@ -23,4 +23,12 @@ Fields
 * treatment_flg (binary): information on performed communication
 * target (binary): customer purchasing
 
+Key figures
+################
+
+* Format: CSV
+* Size: 647M (compressed) 4.17GB (uncompressed)
+* Rows in 'clients.csv': 400162, Rows in 'purchases.csv': 45786568, Rows in 'uplift_train.csv': 200039
+* Response Ratio: 0.62
+* Treatment Ratio: 0.5
 
