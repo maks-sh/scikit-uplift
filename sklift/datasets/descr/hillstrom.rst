@@ -48,7 +48,7 @@ Key figures
 ################
 
 * Format: CSV
-* Size: 433KB (compressed) 4935KB (uncompressed)
-* Rows: 64000
+* Size: 433KB (compressed) 4,935KB (uncompressed)
+* Rows: 64,000
 * Response Ratio: part in the 'visit' column: 0.15, part in the "conversion" column: 0.009, the values in the 'spend' column are unevenly distributed from 0.0 to 499.0
 * Treatment Ratio: The parts are distributed evenly between the three classes

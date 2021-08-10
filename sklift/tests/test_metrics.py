@@ -41,28 +41,33 @@ def make_predictions(binary):
 def test_uplift_curve(binary, test_x_actual, test_y_actual):
     y_true, uplift, treatment = make_predictions(binary)
 
-    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
+    if binary == False:
+        with pytest.raises(Exception):
+            x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
+    else:
+        x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
 
-    assert_array_almost_equal(x_actual, test_x_actual)
-    assert_array_almost_equal(y_actual, test_y_actual)
-    assert x_actual.shape == y_actual.shape
+        assert_array_almost_equal(x_actual, test_x_actual)
+        assert_array_almost_equal(y_actual, test_y_actual)
+        assert x_actual.shape == y_actual.shape
 
 
 def test_uplift_curve_hard():
-    y_true, uplift, treatment = make_predictions(binary=True)
-    y_true = np.zeros(y_true.shape)
+    with pytest.raises(Exception):
+        y_true, uplift, treatment = make_predictions(binary=True)
+        y_true = np.zeros(y_true.shape)
 
-    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
+        x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
 
-    assert_array_almost_equal(x_actual, np.array([0, 3]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0, 3]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
 
-    y_true = np.ones(y_true.shape)
+        y_true = np.ones(y_true.shape)
 
-    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
+        x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
 
-    assert_array_almost_equal(x_actual, np.array([0, 3]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0, 3]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
 
 
 @pytest.mark.parametrize(
@@ -74,42 +79,35 @@ def test_uplift_curve_hard():
 )
 def test_perfect_uplift_curve(binary, test_x_actual, test_y_actual):
     y_true, uplift, treatment = make_predictions(binary)
-
-    x_actual, y_actual = perfect_uplift_curve(y_true, treatment)
-
-    assert_array_almost_equal(x_actual, test_x_actual)
-    assert_array_almost_equal(y_actual, test_y_actual)
-    assert x_actual.shape == y_actual.shape
+    if binary == False:
+        with pytest.raises(Exception):
+            x_actual, y_actual = perfect_uplift_curve(y_true, treatment)
+    else:
+        x_actual, y_actual = perfect_uplift_curve(y_true, treatment)
+        assert_array_almost_equal(x_actual, test_x_actual)
+        assert_array_almost_equal(y_actual, test_y_actual)
+        assert x_actual.shape == y_actual.shape
 
 
 def test_perfect_uplift_curve_hard():
-    y_true, uplift, treatment = make_predictions(binary=True)
-    y_true = np.zeros(y_true.shape)
+    with pytest.raises(Exception):
+        y_true, uplift, treatment = make_predictions(binary=True)
+        y_true = np.zeros(y_true.shape)
 
-    x_actual, y_actual = perfect_uplift_curve(y_true, treatment)
+        x_actual, y_actual = perfect_uplift_curve(y_true, treatment)
 
-    assert_array_almost_equal(x_actual, np.array([0, 1, 3]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 0.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0, 1, 3]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 0.0, 0.0]))
 
-    y_true = np.ones(y_true.shape)
+        y_true = np.ones(y_true.shape)
 
-    x_actual, y_actual = perfect_uplift_curve(y_true, treatment)
+        x_actual, y_actual = perfect_uplift_curve(y_true, treatment)
 
-    assert_array_almost_equal(x_actual, np.array([0, 2, 3]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 2.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0, 2, 3]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 2.0, 0.0]))
 
 
 def test_uplift_auc_score():
-    y_true = [1, 1]
-    uplift = [0.1, 0.3]
-    treatment = [0, 1]
-    assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), 1.)
-
-    y_true = [1, 1]
-    uplift = [0.1, 0.3]
-    treatment = [1, 0]
-    assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), -1.)
-
     y_true = [0, 1]
     uplift = [0.1, 0.3]
     treatment = [1, 0]
@@ -120,15 +118,26 @@ def test_uplift_auc_score():
     treatment = [0, 1]
     assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), 1.)
 
-    y_true = [0, 1, 2]
-    uplift = [0.1, 0.3, 0.9]
-    treatment = [0, 1, 0]
-    assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), -1.333333)
+    with pytest.raises(Exception):
+        y_true = [1, 1]
+        uplift = [0.1, 0.3]
+        treatment = [0, 1]
+        assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), 1.)
 
-    y_true = [0, 1, 2]
-    uplift = [0.1, 0.3, 0.9]
-    treatment = [1, 0, 1]
-    assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), 1.333333)
+        y_true = [1, 1]
+        uplift = [0.1, 0.3]
+        treatment = [1, 0]
+        assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), -1.)
+
+        y_true = [0, 1, 2]
+        uplift = [0.1, 0.3, 0.9]
+        treatment = [0, 1, 0]
+        assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), -1.333333)
+
+        y_true = [0, 1, 2]
+        uplift = [0.1, 0.3, 0.9]
+        treatment = [1, 0, 1]
+        assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), 1.333333)
 
 
 @pytest.mark.parametrize(
@@ -141,37 +150,39 @@ def test_uplift_auc_score():
 def test_qini_curve(binary, test_x_actual, test_y_actual):
     y_true, uplift, treatment = make_predictions(binary)
 
-    x_actual, y_actual = qini_curve(y_true, uplift, treatment)
-
-    assert_array_almost_equal(x_actual, test_x_actual)
-    assert_array_almost_equal(y_actual, test_y_actual)
-    assert x_actual.shape == y_actual.shape
+    if binary == False:
+        with pytest.raises(Exception):    
+            x_actual, y_actual = qini_curve(y_true, uplift, treatment)
+    else:
+        x_actual, y_actual = qini_curve(y_true, uplift, treatment)
+        assert_array_almost_equal(x_actual, test_x_actual)
+        assert_array_almost_equal(y_actual, test_y_actual)
+        assert x_actual.shape == y_actual.shape
 
 
 def test_qini_curve_hard():
-    y_true, uplift, treatment = make_predictions(binary=True)
-    y_true = np.zeros(y_true.shape)
+    with pytest.raises(Exception):
+        y_true, uplift, treatment = make_predictions(binary=True)
+        y_true = np.zeros(y_true.shape)
 
-    x_actual, y_actual = qini_curve(y_true, uplift, treatment)
+        x_actual, y_actual = qini_curve(y_true, uplift, treatment)
 
-    assert_array_almost_equal(x_actual, np.array([0, 3]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0, 3]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
 
-    y_true = np.ones(y_true.shape)
+        y_true = np.ones(y_true.shape)
 
-    x_actual, y_actual = qini_curve(y_true, uplift, treatment)
+        x_actual, y_actual = qini_curve(y_true, uplift, treatment)
 
-    assert_array_almost_equal(x_actual, np.array([0, 3]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0, 3]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
 
 
 @pytest.mark.parametrize(
     "binary, negative_effect, test_x_actual, test_y_actual",
     [
         (True, True, np.array([0, 1, 3]), np.array([0., 1., 1.])),
-        (False, True, np.array([0, 1, 2, 3]), np.array([0., 2., 3., 3.])),
         (True, False, np.array([0., 1., 3.]), np.array([0., 1., 1.])),
-        (False, False, np.array([0., 3., 3.]), np.array([0., 3., 3.]))
     ]
 )
 def test_perfect_qini_curve(binary, negative_effect, test_x_actual, test_y_actual):
@@ -185,43 +196,34 @@ def test_perfect_qini_curve(binary, negative_effect, test_x_actual, test_y_actua
 
 
 def test_perfect_qini_curve_hard():
-    y_true, uplift, treatment = make_predictions(binary=True)
-    y_true = np.zeros(y_true.shape)
+    with pytest.raises(Exception):
+        y_true, uplift, treatment = make_predictions(binary=True)
+        y_true = np.zeros(y_true.shape)
 
-    x_actual, y_actual = perfect_qini_curve(y_true, treatment, negative_effect=True)
+        x_actual, y_actual = perfect_qini_curve(y_true, treatment, negative_effect=True)
 
-    assert_array_almost_equal(x_actual, np.array([0, 3]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0, 3]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 0.0]))
 
-    x_actual, y_actual = perfect_qini_curve(y_true, treatment, negative_effect=False)
+        x_actual, y_actual = perfect_qini_curve(y_true, treatment, negative_effect=False)
 
-    assert_array_almost_equal(x_actual, np.array([0., 0., 3.]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 0.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0., 0., 3.]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 0.0, 0.0]))
 
-    y_true = np.ones(y_true.shape)
+        y_true = np.ones(y_true.shape)
 
-    x_actual, y_actual = perfect_qini_curve(y_true, treatment, negative_effect=True)
+        x_actual, y_actual = perfect_qini_curve(y_true, treatment, negative_effect=True)
 
-    assert_array_almost_equal(x_actual, np.array([0, 2, 3]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 2.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0, 2, 3]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 2.0, 0.0]))
 
-    x_actual, y_actual = perfect_qini_curve(y_true, treatment, negative_effect=False)
+        x_actual, y_actual = perfect_qini_curve(y_true, treatment, negative_effect=False)
 
-    assert_array_almost_equal(x_actual, np.array([0., 0., 3.]))
-    assert_array_almost_equal(y_actual, np.array([0.0, 0.0, 0.0]))
+        assert_array_almost_equal(x_actual, np.array([0., 0., 3.]))
+        assert_array_almost_equal(y_actual, np.array([0.0, 0.0, 0.0]))
 
 
 def test_qini_auc_score():
-    y_true = [1, 1]
-    uplift = [0.1, 0.3]
-    treatment = [0, 1]
-    assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), 1.)
-
-    y_true = [1, 1]
-    uplift = [0.1, 0.3]
-    treatment = [1, 0]
-    assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), 0.)
-
     y_true = [0, 1]
     uplift = [0.1, 0.3]
     treatment = [1, 0]
@@ -232,15 +234,26 @@ def test_qini_auc_score():
     treatment = [0, 1]
     assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), 1.)
 
-    y_true = [0, 1, 2]
-    uplift = [0.1, 0.3, 0.9]
-    treatment = [0, 1, 0]
-    assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), -0.5)
+    with pytest.raises(Exception):
+        y_true = [1, 1]
+        uplift = [0.1, 0.3]
+        treatment = [0, 1]
+        assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), 1.)
 
-    y_true = [0, 1, 2]
-    uplift = [0.1, 0.3, 0.9]
-    treatment = [1, 0, 1]
-    assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), 0.75)
+        y_true = [1, 1]
+        uplift = [0.1, 0.3]
+        treatment = [1, 0]
+        assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), 0.)
+
+        y_true = [0, 1, 2]
+        uplift = [0.1, 0.3, 0.9]
+        treatment = [0, 1, 0]
+        assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), -0.5)
+
+        y_true = [0, 1, 2]
+        uplift = [0.1, 0.3, 0.9]
+        treatment = [1, 0, 1]
+        assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), 0.75)
 
 
 def test_uplift_at_k():
