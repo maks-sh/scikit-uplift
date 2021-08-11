@@ -170,7 +170,7 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
         :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification).
     """
 
-    url = 'https://winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
+    url = 'https://sklift.s3.eu-west-2.amazonaws.com/lenta_dataset.csv.gz'
     filename = url.split('/')[-1]
     csv_path = _get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                          dest_filename=filename,
