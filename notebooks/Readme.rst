@@ -10,6 +10,10 @@
 .. |Open In Colab4| image:: https://colab.research.google.com/assets/colab-badge.svg
    :target: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb
 
+.. _Example of usage model from sklift.models in sklearn.model_selection: https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/uplift_model_selection_tutorial.ipynb
+.. |Open In Colab5| image:: https://colab.research.google.com/assets/colab-badge.svg
+   :target: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/uplift_model_selection_tutorial.ipynb
+
 **********
 Tutorials
 **********
@@ -62,3 +66,15 @@ It is better to start scikit-uplift from the basic tutorials.
       - |Open In Colab4|
       - `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__
       - `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__
+
+`Example of usage model from sklift.models in sklearn.model_selection`_
+----------------------------------------------------------------------------------
+
+.. list-table::
+    :align: center
+    :widths: 12 15 10 8
+
+    * - In English 🇬🇧
+      - |Open In Colab5|
+      - `nbviewer <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/uplift_model_selection_tutorial.ipynb>`__
+      - `github <https://github.com/maks-sh/scikit-uplift/blob/master/notebooks/uplift_model_selection_tutorial.ipynb>`__
