@@ -33,13 +33,13 @@ Use the intuitive python API to train uplift models with `sklift.models  <https:
     control_model = CatBoostClassifier(iterations=50, thread_count=3,
                                        random_state=42, silent=True)
 
-    # define approach
-    tm = TwoModels(treatment_model, control_model, method='vanilla')
+    # define metamodel
+    xlearner = TwoModels(treatment_model, control_model, method='ddr')
     # fit model
-    tm = tm.fit(X_train, y_train, treat_train)
+    xlearner = xlearner.fit(X_train, y_train, treat_train)
 
     # predict uplift
-    uplift_preds = tm.predict(X_val)
+    uplift_preds = xlearner.predict(X_val)
 
 Evaluate your uplift model
 ===========================
@@ -56,21 +56,21 @@ Uplift model evaluation metrics are available in `sklift.metrics  <https://www.u
 
 
     # Uplift@30%
-    tm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_preds,
-                                 treatment=treat_val,
-                                 strategy='overall', k=0.3)
+    uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_preds,
+                              treatment=treat_val,
+                              strategy='overall', k=0.3)
 
     # Area Under Qini Curve
-    tm_qini_auc = qini_auc_score(y_true=y_val, uplift=uplift_preds,
-                                 treatment=treat_val)
+    qini_coef = qini_auc_score(y_true=y_val, uplift=uplift_preds,
+                               treatment=treat_val)
 
     # Area Under Uplift Curve
-    tm_uplift_auc = uplift_auc_score(y_true=y_val, uplift=uplift_preds,
-                                     treatment=treat_val)
+    uplift_auc = uplift_auc_score(y_true=y_val, uplift=uplift_preds,
+                                  treatment=treat_val)
 
     # Weighted average uplift
-    tm_wau = weighted_average_uplift(y_true=y_val, uplift=uplift_preds,
-                                     treatment=treat_val)
+    wau = weighted_average_uplift(y_true=y_val, uplift=uplift_preds,
+                                  treatment=treat_val)
 
 Vizualize the results
 ======================
