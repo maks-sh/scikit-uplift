@@ -381,15 +381,15 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
     if treatment_col == 'all':
         treatment_col = treatment_cols
     elif treatment_col not in treatment_cols:
-        raise ValueError(f"treatment_col value must be in {treatment_cols + ['all']}. "
-                         f"Got value {treatment_col}.")
+        raise ValueError(f"The treatment_col must be an element of {treatment_cols + ['all']}. "
+                         f"Got value target_col={treatment_col}.")
 
     target_cols = ['visit', 'conversion']
     if target_col == 'all':
         target_col = target_cols
     elif target_col not in target_cols:
-        raise ValueError(f"target_col value must be from {target_cols + ['all']}. "
-                         f"Got value {target_col}.")
+        raise ValueError(f"The target_col must be an element of {target_cols + ['all']}. "
+                         f"Got value target_col={target_col}.")
 
     if percent10:
         url = 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo10.csv.gz'
@@ -494,8 +494,8 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
     if target_col == 'all':
         target_col = target_cols
     elif target_col not in target_cols:
-        raise ValueError(f"target_col value must be from {target_cols + ['all']}. "
-                         f"Got value {target_col + ['all']}.")
+        raise ValueError(f"The target_col must be an element of {target_cols + ['all']}. "
+                         f"Got value target_col={target_col}.")
 
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
     filename = url.split('/')[-1]
@@ -566,7 +566,7 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
 
 
         dataset = fetch_megafon()
-        data, treatment, target = dataset.data, dataset.treatment, dataset.target
+        data, target, treatment = dataset.data, dataset.target, dataset.treatment
 
         # alternative option
         data, target, treatment = fetch_megafon(return_X_y_t=True)
