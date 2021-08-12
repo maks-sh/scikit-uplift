@@ -2,6 +2,7 @@ name: Python package
 
 on:
   push:
+    branches: [ master ]
   pull_request_target:
 
 jobs:
@@ -10,12 +11,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       USING_COVERAGE_PY: '3.8'
-      USING_COVERAGE_OS: 'ubuntu-latest'
+      USING_COVERAGE_OS: 'macos-latest'
 
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
         python-version: ['3.6', '3.7', '3.8', '3.9']
+        platform: 'x64'
       fail-fast: false
 
     steps:
@@ -53,4 +55,4 @@ jobs:
     - name: Install dependencies
       run: pip install -r docs/requirements.txt
     - name: Run Sphinx
-      run: sphinx-build -b html docs /tmp/_docs_build
+      run: sphinx-build -W -b html docs /tmp/_docs_build
