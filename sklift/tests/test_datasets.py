@@ -10,8 +10,13 @@ from ..datasets import (
     fetch_megafon
 )
 
-clear_data_dir()
+
 fetch_criteo10 = partial(fetch_criteo, percent10=True)
+
+@pytest.fixture(scope="session", autouse=True)
+def clear():
+    # prepare something ahead of all tests
+    clear_data_dir()
 
 
 @pytest.fixture
