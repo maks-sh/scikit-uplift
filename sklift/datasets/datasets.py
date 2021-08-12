@@ -566,7 +566,7 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
 
 
         dataset = fetch_megafon()
-        data, treatment, target = dataset.data, dataset.treatment, dataset.target
+        data, target, treatment = dataset.data, dataset.target, dataset.treatment
 
         # alternative option
         data, target, treatment = fetch_megafon(return_X_y_t=True)
