@@ -23,8 +23,8 @@ Key figures
 ################
 * Format: CSV
 * Size: 554M 
-* Rows: 600 000
-* Average Conversion Rate: .2
+* Rows: 600,000
+* Response Ratio: .2
 * Treatment Ratio: .5
 
 

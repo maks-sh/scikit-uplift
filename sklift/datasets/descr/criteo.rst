@@ -25,8 +25,11 @@ Key figures
 * Format: CSV
 * Size: 297M (compressed) 3,2GB (uncompressed)
 * Rows: 13,979,592
-* Average Visit Rate: .046992
-* Average Conversion Rate: .00292
+* Response Ratio:
+
+    * Average `Visit` Rate: .046992
+    * Average `Conversion` Rate: .00292
+
 * Treatment Ratio: .85
 
 
@@ -35,7 +38,3 @@ This dataset is released along with the paper:
 “*A Large Scale Benchmark for Uplift Modeling*"
 Eustache Diemert, Artem Betlei, Christophe Renaudin; (Criteo AI Lab), Massih-Reza Amini (LIG, Grenoble INP)
 This work was published in: `AdKDD 2018  <https://adkdd-targetad.wixsite.com/2018/>`_ Workshop, in conjunction with KDD 2018.
-
-
-
-
