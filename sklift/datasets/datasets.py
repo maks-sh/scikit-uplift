@@ -582,7 +582,7 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
         :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).
 
     """
-    url_train = 'https://storage.yandexcloud.net/datasouls-ods/static/competitions/megafon_fest2021/train.csv'
+    url_train = 'https://sklift.s3.eu-west-2.amazonaws.com/megafon_dataset.csv.gz'
     file_train = url_train.split('/')[-1]
     csv_train_path = _get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                                dest_filename=file_train,
