@@ -54,19 +54,22 @@ Articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blo
 `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__
 and `Part 3 <https://habr.com/ru/company/ru_mts/blog/538934/>`__.
 
-**Features**:
+Why sklift
+-------------
 
-* Сomfortable and intuitive scikit-learn-like API;
+- Сomfortable and intuitive *scikit-learn*-like API;
 
-* Applying any estimator compatible with scikit-learn (e.g. Xgboost, LightGBM, Catboost, etc.);
+- More uplift metrics than you have ever seen in one place! Include brilliants like  *Area Under Uplift Curve* (AUUC) or *Area Under Qini Curve* (Qini coefficient) with ideal cases;
 
-* All approaches can be used in sklearn.pipeline (see example (`EN <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb>`__ |Open In Colab3|_, `RU <https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb>`__ |Open In Colab4|_));
+- Supporting any estimator compatible with scikit-learn (e.g. Xgboost, LightGBM, Catboost, etc.);
 
-* Almost all implemented approaches solve classification and regression problem;
+- All approaches can be used in the ``sklearn.pipeline``. See the example of usage on `the Tutorials page <https://www.uplift-modeling.com/en/latest/tutorials.html>`__;
 
-* More uplift metrics that you have ever seen in one place! Include brilliants like  *Area Under Uplift Curve* (AUUC) or *Area Under Qini Curve* (Qini coefficient) with ideal cases;
+- Also metrics are compatible with the classes from ``sklearn.model_selection``. See the example of usage on `the Tutorials page <https://www.uplift-modeling.com/en/latest/tutorials.html>`__;
 
-* Nice and useful viz for analyzing a performance model.
+- Almost all implemented approaches solve classification and regression problems;
+
+- Nice and useful viz for analysing a performance model.
 
 Installation
 -------------
@@ -123,13 +126,13 @@ Use the intuitive python API to train uplift models with `sklift.models  <https:
     control_model = CatBoostClassifier(iterations=50, thread_count=3,
                                        random_state=42, silent=True)
 
-    # define approach
-    tm = TwoModels(treatment_model, control_model, method='vanilla')
+    # define metamodel
+    xlearner = TwoModels(treatment_model, control_model, method='ddr')
     # fit model
-    tm = tm.fit(X_train, y_train, treat_train)
+    xlearner = xlearner.fit(X_train, y_train, treat_train)
 
     # predict uplift
-    uplift_preds = tm.predict(X_val)
+    uplift_preds = xlearner.predict(X_val)
 
 **Evaluate your uplift model**
 
@@ -144,17 +147,17 @@ Uplift model evaluation metrics are available in `sklift.metrics  <https://www.u
 
 
     # Uplift@30%
-    tm_uplift_at_k = uplift_at_k(y_true=y_val, uplift=uplift_preds, treatment=treat_val,
+    uplift_at_30 = uplift_at_k(y_true=y_val, uplift=uplift_preds, treatment=treat_val,
                                  strategy='overall', k=0.3)
 
     # Area Under Qini Curve
-    tm_qini_auc = qini_auc_score(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
+    qini_coef = qini_auc_score(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
 
     # Area Under Uplift Curve
-    tm_uplift_auc = uplift_auc_score(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
+    uplift_auc = uplift_auc_score(y_true=y_val, uplift=uplift_preds, treatment=treat_val)
 
     # Weighted average uplift
-    tm_wau = weighted_average_uplift(y_true=y_val, uplift=uplift_preds,  treatment=treat_val)
+    wau = weighted_average_uplift(y_true=y_val, uplift=uplift_preds,  treatment=treat_val)
 
 **Vizualize the results**
 
