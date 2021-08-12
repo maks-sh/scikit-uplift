@@ -107,18 +107,10 @@ def test_fetch_hillstrom(
     assert data.treatment.shape == hillstrom_dataset['treatment.shape']
 
 
-def check_return_X_y_t(bunch, dataset_func):
-    X_y_t_tuple = dataset_func(return_X_y_t=True)
-    assert isinstance(X_y_t_tuple, tuple)
-    assert X_y_t_tuple[0].shape == bunch.data.shape
-    assert X_y_t_tuple[1].shape == bunch.target.shape
-    assert X_y_t_tuple[2].shape == bunch.treatment.shape
-
-
 @pytest.fixture
 def megafon_dataset() -> dict:
     data = {'keys': ['data', 'target', 'treatment', 'DESCR', 'feature_names', 'target_name', 'treatment_name'],
-            'data.shape': (600000, 51), 'target.shape': (600000,), 'treatment.shape': (600000,)}
+            'data.shape': (600000, 50), 'target.shape': (600000,), 'treatment.shape': (600000,)}
     return data
 
 
@@ -129,6 +121,14 @@ def test_fetch_megafon(megafon_dataset):
     assert data.data.shape == megafon_dataset['data.shape']
     assert data.target.shape == megafon_dataset['target.shape']
     assert data.treatment.shape == megafon_dataset['treatment.shape']
+
+
+def check_return_X_y_t(bunch, dataset_func):
+    X_y_t_tuple = dataset_func(return_X_y_t=True)
+    assert isinstance(X_y_t_tuple, tuple)
+    assert X_y_t_tuple[0].shape == bunch.data.shape
+    assert X_y_t_tuple[1].shape == bunch.target.shape
+    assert X_y_t_tuple[2].shape == bunch.treatment.shape
 
 
 @pytest.mark.parametrize("fetch_func", [fetch_hillstrom, fetch_criteo10, fetch_lenta, fetch_megafon])
