@@ -12,7 +12,7 @@ def get_data_dir():
 
     This folder is used by some large dataset loaders to avoid downloading the data several times.
 
-    By default the data dir is set to a folder named ‘scikit_learn_data’ in the user home folder.
+    By default the data dir is set to a folder named ``scikit-uplift-data`` in the user home folder.
 
     Returns:
         string: The path to scikit-uplift data dir.
@@ -66,7 +66,7 @@ def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing,
         dest_filename (str): The name of the dataset.
         download_if_missing (bool): If False, raise a IOError if the data is not locally available instead of
             trying to download the data from the source site.
-        content_length_header (str): The key in the HTTP response headers that lists the response size in bytes.
+        content_length_header_key (str): The key in the HTTP response headers that lists the response size in bytes.
             Used for progress bar.
 
     Returns:
