@@ -189,7 +189,7 @@ def plot_qini_curve(y_true, uplift, treatment,
 
     auc = qini_auc_score(y_true, uplift, treatment, negative_effect)
 
-    return viz.plot(auc, ax=ax, title="plot_qini_curve", **kwargs)
+    return viz.plot(auc, ax=ax, title="AUC", **kwargs)
 
 
 def plot_uplift_curve(y_true, uplift, treatment,
@@ -240,7 +240,7 @@ def plot_uplift_curve(y_true, uplift, treatment,
 
     auc = uplift_auc_score(y_true, uplift, treatment)
 
-    return viz.plot(auc, ax=ax, title="plot_uplift_curve", **kwargs)
+    return viz.plot(auc, ax=ax, title="AUC", **kwargs)
 
 
 def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
