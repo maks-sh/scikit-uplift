@@ -35,23 +35,23 @@ def test_fetch_lenta(lenta_dataset):
     assert data.treatment.shape == lenta_dataset['treatment.shape']
 
 
-@pytest.fixture
-def x5_dataset() -> dict:
-    data = {'keys': ['data', 'target', 'treatment', 'DESCR', 'feature_names', 'target_name', 'treatment_name'],
-            'data.keys': ['clients', 'train', 'purchases'], 'clients.shape': (400162, 5),
-            'train.shape': (200039, 1), 'target.shape': (200039,), 'treatment.shape': (200039,)}
-    return data
-
-
-def test_fetch_x5(x5_dataset):
-    data = fetch_x5()
-    assert isinstance(data, sklearn.utils.Bunch)
-    assert set(data.keys()) == set(x5_dataset['keys'])
-    assert set(data.data.keys()) == set(x5_dataset['data.keys'])
-    assert data.data.clients.shape == x5_dataset['clients.shape']
-    assert data.data.train.shape == x5_dataset['train.shape']
-    assert data.target.shape == x5_dataset['target.shape']
-    assert data.treatment.shape == x5_dataset['treatment.shape']
+# @pytest.fixture
+# def x5_dataset() -> dict:
+#     data = {'keys': ['data', 'target', 'treatment', 'DESCR', 'feature_names', 'target_name', 'treatment_name'],
+#             'data.keys': ['clients', 'train', 'purchases'], 'clients.shape': (400162, 5),
+#             'train.shape': (200039, 1), 'target.shape': (200039,), 'treatment.shape': (200039,)}
+#     return data
+#
+#
+# def test_fetch_x5(x5_dataset):
+#     data = fetch_x5()
+#     assert isinstance(data, sklearn.utils.Bunch)
+#     assert set(data.keys()) == set(x5_dataset['keys'])
+#     assert set(data.data.keys()) == set(x5_dataset['data.keys'])
+#     assert data.data.clients.shape == x5_dataset['clients.shape']
+#     assert data.data.train.shape == x5_dataset['train.shape']
+#     assert data.target.shape == x5_dataset['target.shape']
+#     assert data.treatment.shape == x5_dataset['treatment.shape']
 
 
 @pytest.fixture
