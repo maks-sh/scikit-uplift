@@ -124,9 +124,15 @@ class UpliftCurveDisplay:
         ax.set_xlabel('Number targeted')
         ax.set_ylabel('Number of incremental outcome')
 
-        if len(ax.lines) > 3:
+        if self.random == self.perfect:
+            variance = False
+        else:
+            variance = True
+
+        if len(ax.lines) > 4:
             ax.lines.pop(len(ax.lines) - 1)
-            ax.lines.pop(len(ax.lines) - 1)
+            if variance == False:
+                ax.lines.pop(len(ax.lines) - 1)
 
         if "label" in line_kwargs:
             ax.legend(loc=u'upper left', bbox_to_anchor=(1, 1))
@@ -155,6 +161,18 @@ def plot_qini_curve(y_true, uplift, treatment,
 
     Returns:
         Object that stores computed values.
+
+    Example::
+
+        from sklift.viz import plot_qini_curve
+
+
+        qini_disp = plot_qini_curve(
+            y_test, uplift_predicted, trmnt_test,
+            perfect=True, name='Model name'
+        );
+
+        qini_disp.figure_.suptitle("Qini curve");
     """
     check_matplotlib_support('plot_qini_curve')
     check_consistent_length(y_true, uplift, treatment)
@@ -207,6 +225,18 @@ def plot_uplift_curve(y_true, uplift, treatment,
 
     Returns:
         Object that stores computed values.
+
+    Example::
+
+        from sklift.viz import plot_uplift_curve
+
+
+        uplift_disp = plot_uplift_curve(
+            y_test, uplift_predicted, trmnt_test,
+            perfect=True, name='Model name'
+        );
+
+        uplift_disp.figure_.suptitle("Uplift curve");
     """
     check_matplotlib_support('plot_uplift_curve')
     check_consistent_length(y_true, uplift, treatment)
