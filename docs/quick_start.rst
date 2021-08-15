@@ -98,7 +98,7 @@ Visualize performance metrics with `sklift.viz  <https://www.uplift-modeling.com
     );
 
 .. image:: _static/images/quick_start_qini.png
-    :alt: Example of model's qini curve, perfect qini curve and random qini curve
+    :alt: Example of some models qini curves, perfect qini curve and random qini curve
 
 
 .. code-block:: python
@@ -121,7 +121,7 @@ Visualize performance metrics with `sklift.viz  <https://www.uplift-modeling.com
     );
 
 .. image:: _static/images/quick_start_uplift.png
-    :alt: Example of model's uplift curve, perfect uplift curve and random uplift curve
+    :alt: Example of some uplift curves, perfect uplift curve and random uplift curve
 
 .. code-block:: python
     :linenos:
@@ -132,4 +132,4 @@ Visualize performance metrics with `sklift.viz  <https://www.uplift-modeling.com
                               treatment=treat_val, kind='bar')
 
 .. image:: _static/images/quick_start_wau.png
-    :alt: Uplift by percentile
+    :alt: Uplift by percentile visualization
