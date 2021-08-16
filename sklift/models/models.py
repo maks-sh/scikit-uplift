@@ -1,4 +1,3 @@
-import warnings
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
@@ -247,13 +246,6 @@ class ClassTransformation(BaseEstimator):
 
         if self._type_of_target != 'binary':
             raise ValueError("This approach is only suitable for binary classification problem")
-        _, treatment_counts = np.unique(treatment, return_counts=True)
-        if treatment_counts[0] != treatment_counts[1]:
-            warnings.warn(
-                "It is recommended to use this approach on treatment balanced data. Current sample size is unbalanced.",
-                category=UserWarning,
-                stacklevel=2
-            )
 
         y_mod = (np.array(y) == np.array(treatment)).astype(int)
 
