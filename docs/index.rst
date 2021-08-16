@@ -2,7 +2,7 @@
 .. _Open In Colab3: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_EN.ipynb
 
 .. |Open In Colab4| image:: https://colab.research.google.com/assets/colab-badge.svg
-.. _Open In Colab4: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/pipeline_usage_RU.ipynb
+.. _Open In Colab4: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/uplift_model_selection_tutorial.ipynb
 
 **************
 scikit-uplift
@@ -22,33 +22,35 @@ The main idea is to provide easy-to-use and fast python package for uplift model
 
 * Select a tiny group of customers in the campaign where a price per customer is high.
 
-Read more about *uplift modeling* problem in `User Guide <https://www.uplift-modeling.com/en/latest/user_guide/index.html>`__,
+Read more about *uplift modeling* problem in :ref:`the User Guide <user_guide>`.
 
 Articles in russian on habr.com: `Part 1 <https://habr.com/ru/company/ru_mts/blog/485980/>`__ ,
 `Part 2 <https://habr.com/ru/company/ru_mts/blog/485976/>`__
 and `Part 3 <https://habr.com/ru/company/ru_mts/blog/538934/>`__.
 
-Features
-#########
+Why sklift
+#############
 
-- Сomfortable and intuitive scikit-learn-like API;
+- Сomfortable and intuitive *scikit-learn*-like API;
 
-- Applying any estimator compatible with scikit-learn (e.g. Xgboost, LightGBM, Catboost, etc.);
+- More uplift metrics than you have ever seen in one place! Include brilliants like  *Area Under Uplift Curve* (AUUC) or *Area Under Qini Curve* (Qini coefficient) with ideal cases;
 
-- All approaches can be used in `sklearn.pipeline`. See the example of usage: |Open In Colab3|_;
+- Supporting any estimator compatible with scikit-learn (e.g. Xgboost, LightGBM, Catboost, etc.);
 
-- Almost all implemented approaches solve classification and regression problem;
+- All approaches can be used in the ``sklearn.pipeline``. See the example of usage on `the Tutorials page <https://www.uplift-modeling.com/en/latest/tutorials.html>`__;
 
-- More uplift metrics that you have ever seen in one place! Include brilliants like  *Area Under Uplift Curve* (AUUC) or *Area Under Qini Curve* (Qini coefficient) with ideal cases;
+- Also metrics are compatible with the classes from ``sklearn.model_selection``. See the example of usage on `the Tutorials page <https://www.uplift-modeling.com/en/latest/tutorials.html>`__;
 
-- Nice and useful viz for analyzing a performance model.
+- Almost all implemented approaches solve classification and regression problems;
+
+- Nice and useful viz for analysing a performance model.
 
 
 **The package currently supports the following methods:**
 
-1. Solo Model (aka Treatment Dummy and Treatment interaction) approach
+1. Solo Model (aka S-learner or Treatment Dummy, Treatment interaction) approach
 2. Class Transformation (aka Class Variable Transformation or Revert Label) approach
-3. Two Models (aka naïve approach, or difference score method, or double classifier approach) approach, including Dependent Data Representation
+3. Two Models (aka X-learner, or naïve approach, or difference score method, or double classifier approach) approach, including Dependent Data Representation
 
 **And the following metrics:**
 

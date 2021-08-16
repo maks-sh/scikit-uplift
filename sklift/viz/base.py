@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.utils.validation import check_consistent_length
+from sklearn.utils import check_matplotlib_support
 
 from ..utils import check_is_binary
 from ..metrics import (
@@ -57,53 +58,97 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     return axes
 
 
-def plot_uplift_curve(y_true, uplift, treatment, random=True, perfect=True):
-    """Plot Uplift curves from predictions.
+class UpliftCurveDisplay:
+    """Qini and Uplift curve visualization.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
-        uplift (1d array-like): Predicted uplift, as returned by a model.
-        treatment (1d array-like): Treatment labels.
-        random (bool): Draw a random curve. Default is True.
-        perfect (bool): Draw a perfect curve. Default is True.
-
-    Returns:
-        Object that stores computed values.
+        x_actual, y_actual (array (shape = [>2]), array (shape = [>2])): Points on a curve
+        x_baseline, y_baseline (array (shape = [>2]), array (shape = [>2])): Points on a random curve
+        x_perfect, y_perfect (array (shape = [>2]), array (shape = [>2])): Points on a perfect curve
+        random (bool): Plotting a random curve
+        perfect (bool): Plotting a perfect curve
+        estimator_name (str): Name of estimator. If None, the estimator name is not shown.
     """
 
-    check_consistent_length(y_true, uplift, treatment)
-    check_is_binary(treatment)
-    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+    def __init__(self, x_actual, y_actual, x_baseline=None,
+                 y_baseline=None, x_perfect=None, y_perfect=None,
+                 random=None, perfect=None, estimator_name=None):
+        self.x_actual = x_actual
+        self.y_actual = y_actual
+        self.x_baseline = x_baseline
+        self.y_baseline = y_baseline
+        self.x_perfect = x_perfect
+        self.y_perfect = y_perfect
+        self.random = random
+        self.perfect = perfect
+        self.estimator_name = estimator_name
 
-    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
+    def plot(self, auc_score, ax=None, name=None, title=None, **kwargs):
+        """Plot visualization
 
-    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
-    ax.plot(x_actual, y_actual, label='Model', color='blue')
+        Args:
+            auc_score (float): Area under curve.§
+            ax (matplotlib axes): Axes object to plot on. If `None`, a new figure and axes is created. Default is None.
+            name (str): Name of ROC Curve for labeling. If `None`, use the name of the estimator. Default is None.
+            title (str): Title plot. Default is None.
 
-    if random:
-        x_baseline, y_baseline = x_actual, x_actual * \
-            y_actual[-1] / len(y_true)
-        ax.plot(x_baseline, y_baseline, label='Random', color='black')
-        ax.fill_between(x_actual, y_actual, y_baseline, alpha=0.2, color='b')
+        Returns:
+            Object that stores computed values
+        """
+        check_matplotlib_support('UpliftCurveDisplay.plot')
 
-    if perfect:
-        x_perfect, y_perfect = perfect_uplift_curve(y_true, treatment)
-        ax.plot(x_perfect, y_perfect, label='Perfect', color='Red')
+        name = self.estimator_name if name is None else name
 
-    ax.legend(loc='lower right')
-    ax.set_title(
-        f'Uplift curve\nuplift_auc_score={uplift_auc_score(y_true, uplift, treatment):.4f}')
-    ax.set_xlabel('Number targeted')
-    ax.set_ylabel('Gain: treatment - control')
+        line_kwargs = {}
+        if auc_score is not None and name is not None:
+            line_kwargs["label"] = f"{name} ({title} = {auc_score:0.2f})"
+        elif auc_score is not None:
+            line_kwargs["label"] = f"{title} = {auc_score:0.2f}"
+        elif name is not None:
+            line_kwargs["label"] = name
 
-    return ax
+        line_kwargs.update(**kwargs)
+
+        if ax is None:
+            fig, ax = plt.subplots()
+
+        self.line_, = ax.plot(self.x_actual, self.y_actual, **line_kwargs)
+
+        if self.random:
+            ax.plot(self.x_baseline, self.y_baseline, label="Random")
+            ax.fill_between(self.x_actual, self.y_actual, self.y_baseline, alpha=0.2)
+
+        if self.perfect:
+            ax.plot(self.x_perfect, self.y_perfect, label="Perfect")
+
+        ax.set_xlabel('Number targeted')
+        ax.set_ylabel('Number of incremental outcome')
+
+        if self.random == self.perfect:
+            variance = False
+        else:
+            variance = True
+
+        if len(ax.lines) > 4:
+            ax.lines.pop(len(ax.lines) - 1)
+            if variance == False:
+                ax.lines.pop(len(ax.lines) - 1)
+
+        if "label" in line_kwargs:
+            ax.legend(loc=u'upper left', bbox_to_anchor=(1, 1))
+
+        self.ax_ = ax
+        self.figure_ = ax.figure
+
+        return self
 
 
-def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negative_effect=True):
+def plot_qini_curve(y_true, uplift, treatment,
+                    random=True, perfect=True, negative_effect=True, ax=None, name=None, **kwargs):
     """Plot Qini curves from predictions.
 
     Args:
-        y_true (1d array-like): Ground truth (correct) labels.
+        y_true (1d array-like): Ground truth (correct) binary labels.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         random (bool): Draw a random curve. Default is True.
@@ -111,38 +156,121 @@ def plot_qini_curve(y_true, uplift, treatment, random=True, perfect=True, negati
         negative_effect (bool): If True, optimum Qini Curve contains the negative effects
             (negative uplift because of campaign). Otherwise, optimum Qini Curve will not
             contain the negative effects. Default is True.
+        ax (object): The graph on which the function will be built. Default is None.
+        name (string): The name of the function. Default is None.
 
     Returns:
         Object that stores computed values.
-    """
 
+    Example::
+
+        from sklift.viz import plot_qini_curve
+
+
+        qini_disp = plot_qini_curve(
+            y_test, uplift_predicted, trmnt_test,
+            perfect=True, name='Model name'
+        );
+
+        qini_disp.figure_.suptitle("Qini curve");
+    """
+    check_matplotlib_support('plot_qini_curve')
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
+
     y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
-
-    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
-
     x_actual, y_actual = qini_curve(y_true, uplift, treatment)
-    ax.plot(x_actual, y_actual, label='Model', color='blue')
 
     if random:
-        x_baseline, y_baseline = x_actual, x_actual * \
-            y_actual[-1] / len(y_true)
-        ax.plot(x_baseline, y_baseline, label='Random', color='black')
-        ax.fill_between(x_actual, y_actual, y_baseline, alpha=0.2, color='b')
+        x_baseline, y_baseline = x_actual, x_actual * y_actual[-1] / len(y_true)
+    else:
+        x_baseline, y_baseline = None, None
 
     if perfect:
         x_perfect, y_perfect = perfect_qini_curve(
             y_true, treatment, negative_effect)
-        ax.plot(x_perfect, y_perfect, label='Perfect', color='Red')
+    else:
+        x_perfect, y_perfect = None, None
 
-    ax.legend(loc='lower right')
-    ax.set_title(
-        f'Qini curve\nqini_auc_score={qini_auc_score(y_true, uplift, treatment, negative_effect):.4f}')
-    ax.set_xlabel('Number targeted')
-    ax.set_ylabel('Number of incremental outcome')
+    viz = UpliftCurveDisplay(
+        x_actual=x_actual,
+        y_actual=y_actual,
+        x_baseline=x_baseline,
+        y_baseline=y_baseline,
+        x_perfect=x_perfect,
+        y_perfect=y_perfect,
+        random=random,
+        perfect=perfect,
+        estimator_name=name,
+    )
 
-    return ax
+    auc = qini_auc_score(y_true, uplift, treatment, negative_effect)
+
+    return viz.plot(auc, ax=ax, title="AUC", **kwargs)
+
+
+def plot_uplift_curve(y_true, uplift, treatment,
+                      random=True, perfect=True, ax=None, name=None, **kwargs):
+    """Plot Uplift curves from predictions.
+
+    Args:
+        y_true (1d array-like): Ground truth (correct) binary labels.
+        uplift (1d array-like): Predicted uplift, as returned by a model.
+        treatment (1d array-like): Treatment labels.
+        random (bool): Draw a random curve. Default is True.
+        perfect (bool): Draw a perfect curve. Default is True.
+        ax (object): The graph on which the function will be built. Default is None.
+        name (string): The name of the function. Default is None.
+
+    Returns:
+        Object that stores computed values.
+
+    Example::
+
+        from sklift.viz import plot_uplift_curve
+
+
+        uplift_disp = plot_uplift_curve(
+            y_test, uplift_predicted, trmnt_test,
+            perfect=True, name='Model name'
+        );
+
+        uplift_disp.figure_.suptitle("Uplift curve");
+    """
+    check_matplotlib_support('plot_uplift_curve')
+    check_consistent_length(y_true, uplift, treatment)
+    check_is_binary(treatment)
+    check_is_binary(y_true)
+
+    y_true, uplift, treatment = np.array(y_true), np.array(uplift), np.array(treatment)
+    x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
+
+    if random:
+        x_baseline, y_baseline = x_actual, x_actual * y_actual[-1] / len(y_true)
+    else:
+        x_baseline, y_baseline = None, None
+
+    if perfect:
+        x_perfect, y_perfect = perfect_uplift_curve(y_true, treatment)
+    else:
+        x_perfect, y_perfect = None, None
+
+    viz = UpliftCurveDisplay(
+        x_actual=x_actual,
+        y_actual=y_actual,
+        x_baseline=x_baseline,
+        y_baseline=y_baseline,
+        x_perfect=x_perfect,
+        y_perfect=y_perfect,
+        random=random,
+        perfect=perfect,
+        estimator_name=name,
+    )
+
+    auc = uplift_auc_score(y_true, uplift, treatment)
+
+    return viz.plot(auc, ax=ax, title="AUC", **kwargs)
 
 
 def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
@@ -154,7 +282,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
     Uplift score is a difference between treatment response rate and control response rate.
 
     Args:
-        y_true (1d array-like): Correct (true) target values.
+        y_true (1d array-like): Correct (true) binary target values.
         uplift (1d array-like): Predicted uplift, as returned by a model.
         treatment (1d array-like): Treatment labels.
         strategy (string, ['overall', 'by_group']): Determines the calculating strategy. Default is 'overall'.
@@ -186,6 +314,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
 
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
+    check_is_binary(y_true)
     n_samples = len(y_true)
 
     if strategy not in strategy_methods:
@@ -278,7 +407,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
 
         if string_percentiles:  # string percentiles for plotting
             percentiles_str = [f"0-{percentiles[0]:.0f}"] + \
-                          [f"{percentiles[i]:.0f}-{percentiles[i + 1]:.0f}" for i in range(len(percentiles) - 1)]
+                              [f"{percentiles[i]:.0f}-{percentiles[i + 1]:.0f}" for i in range(len(percentiles) - 1)]
             axes[1].set_xticks(percentiles)
             axes[1].set_xticklabels(percentiles_str, rotation=45)
 

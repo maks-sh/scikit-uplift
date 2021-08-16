@@ -3,29 +3,67 @@ name: Python package
 on:
   push:
     branches: [ master ]
-  pull_request:
-    
+  pull_request_target:
 
 jobs:
   test:
     name: Check tests
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ${{ matrix.os }}
+    env:
+      # fix the python version and the operating system for codecoverage commentator
+      USING_COVERAGE_PY: '3.8'
+      USING_COVERAGE_OS: 'ubuntu-latest'
+    outputs:
+      # fix the results of pytest for unix
+      output1: ${{ steps.pytest.outputs.exit_code }}
+
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+        python-version: ['3.6', '3.7', '3.8', '3.9']
+      # GitHub does not cancel all in-progress jobs if any matrix job fails
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies and lints
-      run: pip install pytest .[tests]
-    - name: Run PyTest
-      run: pytest
+      - uses: actions/checkout@v2
+      # Install python
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      # Update pip and install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install . -r test_requirements.txt -r requirements.txt
+      # Pytest in windows
+      - name: Run PyTest windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          pytest | tee pytest-coverage.txt
+      # Pytest in unix. Exit code of this run captures the exit status of tee and not of pytest
+      # So, use $PIPESTATUS that holds the exit status of each command in pipeline
+      - name: Run PyTest unix
+        if: ${{ matrix.os != 'windows-latest' }}
+        id: pytest
+        run: |
+          pytest | tee pytest-coverage.txt;
+          exit_code=${PIPESTATUS[0]};
+          echo "::set-output name=exit_code::$exit_code"
+      # Сomment on the results of the test coverage
+      - name: Comment coverage
+        if: contains(env.USING_COVERAGE_PY, matrix.python-version) && contains(env.USING_COVERAGE_OS, matrix.os)
+        uses: MishaKav/pytest-coverage-comment@v1.1.6
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
+      # For unix workflow should have failed if exit code of pytest were 1
+      - name: Check fail of pytest unix
+        if: ${{ matrix.os != 'windows-latest' && steps.pytest.outputs.exit_code == 1 }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('Some tests failed!')
 
   check_sphinx_build:
     name: Check Sphinx build for docs
@@ -34,15 +72,15 @@ jobs:
       matrix:
         python-version: [3.8]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Update pip
-      run: python -m pip install --upgrade pip
-    - name: Install dependencies
-      run: pip install -r docs/requirements.txt
-    - name: Run Sphinx
-      run: sphinx-build -b html docs /tmp/_docs_build
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Update pip and install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r docs/requirements.txt -r requirements.txt
+      - name: Run Sphinx
+        run: sphinx-build -W -b html docs /tmp/_docs_build
