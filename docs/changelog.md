@@ -10,17 +10,17 @@
 
 ## Version 0.3.2
 
-### [sklift.datasets](https://www.uplift-modeling.com/en/v0.3.1/api/datasets/index.html)
+### [sklift.datasets](https://www.uplift-modeling.com/en/v0.3.2/api/datasets/index.html)
 
-* 🔨 Fix bug in [fetch_x5](https://www.uplift-modeling.com/en/v0.3.1/api/datasets/fetch_x5.html) function by [@Muhamob](https://github.com/Muhamob).
+* 🔨 Fix bug in [fetch_x5](https://www.uplift-modeling.com/en/v0.3.2/api/datasets/fetch_x5.html) function by [@Muhamob](https://github.com/Muhamob).
 
-### [sklift.metrics](https://www.uplift-modeling.com/en/v0.3.1/api/index/metrics.html)
+### [sklift.metrics](https://www.uplift-modeling.com/en/v0.3.2/api/index/metrics.html)
 
-* 📝 Fix docstring in [uplift_by_percentile](https://www.uplift-modeling.com/en/v0.3.1/api/metrics/uplift_by_percentile.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
+* 📝 Fix docstring in [uplift_by_percentile](https://www.uplift-modeling.com/en/v0.3.2/api/metrics/uplift_by_percentile.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
 
-### [sklift.viz](https://www.uplift-modeling.com/en/v0.3.1/api/viz/index.html)
+### [sklift.viz](https://www.uplift-modeling.com/en/v0.3.2/api/viz/index.html)
 
-* 🔨 Fix bug in [plot_uplift_preds](https://www.uplift-modeling.com/en/v0.3.1/api/viz/plot_uplift_preds.html) function by [@bwbelljr](https://github.com/bwbelljr).
+* 🔨 Fix bug in [plot_uplift_preds](https://www.uplift-modeling.com/en/v0.3.2/api/viz/plot_uplift_preds.html) function by [@bwbelljr](https://github.com/bwbelljr).
 
 ### Miscellaneous
 

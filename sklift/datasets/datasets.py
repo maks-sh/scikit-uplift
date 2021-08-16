@@ -12,7 +12,7 @@ def get_data_dir():
 
     This folder is used by some large dataset loaders to avoid downloading the data several times.
 
-    By default the data dir is set to a folder named ‘scikit_learn_data’ in the user home folder.
+    By default the data dir is set to a folder named ``scikit-uplift-data`` in the user home folder.
 
     Returns:
         string: The path to scikit-uplift data dir.
@@ -66,7 +66,7 @@ def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing,
         dest_filename (str): The name of the dataset.
         download_if_missing (bool): If False, raise a IOError if the data is not locally available instead of
             trying to download the data from the source site.
-        content_length_header (str): The key in the HTTP response headers that lists the response size in bytes.
+        content_length_header_key (str): The key in the HTTP response headers that lists the response size in bytes.
             Used for progress bar.
 
     Returns:
@@ -226,7 +226,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
                 * ``purchases`` (ndarray or DataFrame object): clients’ purchase history prior to communication.
             * ``target`` (Series object): Column target by values.
             * ``treatment`` (Series object): Column treatment by values.
-            * ``DESCR`` (str): Description of the Lenta dataset.
+            * ``DESCR`` (str): Description of the X5 dataset.
             * ``feature_names`` (Bunch object): Names of the features.
             * ``target_name`` (str): Name of the target.
             * ``treatment_name`` (str): Name of the treatment.
@@ -343,7 +343,7 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
                 * ``data`` (DataFrame object): Dataset without target and treatment.
                 * ``target`` (Series or DataFrame object): Column target by values.
                 * ``treatment`` (Series or DataFrame object): Column treatment by values.
-                * ``DESCR`` (str): Description of the Lenta dataset.
+                * ``DESCR`` (str): Description of the Criteo dataset.
                 * ``feature_names`` (list): Names of the features.
                 * ``target_name`` (str list): Name of the target.
                 * ``treatment_name`` (str or list): Name of the treatment.
@@ -458,7 +458,7 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
                 * ``data`` (DataFrame object): Dataset without target and treatment.
                 * ``target`` (Series or DataFrame object): Column target by values.
                 * ``treatment`` (Series object): Column treatment by values.
-                * ``DESCR`` (str): Description of the Lenta dataset.
+                * ``DESCR`` (str): Description of the Hillstrom dataset.
                 * ``feature_names`` (list): Names of the features.
                 * ``target_name`` (str or list): Name of the target.
                 * ``treatment_name`` (str): Name of the treatment.
@@ -552,7 +552,7 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
                 * ``data`` (DataFrame object): Dataset without target and treatment.
                 * ``target`` (Series object): Column target by values.
                 * ``treatment`` (Series object): Column treatment by values.
-                * ``DESCR`` (str): Description of the Lenta dataset.
+                * ``DESCR`` (str): Description of the Megafon dataset.
                 * ``feature_names`` (list): Names of the features.
                 * ``target_name`` (str): Name of the target.
                 * ``treatment_name`` (str): Name of the treatment.
@@ -588,7 +588,6 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
                                dest_filename=file_train,
                                download_if_missing=download_if_missing)
     train = pd.read_csv(csv_train_path)
-    train_features = list(train.columns)
 
     target_col = 'conversion'
     treatment_col = 'treatment_group'
