@@ -110,7 +110,7 @@ Key figures
 
 * Format: CSV
 * Size: 153M (compressed) 567M (uncompressed)
-* Rows: 687 029
-* Response Ratio: 0.1
-* Treatment Ratio: 0.75
+* Rows: 687,029
+* Response Ratio: .1
+* Treatment Ratio: .75
 

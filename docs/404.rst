@@ -1,8 +1,10 @@
+:orphan:
+
 *******************
 404 Page Not Found
 *******************
 
-.. image:: ../../_static/images/sklift_404.png
+.. image:: _static/images/sklift_404.png
    :alt: 404 Page not found
    :align: center
    :width: 250 px

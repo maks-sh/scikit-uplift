@@ -8,19 +8,43 @@
 * 🔨 something that previously didn’t work as documented – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
+## Version 0.4.0
+
+### [sklift.metrics](https://www.uplift-modeling.com/en/v0.4.0/api/index/metrics.html)
+
+* 🔥 Add [make_uplift_scorer](https://www.uplift-modeling.com/en/v0.4.0/api/metrics/make_uplift_scorer.html) function for interacting with the module ``sklearn.model_selection``  by [@wrapper228](https://github.com/wrapper228).
+* 🔥 Add new metric [average_squared_deviation](https://www.uplift-modeling.com/en/v0.4.0/api/metrics/average_squared_deviation.html) function by [@Mogby](https://github.com/Mogby).
+
+### [sklift.viz](https://www.uplift-modeling.com/en/v0.4.0/api/viz/index.html)
+
+* 🔥 Added the ability to draw multiple plot on the same graph of [plot_uplift_curve](https://www.uplift-modeling.com/en/v0.4.0/api/viz/plot_uplift_curve.html) function and [plot_qini_curve](https://www.uplift-modeling.com/en/v0.4.0/api/viz/plot_qini_curve.html) function by [@flashlight101](https://github.com/flashlight101).
+
+### [sklift.datasets](https://www.uplift-modeling.com/en/v0.4.0/api/datasets/index.html)
+
+* 💥 Add new dataset [fetch_megafon](https://www.uplift-modeling.com/en/v0.4.0/api/datasets/fetch_megafon.html) function by [@ezhdi](https://github.com/ezhdi).
+* 📝 Improve documentation of [sklift.datasets](https://www.uplift-modeling.com/en/v0.4.0/api/datasets/index.html) by [@flashlight101](https://github.com/flashlight101) and [@ezhdi](https://github.com/ezhdi).
+
+
+### Miscellaneous
+
+* 💥 Add new tutorial [Example of usage model from sklift.models in sklearn.model_selection](https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/uplift_model_selection_tutorial.ipynb) by [@wrapper228](https://github.com/wrapper228).
+* 💥 Increased test coverage from 30% to 82% by [@flashlight101](https://github.com/flashlight101) and [@Ksyula](https://github.com/Ksyula)
+* 📝 Add EDA of available datasets on [Tutorials](https://www.uplift-modeling.com/en/v0.4.0/tutorials.html) page by [@lyutov89](https://github.com/lyutov89), [@ezhdi](https://github.com/ezhdi), [@patpanda94](https://github.com/patpanda94) and [@Ksyula](https://github.com/Ksyula).
+* 📝 Imporve ["RetailHero tutorial"](https://nbviewer.jupyter.org/github/maks-sh/scikit-uplift/blob/master/notebooks/RetailHero_EN.ipynb) by [@Ksyula](https://github.com/Ksyula).
+
 ## Version 0.3.2
 
-### [sklift.datasets](https://www.uplift-modeling.com/en/v0.3.1/api/datasets/index.html)
+### [sklift.datasets](https://www.uplift-modeling.com/en/v0.3.2/api/datasets/index.html)
 
-* 🔨 Fix bug in [fetch_x5](https://www.uplift-modeling.com/en/v0.3.1/api/datasets/fetch_x5.html) function by [@Muhamob](https://github.com/Muhamob).
+* 🔨 Fix bug in [fetch_x5](https://www.uplift-modeling.com/en/v0.3.2/api/datasets/fetch_x5.html) function by [@Muhamob](https://github.com/Muhamob).
 
-### [sklift.metrics](https://www.uplift-modeling.com/en/v0.3.1/api/index/metrics.html)
+### [sklift.metrics](https://www.uplift-modeling.com/en/v0.3.2/api/index/metrics.html)
 
-* 📝 Fix docstring in [uplift_by_percentile](https://www.uplift-modeling.com/en/v0.3.1/api/metrics/uplift_by_percentile.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
+* 📝 Fix docstring in [uplift_by_percentile](https://www.uplift-modeling.com/en/v0.3.2/api/metrics/uplift_by_percentile.html) function by [@ElisovaIra](https://github.com/ElisovaIra).
 
-### [sklift.viz](https://www.uplift-modeling.com/en/v0.3.1/api/viz/index.html)
+### [sklift.viz](https://www.uplift-modeling.com/en/v0.3.2/api/viz/index.html)
 
-* 🔨 Fix bug in [plot_uplift_preds](https://www.uplift-modeling.com/en/v0.3.1/api/viz/plot_uplift_preds.html) function by [@bwbelljr](https://github.com/bwbelljr).
+* 🔨 Fix bug in [plot_uplift_preds](https://www.uplift-modeling.com/en/v0.3.2/api/viz/plot_uplift_preds.html) function by [@bwbelljr](https://github.com/bwbelljr).
 
 ### Miscellaneous
 

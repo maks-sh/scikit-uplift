@@ -50,7 +50,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
-    "recommonmark",
+    "myst_parser",
     "sphinx.ext.intersphinx",
     "sphinxcontrib.bibtex"
 ]
@@ -88,9 +88,6 @@ html_logo = "./_static/sklift-logo.png"
 
 # Removing the view source link
 html_show_sourcelink = False
-
-# Add supporting *.md files by recommonmark extension
-source_suffix = ['.rst', '.md']
 
 html_theme_options = {
     'navigation_depth': 3,

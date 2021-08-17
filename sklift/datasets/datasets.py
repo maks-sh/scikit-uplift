@@ -12,7 +12,7 @@ def get_data_dir():
 
     This folder is used by some large dataset loaders to avoid downloading the data several times.
 
-    By default the data dir is set to a folder named ‘scikit_learn_data’ in the user home folder.
+    By default the data dir is set to a folder named ``scikit-uplift-data`` in the user home folder.
 
     Returns:
         string: The path to scikit-uplift data dir.
@@ -66,7 +66,7 @@ def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing,
         dest_filename (str): The name of the dataset.
         download_if_missing (bool): If False, raise a IOError if the data is not locally available instead of
             trying to download the data from the source site.
-        content_length_header (str): The key in the HTTP response headers that lists the response size in bytes.
+        content_length_header_key (str): The key in the HTTP response headers that lists the response size in bytes.
             Used for progress bar.
 
     Returns:
@@ -170,7 +170,7 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
         :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification).
     """
 
-    url = 'https://winterschool123.s3.eu-north-1.amazonaws.com/lentadataset.csv.gz'
+    url = 'https://sklift.s3.eu-west-2.amazonaws.com/lenta_dataset.csv.gz'
     filename = url.split('/')[-1]
     csv_path = _get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                          dest_filename=filename,
@@ -226,7 +226,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
                 * ``purchases`` (ndarray or DataFrame object): clients’ purchase history prior to communication.
             * ``target`` (Series object): Column target by values.
             * ``treatment`` (Series object): Column treatment by values.
-            * ``DESCR`` (str): Description of the Lenta dataset.
+            * ``DESCR`` (str): Description of the X5 dataset.
             * ``feature_names`` (Bunch object): Names of the features.
             * ``target_name`` (str): Name of the target.
             * ``treatment_name`` (str): Name of the treatment.
@@ -343,7 +343,7 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
                 * ``data`` (DataFrame object): Dataset without target and treatment.
                 * ``target`` (Series or DataFrame object): Column target by values.
                 * ``treatment`` (Series or DataFrame object): Column treatment by values.
-                * ``DESCR`` (str): Description of the Lenta dataset.
+                * ``DESCR`` (str): Description of the Criteo dataset.
                 * ``feature_names`` (list): Names of the features.
                 * ``target_name`` (str list): Name of the target.
                 * ``treatment_name`` (str or list): Name of the treatment.
@@ -381,15 +381,15 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
     if treatment_col == 'all':
         treatment_col = treatment_cols
     elif treatment_col not in treatment_cols:
-        raise ValueError(f"treatment_col value must be in {treatment_cols + ['all']}. "
-                         f"Got value {treatment_col}.")
+        raise ValueError(f"The treatment_col must be an element of {treatment_cols + ['all']}. "
+                         f"Got value target_col={treatment_col}.")
 
     target_cols = ['visit', 'conversion']
     if target_col == 'all':
         target_col = target_cols
     elif target_col not in target_cols:
-        raise ValueError(f"target_col value must be from {target_cols + ['all']}. "
-                         f"Got value {target_col}.")
+        raise ValueError(f"The target_col must be an element of {target_cols + ['all']}. "
+                         f"Got value target_col={target_col}.")
 
     if percent10:
         url = 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo10.csv.gz'
@@ -458,7 +458,7 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
                 * ``data`` (DataFrame object): Dataset without target and treatment.
                 * ``target`` (Series or DataFrame object): Column target by values.
                 * ``treatment`` (Series object): Column treatment by values.
-                * ``DESCR`` (str): Description of the Lenta dataset.
+                * ``DESCR`` (str): Description of the Hillstrom dataset.
                 * ``feature_names`` (list): Names of the features.
                 * ``target_name`` (str or list): Name of the target.
                 * ``treatment_name`` (str): Name of the treatment.
@@ -494,8 +494,8 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
     if target_col == 'all':
         target_col = target_cols
     elif target_col not in target_cols:
-        raise ValueError(f"target_col value must be from {target_cols + ['all']}. "
-                         f"Got value {target_col + ['all']}.")
+        raise ValueError(f"The target_col must be an element of {target_cols + ['all']}. "
+                         f"Got value target_col={target_col}.")
 
     url = 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz'
     filename = url.split('/')[-1]
@@ -552,7 +552,7 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
                 * ``data`` (DataFrame object): Dataset without target and treatment.
                 * ``target`` (Series object): Column target by values.
                 * ``treatment`` (Series object): Column treatment by values.
-                * ``DESCR`` (str): Description of the Lenta dataset.
+                * ``DESCR`` (str): Description of the Megafon dataset.
                 * ``feature_names`` (list): Names of the features.
                 * ``target_name`` (str): Name of the target.
                 * ``treatment_name`` (str): Name of the treatment.
@@ -566,7 +566,7 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
 
 
         dataset = fetch_megafon()
-        data, treatment, target = dataset.data, dataset.treatment, dataset.target
+        data, target, treatment = dataset.data, dataset.target, dataset.treatment
 
         # alternative option
         data, target, treatment = fetch_megafon(return_X_y_t=True)
@@ -582,13 +582,12 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
         :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).
 
     """
-    url_train = 'https://storage.yandexcloud.net/datasouls-ods/static/competitions/megafon_fest2021/train.csv'
+    url_train = 'https://sklift.s3.eu-west-2.amazonaws.com/megafon_dataset.csv.gz'
     file_train = url_train.split('/')[-1]
     csv_train_path = _get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                                dest_filename=file_train,
                                download_if_missing=download_if_missing)
     train = pd.read_csv(csv_train_path)
-    train_features = list(train.columns)
 
     target_col = 'conversion'
     treatment_col = 'treatment_group'
