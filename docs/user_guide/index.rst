@@ -17,6 +17,7 @@ This guide is going to shed some light on the essentials of causal inference est
 
    ./introduction/index
    ./models/index
+   ./notebooks/index
 
 Credits
 --------
