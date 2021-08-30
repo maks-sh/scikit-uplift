@@ -2,8 +2,7 @@
 
 .. meta::
     :description lang=en:
-        Introduction to approaches for building uplift model with examples
-        on Python using scikit-uplift (sklift) package.
+        Notebooks for the scikit-uplift(sklift) package.
 
 *********
 Notebooks
