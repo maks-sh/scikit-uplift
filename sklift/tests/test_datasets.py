@@ -34,24 +34,23 @@ def test_fetch_lenta(lenta_dataset):
     assert data.target.shape == lenta_dataset['target.shape']
     assert data.treatment.shape == lenta_dataset['treatment.shape']
 
-
-# @pytest.fixture
-# def x5_dataset() -> dict:
-#     data = {'keys': ['data', 'target', 'treatment', 'DESCR', 'feature_names', 'target_name', 'treatment_name'],
+#@pytest.fixture
+#def x5_dataset() -> dict:
+#	data = {'keys': ['data', 'target', 'treatment', 'DESCR', 'feature_names', 'target_name', 'treatment_name'],
 #             'data.keys': ['clients', 'train', 'purchases'], 'clients.shape': (400162, 5),
-#             'train.shape': (200039, 1), 'target.shape': (200039,), 'treatment.shape': (200039,)}
-#     return data
+#            'train.shape': (200039, 1), 'target.shape': (200039,), 'treatment.shape': (200039,)}
+#	return data
+
 #
-#
-# def test_fetch_x5(x5_dataset):
-#     data = fetch_x5()
-#     assert isinstance(data, sklearn.utils.Bunch)
-#     assert set(data.keys()) == set(x5_dataset['keys'])
-#     assert set(data.data.keys()) == set(x5_dataset['data.keys'])
-#     assert data.data.clients.shape == x5_dataset['clients.shape']
-#     assert data.data.train.shape == x5_dataset['train.shape']
-#     assert data.target.shape == x5_dataset['target.shape']
-#     assert data.treatment.shape == x5_dataset['treatment.shape']
+#def test_fetch_x5(x5_dataset):
+#	data = fetch_x5()
+#	assert isinstance(data, sklearn.utils.Bunch)
+#	assert set(data.keys()) == set(x5_dataset['keys'])
+#	assert set(data.data.keys()) == set(x5_dataset['data.keys'])
+#	assert data.data.clients.shape == x5_dataset['clients.shape']
+#	assert data.data.train.shape == x5_dataset['train.shape']
+#	assert data.target.shape == x5_dataset['target.shape']
+#	assert data.treatment.shape == x5_dataset['treatment.shape']
 
 
 @pytest.fixture
@@ -85,6 +84,14 @@ def test_fetch_criteo10(
     assert data.target.shape == target_shape
     assert data.treatment.shape == treatment_shape
 
+@pytest.mark.parametrize(
+    'target_col, treatment_col',
+    [('visit','new_trmnt'), ('new_target','treatment')]
+    )    
+def test_fetch_criteo_errors(target_col, treatment_col):
+	with pytest.raises(ValueError):
+		 fetch_criteo(target_col=target_col, treatment_col=treatment_col) 
+
 
 @pytest.fixture
 def hillstrom_dataset() -> dict:
@@ -110,6 +117,10 @@ def test_fetch_hillstrom(
     assert data.data.shape == hillstrom_dataset['data.shape']
     assert data.target.shape == target_shape
     assert data.treatment.shape == hillstrom_dataset['treatment.shape']
+
+def test_fetch_hillstrom_error():
+	with pytest.raises(ValueError):
+		 fetch_hillstrom(target_col='new_target')   
 
 
 @pytest.fixture

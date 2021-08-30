@@ -3,7 +3,7 @@ import numpy as np
 
 from numpy.testing import assert_allclose
 
-from ..viz import plot_qini_curve, plot_uplift_curve, plot_uplift_preds, plot_uplift_by_percentile
+from ..viz import plot_qini_curve, plot_uplift_curve, plot_uplift_preds, plot_uplift_by_percentile, plot_treatment_balance_curve
 from ..metrics import qini_curve, perfect_qini_curve, uplift_curve, perfect_uplift_curve
 from ..viz import UpliftCurveDisplay
 
@@ -51,8 +51,6 @@ def test_plot_qini_curve(random, perfect, negative_effect):
         assert_allclose(viz.x_perfect, x_perfect)
         assert_allclose(viz.y_perfect, y_perfect)
 
-    import matplotlib as mpl
-
     assert isinstance(viz.line_, mpl.lines.Line2D)
     assert isinstance(viz.ax_, mpl.axes.Axes)
     assert isinstance(viz.figure_, mpl.figure.Figure)
@@ -62,7 +60,8 @@ def test_plot_qini_curve(random, perfect, negative_effect):
     "qini_auc, estimator_name, expected_label",
     [
         (0.61, None, "plot_qini_curve = 0.61"),
-        (0.61, "first", "first (plot_qini_curve = 0.61)")
+        (0.61, "first", "first (plot_qini_curve = 0.61)"),
+        (None, "None", "None")
     ]
 )
 def test_default_labels(qini_auc, estimator_name, expected_label):
@@ -77,8 +76,6 @@ def test_default_labels(qini_auc, estimator_name, expected_label):
 
     assert disp.line_.get_label() == expected_label
 
-from ..viz import plot_uplift_curve
-from ..metrics import uplift_curve, perfect_uplift_curve
 
 @pytest.mark.parametrize("random", [True, False])
 @pytest.mark.parametrize("perfect", [True, False])
@@ -104,8 +101,6 @@ def test_plot_uplift_curve(random, perfect):
         assert_allclose(viz.x_perfect, x_perfect)
         assert_allclose(viz.y_perfect, y_perfect)
 
-    import matplotlib as mpl
-
     assert isinstance(viz.line_, mpl.lines.Line2D)
     assert isinstance(viz.ax_, mpl.axes.Axes)
     assert isinstance(viz.figure_, mpl.figure.Figure)
@@ -115,7 +110,8 @@ def test_plot_uplift_curve(random, perfect):
     "uplift_auc, estimator_name, expected_label",
     [
         (0.75, None, "plot_uplift_curve = 0.75"),
-        (0.75, "first", "first (plot_uplift_curve = 0.75)")
+        (0.75, "first", "first (plot_uplift_curve = 0.75)"),
+        (None, "None", "None")
     ]
 )
 def test_default_labels(uplift_auc, estimator_name, expected_label):
@@ -130,16 +126,19 @@ def test_default_labels(uplift_auc, estimator_name, expected_label):
 
     assert disp.line_.get_label() == expected_label
 
+
 def test_plot_uplift_preds():
     trmnt_preds = np.array([1,1,0,1,1,1])
     ctrl_preds = np.array([0,1,0,1,0,1])
-
+	 
     viz = plot_uplift_preds(trmnt_preds, ctrl_preds, log=True, bins=5)
-
-    import matplotlib as mpl
+	 
     assert isinstance(viz[0], mpl.axes.Axes)
     assert isinstance(viz[1], mpl.axes.Axes)
     assert isinstance(viz[2], mpl.axes.Axes)
+    
+    with pytest.raises(ValueError):
+    	plot_uplift_preds(trmnt_preds, ctrl_preds, log=True, bins=0)
 
 def test_plot_uplift_by_percentile():
     y_true, uplift, treatment = make_predictions()
@@ -157,8 +156,36 @@ def test_plot_uplift_by_percentile():
     assert viz[1].get_title() == "Response rate by percentile"
     assert isinstance(viz[0], mpl.axes.Axes)
     assert isinstance(viz[1], mpl.axes.Axes)
+    viz = plot_uplift_by_percentile(y_true, uplift, treatment, strategy='by_group',kind='bar', bins=1, string_percentiles=True)
 
-def plot_treatment_balance_curve():
+    assert viz[0].get_title() == "Uplift by percentile\nweighted average uplift = 0.5000"
+    assert viz[1].get_xlabel() == "Percentile"
+    assert viz[1].get_title() == "Response rate by percentile"
+    assert isinstance(viz[0], mpl.axes.Axes)
+    assert isinstance(viz[1], mpl.axes.Axes)
+    
+    viz = plot_uplift_by_percentile(y_true, uplift, treatment, strategy='by_group',kind='line', bins=1, string_percentiles=False)
+    assert isinstance(viz, mpl.axes.Axes)
+    
+
+@pytest.mark.parametrize(
+    "strategy, kind, bins, string_percentiles",
+    [
+        ("new_strategy", "bar", 1, False),
+        ("by_group", "new_bar", 1, False),
+        ("by_group", "bar", 0, False),
+        ("by_group", "bar", 100, False),
+        ("by_group", "bar", 1, 5)
+
+    ]
+)    
+def test_plot_uplift_by_percentile_errors(strategy, kind, bins, string_percentiles):
+    y_true, uplift, treatment = make_predictions()    
+    with pytest.raises(ValueError):
+    	viz = plot_uplift_by_percentile(y_true, uplift, treatment, strategy=strategy, kind=kind, bins=bins, string_percentiles=string_percentiles)
+
+
+def test_plot_treatment_balance_curve():
     y_true, uplift, treatment = make_predictions()
 
     viz = plot_treatment_balance_curve(uplift, treatment, winsize=0.5)
@@ -167,3 +194,8 @@ def plot_treatment_balance_curve():
     assert viz.get_xlabel() == "Percentage targeted"
     assert viz.get_ylabel() == "Balance: treatment / (treatment + control)"
     assert isinstance(viz, mpl.axes.Axes)
+    
+def test_plot_treatment_balance_errors():
+	y_true, uplift, treatment = make_predictions()
+	with pytest.raises(ValueError):		
+		viz = plot_treatment_balance_curve(uplift, treatment, winsize=5) 

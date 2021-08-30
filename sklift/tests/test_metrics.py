@@ -7,10 +7,11 @@ from ..models import SoloModel
 
 from sklearn.utils._testing import assert_array_almost_equal
 
+from ..metrics import make_uplift_scorer
 from ..metrics import uplift_curve, uplift_auc_score, perfect_uplift_curve
 from ..metrics import qini_curve, qini_auc_score, perfect_qini_curve
 from ..metrics import (uplift_at_k, response_rate_by_percentile,
-                       weighted_average_uplift, uplift_by_percentile, treatment_balance_curve)
+                       weighted_average_uplift, uplift_by_percentile, treatment_balance_curve, average_squared_deviation)
 
 
 def make_predictions(binary):
@@ -221,6 +222,12 @@ def test_perfect_qini_curve_hard():
 
         assert_array_almost_equal(x_actual, np.array([0., 0., 3.]))
         assert_array_almost_equal(y_actual, np.array([0.0, 0.0, 0.0]))
+ 
+def test_perfect_qini_curve_error():
+	y_true, uplift, treatment = make_predictions(binary=True)
+	with pytest.raises(TypeError):
+		perfect_qini_curve(y_true, treatment, negative_effect=5)
+        
 
 
 def test_qini_auc_score():
@@ -255,11 +262,33 @@ def test_qini_auc_score():
         treatment = [1, 0, 1]
         assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), 0.75)
 
+def test_qini_auc_score_error():
+	y_true = [1, 0]
+	uplift = [0.1, 0.3]
+	treatment = [0, 1]
+	with pytest.raises(TypeError):
+		qini_auc_score(y_true, uplift, treatment, negative_effect=5)        
+
 
 def test_uplift_at_k():
     y_true, uplift, treatment = make_predictions(binary=True)
 
     assert_array_almost_equal(uplift_at_k(y_true, uplift, treatment, strategy='by_group', k=1), np.array([0.]))
+    #assert_array_almost_equal(uplift_at_k(y_true, uplift, treatment, strategy='overall', k=2), np.array([0.]))
+
+@pytest.mark.parametrize(
+    "strategy, k",
+    [
+        ('new_strategy', 1),
+        ('by_group', -0.5),
+        ('by_group', '1'),
+        ('by_group', 2)
+    ]
+)
+def test_uplift_at_k_errors(strategy, k):
+	y_true, uplift, treatment = make_predictions(binary=True)
+	with pytest.raises(ValueError):
+		uplift_at_k(y_true, uplift, treatment, strategy, k)
 
 
 @pytest.mark.parametrize(
@@ -277,6 +306,19 @@ def test_response_rate_by_percentile(strategy, group, response_rate):
     assert_array_almost_equal(response_rate_by_percentile(y_true, uplift, treatment, group, strategy, bins=1),
                               response_rate)
 
+@pytest.mark.parametrize(
+    "strategy, group, bins",
+    [
+        ('new_strategy', 'control', 1),
+        ('by_group', 'ctrl', 1),
+        ('by_group', 'control', 0.5),
+        ('by_group', 'control', 9999)
+    ]
+)
+def test_response_rate_by_percentile_errors(strategy, group, bins):
+    y_true, uplift, treatment = make_predictions(binary=True)
+    with pytest.raises(ValueError):
+    	response_rate_by_percentile(y_true, uplift, treatment, group=group, strategy=strategy, bins=bins)
 
 @pytest.mark.parametrize(
     "strategy, weighted_average",
@@ -289,7 +331,21 @@ def test_weighted_average_uplift(strategy, weighted_average):
     y_true, uplift, treatment = make_predictions(binary=True)
 
     assert_array_almost_equal(weighted_average_uplift(y_true, uplift, treatment, strategy, bins=1), weighted_average)
+    
 
+@pytest.mark.parametrize(
+    "strategy, bins",
+    [
+        ('new_strategy', 1),
+        ('by_group', 0.5),
+        ('by_group', 9999)
+    ]
+)
+def test_weighted_average_uplift_errors(strategy, bins):
+	y_true, uplift, treatment = make_predictions(binary=True)
+	with pytest.raises(ValueError):
+		weighted_average_uplift(y_true, uplift, treatment, strategy=strategy, bins=bins)
+    
 
 @pytest.mark.parametrize(
     "strategy, bins, std, total, string_percentiles, data",
@@ -307,6 +363,22 @@ def test_uplift_by_percentile(strategy, bins, std, total, string_percentiles, da
 
     assert_array_almost_equal(
         uplift_by_percentile(y_true, uplift, treatment, strategy, bins, std, total, string_percentiles), data)
+        
+@pytest.mark.parametrize(
+    "strategy, bins, std, total, string_percentiles",
+    [
+        ('new_strategy', 1, True, True, True),
+        ('by_group', 0.5, True, True, True),
+        ('by_group', 9999, True, True, True),
+        ('by_group', 1, 2, True, True),
+        ('by_group', 1, True, True, 2),
+        ('by_group', 1, True, 2, True)
+    ]
+)
+def test_uplift_by_percentile_errors(strategy, bins, std, total, string_percentiles):
+	y_true, uplift, treatment = make_predictions(binary=True)
+	with pytest.raises(ValueError):
+		uplift_by_percentile(y_true, uplift, treatment, strategy, bins, std, total, string_percentiles)        
 
 
 def test_treatment_balance_curve():
@@ -315,3 +387,44 @@ def test_treatment_balance_curve():
     idx, balance = treatment_balance_curve(uplift, treatment, winsize=2)
     assert_array_almost_equal(idx, np.array([1., 100.]))
     assert_array_almost_equal(balance, np.array([1., 0.5]))
+
+@pytest.mark.parametrize(
+    "strategy",
+    [
+        ('overall'),
+        ('by_group')
+    ]
+)    
+def test_average_squared_deviation(strategy):
+	y_true, uplift, treatment = make_predictions(binary=True)
+	assert (average_squared_deviation(y_true, uplift, treatment, y_true, uplift, treatment, strategy, bins=1) == 0)
+
+@pytest.mark.parametrize(
+    "strategy, bins",
+    [
+        ('new_strategy', 1),
+        ('by_group', 0.5),
+        ('by_group', 9999)
+    ]
+)    
+def test_average_squared_deviation_errors(strategy, bins):
+	y_true, uplift, treatment = make_predictions(binary=True)
+	with pytest.raises(ValueError):
+		average_squared_deviation(y_true, uplift, treatment, y_true, uplift, treatment, strategy=strategy, bins=bins)
+ 	
+def test_metric_name_error():
+	with pytest.raises(ValueError):
+		make_uplift_scorer('new_scorer', [0, 1])
+		
+def test_make_scorer_error():
+	with pytest.raises(TypeError):
+		make_uplift_scorer('qini_auc_score', [])	
+
+    
+ 
+
+	    
+
+
+			
+			  
