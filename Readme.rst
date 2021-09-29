@@ -88,6 +88,12 @@ Or install from source:
     cd scikit-uplift
     python setup.py install
 
+To install this package on Fedora, run:
+
+.. code-block:: bash
+
+    dnf install python3-scikit-uplift
+
 Documentation
 --------------
 
