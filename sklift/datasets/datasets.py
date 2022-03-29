@@ -262,7 +262,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
 
         :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification).
     """
-    url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
+    url_train = 'https://sklift.s3.eu-west-2.amazonaws.com/uplift_train.csv.gz'
     file_train = url_train.split('/')[-1]
     csv_train_path = _get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                                dest_filename=file_train,
