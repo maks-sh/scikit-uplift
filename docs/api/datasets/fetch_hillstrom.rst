@@ -6,12 +6,12 @@
 
 .. autofunction:: sklift.datasets.datasets.fetch_hillstrom
 
-About the company
+.. include:: ../../../sklift/datasets/descr/hillstrom.rst
+
+About Hillstrom
 ##################
 
-The dataset was provided by Kevin Hillstorm. 
+The dataset was provided by Kevin Hillstorm.
 Kevin is President of MineThatData, a consultancy that helps CEOs understand the complex relationship between Customers, Advertising, Products, Brands, and Channels.
 
-Link to the blog website: https://blog.minethatdata.com/
-
-.. include:: ../../../sklift/datasets/descr/hillstrom.rst
+Link to the blog: https://blog.minethatdata.com/

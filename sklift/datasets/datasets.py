@@ -262,7 +262,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
 
         :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification).
     """
-    url_train = 'https://timds.s3.eu-central-1.amazonaws.com/uplift_train.csv.gz'
+    url_train = 'https://sklift.s3.eu-west-2.amazonaws.com/uplift_train.csv.gz'
     file_train = url_train.split('/')[-1]
     csv_train_path = _get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                                dest_filename=file_train,
@@ -277,7 +277,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
 
     train = train.drop([target_col, treatment_col], axis=1)
 
-    url_clients = 'https://timds.s3.eu-central-1.amazonaws.com/clients.csv.gz'
+    url_clients = 'https://sklift.s3.eu-west-2.amazonaws.com/clients.csv.gz'
     file_clients = url_clients.split('/')[-1]
     csv_clients_path = _get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
                                  dest_filename=file_clients,
@@ -285,7 +285,7 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     clients = pd.read_csv(csv_clients_path)
     clients_features = list(clients.columns)
 
-    url_purchases = 'https://timds.s3.eu-central-1.amazonaws.com/purchases.csv.gz'
+    url_purchases = 'https://sklift.s3.eu-west-2.amazonaws.com/purchases.csv.gz'
     file_purchases = url_purchases.split('/')[-1]
     csv_purchases_path = _get_data(data_home=data_home, url=url_purchases, dest_subdir=dest_subdir,
                                    dest_filename=file_purchases,
