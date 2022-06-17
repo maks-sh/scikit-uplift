@@ -6,14 +6,14 @@
 
 .. autofunction:: sklift.datasets.datasets.fetch_lenta
 
-About the company
-##################
+.. include:: ../../../sklift/datasets/descr/lenta.rst
 
-Lenta (Russian: Лентa) is a Russian super - and hypermarket chain. With 149 locations across the country, 
-it is one of Russia's largest retail chains in addition to being the country's second largest hypermarket chain.
+About Lenta
+##################
 
 .. figure:: https://upload.wikimedia.org/wikipedia/commons/7/73/Lenta_logo.svg
 
-Link to the company's website: https://www.lenta.com/
+`Lenta (Russian: Лентa) <https://en.wikipedia.org/wiki/Lenta_(retail)>`__  is a Russian super - and hypermarket chain. With 149 locations across the country,
+it is one of Russia's largest retail chains in addition to being the country's second largest hypermarket chain.
 
-.. include:: ../../../sklift/datasets/descr/lenta.rst
+Link to the company's website: https://www.lenta.com/
