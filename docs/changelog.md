@@ -8,6 +8,13 @@
 * 🔨 something that previously didn’t work as documented – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
+## Version 0.4.1
+
+### [sklift.datasets](https://www.uplift-modeling.com/en/v0.4.0/api/datasets/index.html)
+
+* 🔨 Fix bug in dataset links.
+* 📝 Add about a company section
+
 ## Version 0.4.0
 
 ### [sklift.metrics](https://www.uplift-modeling.com/en/v0.4.0/api/index/metrics.html)
