@@ -1,6 +1,3 @@
-from .models import (SoloModel, ClassTransformation, TwoModels)
+from .models import SoloModel, ClassTransformation, ClassTransformationReg, TwoModels
 
-__all__ = [
-	'SoloModel', 
-	'ClassTransformation', 
-	'TwoModels']
+__all__ = [SoloModel, ClassTransformation, ClassTransformationReg, TwoModels]
