@@ -17,6 +17,9 @@ Data contains several parts:
 * clients.csv: general info about clients;
 * purchases.csv: clients’ purchase history prior to communication.
 
+.. image:: ../../_static/images/x5_table_scheme.png
+    :alt: X5 table schema
+
 Fields
 ################
 
