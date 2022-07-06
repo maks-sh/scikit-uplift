@@ -826,3 +826,74 @@ def average_squared_deviation(y_true_train, uplift_train, treatment_train, y_tru
                                                     strategy=strategy, bins=bins)
     
     return np.mean(np.square(uplift_by_percentile_train['uplift'] - uplift_by_percentile_val['uplift']))
+
+
+def max_prof_uplift(df_sorted, treatment_name, churn_name, pos_outcome, benefit, c_incentive, c_contact, a_cost=0):
+  """Compute the maximum profit generated from an uplift model decided campaign
+
+    This can be visualised by plotting plt.plot(perc, cumulative_profit)
+
+    Args:
+      df_sorted (pandas dataframe): dataframe with descending uplift predictions for each customer (i.e. highest 1st)
+      treatment_name (string): column name of treatment columm (assuming 1 = treated)   
+      churn_name (string): column name of churn column
+      pos_outcome (int or float): 1 or 0 value in churn column indicating a positive outcome (i.e. purchase = 1, whereas churn = 0)
+      benefit (int or float): the benefit of retaining a customer (e.g., the average customer lifetime value)
+      c_incentive (int or float): the cost of the incentive if a customer accepts the offer
+      c_contact (int or float): the cost of contacting a customer regardless of conversion
+      a_cost (int or float): the fixed administration cost for the campaign
+
+    Returns:
+      1d array-like: the incremental increase in x, for plotting
+      1d array-like: the cumulative profit per customer 
+
+    References:
+        Floris Devriendt, Jeroen Berrevoets, Wouter Verbeke. Why you should stop predicting customer churn and start using uplift models.
+  """
+#   VARIABLES
+
+#       n_ct0             no. people not treated
+#       n_ct1             no. people treated
+
+#       n_y1_ct0          no. people not treated with +ve outcome
+#       n_y1_ct1          no. people treated with +ve outcome
+
+#       r_y1_ct0          mean of not treated people with +ve outcome
+#       r_y1_ct1          mean of treated people with +ve outcome
+
+#       cs                cumsum() of each variable
+
+  n_ct0 = np.where(df_sorted[treatment_name] == 0, 1, 0)
+  cs_n_ct0 = pd.Series(n_ct0.cumsum())
+
+  n_ct1 = np.where(df_sorted[treatment_name] == 1, 1, 0)
+  cs_n_ct1 = pd.Series(n_ct1.cumsum())
+
+  if pos_outcome == 0:
+    n_y1_ct0 = np.where((df_sorted[treatment_name] == 0) & (df_sorted[churn_name] == 0), 1, 0)
+    n_y1_ct1 = np.where((df_sorted[treatment_name] == 1) & (df_sorted[churn_name] == 0), 1, 0)  
+
+  elif pos_outcome == 1:
+    n_y1_ct0 = np.where((df_sorted[treatment_name] == 0) & (df_sorted[churn_name] == 1), 1, 0)
+    n_y1_ct1 = np.where((df_sorted[treatment_name] == 1) & (df_sorted[churn_name] == 1), 1, 0)
+    
+  cs_n_y1_ct0 = pd.Series(n_y1_ct0.cumsum())
+  cs_n_y1_ct1 = pd.Series(n_y1_ct1.cumsum())
+
+  cs_r_y1_ct0 = (cs_n_y1_ct0 / cs_n_ct0).fillna(0)
+  cs_r_y1_ct1 = (cs_n_y1_ct1 / cs_n_ct1).fillna(0)
+
+  cs_uplift = cs_r_y1_ct1 - cs_r_y1_ct0
+
+  # Dataframe of all calculated variables
+  df = pd.concat([cs_n_ct0,cs_n_ct1,cs_n_y1_ct0,cs_n_y1_ct1, cs_r_y1_ct0, cs_r_y1_ct1, cs_uplift], axis=1)
+  df.columns = ['cs_n_ct0', 'cs_n_ct1', 'cs_n_y1_ct0', 'cs_n_y1_ct1', 'cs_r_y1_c0', 'cs_r_y1_ct1', 'cs_uplift']
+
+  x = cs_n_ct0 + cs_n_ct1
+  max = cs_n_ct0.max() + cs_n_ct1.max()
+
+  t_profit = (x * cs_uplift * benefit) - (c_incentive * x * cs_r_y1_ct1) - (c_contact * x) - a_cost
+  perc = x / max
+  cumulative_profit = t_profit / max
+
+  return perc, cumulative_profit
