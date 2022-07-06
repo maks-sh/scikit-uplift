@@ -845,7 +845,7 @@ def max_prof_uplift(df_sorted, treatment_name, churn_name, pos_outcome, benefit,
 
     Returns:
       1d array-like: the incremental increase in x, for plotting
-      1d array-like): the cumulative profit per customer 
+      1d array-like: the cumulative profit per customer 
 
     References:
         Floris Devriendt, Jeroen Berrevoets, Wouter Verbeke. Why you should stop predicting customer churn and start using uplift models.
