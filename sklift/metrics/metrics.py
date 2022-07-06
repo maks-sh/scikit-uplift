@@ -834,18 +834,18 @@ def max_prof_uplift(df_sorted, treatment_name, churn_name, pos_outcome, benefit,
     This can be visualised by plotting plt.plot(perc, cumulative_profit)
 
     Args:
-      df_sorted:         dataframe with descending uplift predictions for each customer (i.e. highest 1st)
-      treatment_name:    column name of treatment columm (assuming 1 = treated)   
-      churn_name:        column name of churn column
-      pos_outcome:       value in churn column indicating a positive outcome (i.e. purchase = 1, whereas churn = 0)
-      benefit:           benefit of campaign
-      c_incentive:       cost of incentive when used by customer
-      c_contact:         cost of contacting a customer regardless of conversion
-      a_cost:            fixed administration cost for the campaign
+      df_sorted (pandas dataframe): dataframe with descending uplift predictions for each customer (i.e. highest 1st)
+      treatment_name (string): column name of treatment columm (assuming 1 = treated)   
+      churn_name (string): column name of churn column
+      pos_outcome (int or float): 1 or 0 value in churn column indicating a positive outcome (i.e. purchase = 1, whereas churn = 0)
+      benefit (int or float): the benefit of retaining a customer (e.g., the average customer lifetime value)
+      c_incentive (int or float): the cost of the incentive if a customer accepts the offer
+      c_contact (int or float): the cost of contacting a customer regardless of conversion
+      a_cost (int or float): the fixed administration cost for the campaign
 
     Returns:
-      perc:                    the incremental increase in x, for plotting
-      cumulative_profit:       the cumulative profit per customer 
+      1d array-like: the incremental increase in x, for plotting
+      1d array-like): the cumulative profit per customer 
 
     References:
         Floris Devriendt, Jeroen Berrevoets, Wouter Verbeke. Why you should stop predicting customer churn and start using uplift models.
