@@ -1,5 +1,6 @@
 import os
 import shutil
+import hashlib
 
 import pandas as pd
 import requests
@@ -176,6 +177,14 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
                          dest_filename=filename,
                          download_if_missing=download_if_missing)
 
+    lenta_md5 = '6ab28ff0989ed8b8647f530e2e86452f'
+    with open(csv_path, 'rb') as file_to_check:
+        data = file_to_check.read()    
+        md5_returned = hashlib.md5(data).hexdigest()
+    
+    if md5_returned != lenta_md5:
+        raise NameError("Error, dataset corrupted")
+
     target_col = 'response_att'
     treatment_col = 'group'
 
@@ -267,6 +276,15 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     csv_train_path = _get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                                dest_filename=file_train,
                                download_if_missing=download_if_missing)
+
+    uplift_train_md5 = '2720bbb659daa9e0989b2777b6a42d19'
+    with open(csv_train_path, 'rb') as file_to_check:
+        data = file_to_check.read()    
+        md5_returned = hashlib.md5(data).hexdigest()
+    
+    if md5_returned != uplift_train_md5:
+        raise NameError("Error, dataset corrupted")
+
     train = pd.read_csv(csv_train_path)
     train_features = list(train.columns)
 
@@ -282,6 +300,15 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     csv_clients_path = _get_data(data_home=data_home, url=url_clients, dest_subdir=dest_subdir,
                                  dest_filename=file_clients,
                                  download_if_missing=download_if_missing)
+
+    clients_md5 = 'b9cdeb2806b732771de03e819b3354c5'
+    with open(csv_clients_path, 'rb') as file_to_check:
+        data = file_to_check.read()    
+        md5_returned = hashlib.md5(data).hexdigest()
+    
+    if md5_returned != clients_md5:
+        raise NameError("Error, dataset corrupted")
+
     clients = pd.read_csv(csv_clients_path)
     clients_features = list(clients.columns)
 
@@ -290,6 +317,15 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     csv_purchases_path = _get_data(data_home=data_home, url=url_purchases, dest_subdir=dest_subdir,
                                    dest_filename=file_purchases,
                                    download_if_missing=download_if_missing)
+
+    purchases_md5 = '48d2de13428e24e8b61d66fef02957a8'
+    with open(csv_purchases_path, 'rb') as file_to_check:
+        data = file_to_check.read()    
+        md5_returned = hashlib.md5(data).hexdigest()
+    
+    if md5_returned != purchases_md5:
+        raise NameError("Error, dataset corrupted")
+        
     purchases = pd.read_csv(csv_purchases_path)
     purchases_features = list(purchases.columns)
 
@@ -393,13 +429,22 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
 
     if percent10:
         url = 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo10.csv.gz'
+        criteo_md5 = 'fe159bcee2cea57548e48eb2d7d5d00c'
     else:
         url = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
+        criteo_md5 = 'd2236769ef69e9be52556110102911ec'
 
     filename = url.split('/')[-1]
     csv_path = _get_data(data_home=data_home, url=url, dest_subdir=dest_subdir,
                          dest_filename=filename,
                          download_if_missing=download_if_missing)
+
+    with open(csv_path, 'rb') as file_to_check:
+        data = file_to_check.read()    
+        md5_returned = hashlib.md5(data).hexdigest()
+    
+    if md5_returned != criteo_md5:
+        raise NameError("Error, dataset corrupted")
 
     dtypes = {
         'exposure': 'Int8',
@@ -503,6 +548,14 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
                          dest_filename=filename,
                          download_if_missing=download_if_missing)
 
+    hillstrom_md5 = 'a68a81291f53a14f4e29002629803ba3'
+    with open(csv_path, 'rb') as file_to_check:
+        data = file_to_check.read()    
+        md5_returned = hashlib.md5(data).hexdigest()
+    
+    if md5_returned != hillstrom_md5:
+        raise NameError("Error, dataset corrupted")
+
     treatment_col = 'segment'
 
     data = pd.read_csv(csv_path)
@@ -587,6 +640,15 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
     csv_train_path = _get_data(data_home=data_home, url=url_train, dest_subdir=dest_subdir,
                                dest_filename=file_train,
                                download_if_missing=download_if_missing)
+
+    megafon_md5 = 'ee8d45a343d4d2cf90bb756c93959ecd'
+    with open(csv_train_path, 'rb') as file_to_check:
+        data = file_to_check.read()    
+        md5_returned = hashlib.md5(data).hexdigest()
+    
+    if md5_returned != megafon_md5:
+        raise NameError("Error, dataset corrupted")
+        
     train = pd.read_csv(csv_train_path)
 
     target_col = 'conversion'
