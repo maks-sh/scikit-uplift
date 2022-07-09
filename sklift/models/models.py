@@ -517,11 +517,11 @@ class TwoModels(BaseEstimator):
         y_copy = y.copy()
         treatment_copy = treatment.copy()
 
-        if (X.index != y_copy.index).mean() != 0.0:
+        if not X.index.equals(y_copy.index):
             y_copy.index = X.index
             warnings.warn("Target indexes do not match data indexes, re-indexing has been performed")
         
-        if (X.index != treatment_copy.index).mean() != 0.0:
+        if not X.index.equals(treatment_copy.index):
             treatment_copy.index = X.index
             warnings.warn("Treatment indexes do not match data indexes, re-indexing has been performed")
 
