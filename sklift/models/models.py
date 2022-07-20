@@ -517,14 +517,12 @@ class TwoModels(BaseEstimator):
         y_copy = y.copy()
         treatment_copy = treatment.copy()
 
-        if (type(X) == pd.core.series.Series) & (type(y_copy) == pd.core.series.Series):
-            if not X.index.equals(y_copy.index):
-                y_copy.index = X.index
-                warnings.warn("Target indexes do not match data indexes, re-indexing has been performed")
-        if (type(X) == pd.core.series.Series) & (type(treatment_copy) == pd.core.series.Series):
-            if not X.index.equals(treatment_copy.index):
-                treatment_copy.index = X.index
-                warnings.warn("Treatment indexes do not match data indexes, re-indexing has been performed")
+        if (isinstance(X, pd.Series) or isinstance(X, pd.DataFrame)) and isinstance(y_copy, pd.Series) and not X.index.equals(y_copy.index):
+            y_copy.index = X.index
+            warnings.warn("Target indexes do not match data indexes, re-indexing has been performed")
+        if (isinstance(X, pd.Series) or isinstance(X, pd.DataFrame)) and isinstance(treatment_copy, pd.Series) and not X.index.equals(treatment_copy.index):
+            treatment_copy.index = X.index
+            warnings.warn("Treatment indexes do not match data indexes, re-indexing has been performed")
 
         X_ctrl, y_ctrl = X[treatment_copy == 0], y_copy[treatment_copy == 0]
         X_trmnt, y_trmnt = X[treatment_copy == 1], y_copy[treatment_copy == 1]
