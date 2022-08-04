@@ -1,5 +1,8 @@
+import warnings
+
 import pytest
 import numpy as np
+import pandas as pd
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -91,3 +94,16 @@ def test_same_estimator_error():
 	with pytest.raises(ValueError):
 		TwoModels(est, est)
 
+@pytest.mark.parametrize(
+    "X, y, treatment",
+    [
+        (pd.DataFrame(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]),columns=['a', 'b', 'c'], index=[0,1,2]), 
+            pd.Series(np.array([1, 0, 1]),index=[0,2,3]), pd.Series(np.array([0, 0, 1]),index=[0,1,2])),
+        (pd.DataFrame(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]),columns=['a', 'b', 'c'], index=[0,1,2]), 
+            pd.Series(np.array([1, 0, 1]),index=[0,1,2]), pd.Series(np.array([0, 0, 1]),index=[1,2,3]))
+    ]
+)
+def test_input_data(X, y, treatment):
+    model = TwoModels(LinearRegression(), LinearRegression())
+    with pytest.warns(UserWarning):
+        model.fit(X, y, treatment)
