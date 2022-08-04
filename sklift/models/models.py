@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
@@ -512,8 +514,19 @@ class TwoModels(BaseEstimator):
         check_is_binary(treatment)
         self._type_of_target = type_of_target(y)
 
-        X_ctrl, y_ctrl = X[treatment == 0], y[treatment == 0]
-        X_trmnt, y_trmnt = X[treatment == 1], y[treatment == 1]
+        y_copy = y.copy()
+        treatment_copy = treatment.copy()
+
+        if not X.index.equals(y_copy.index):
+            y_copy.index = X.index
+            warnings.warn("Target indexes do not match data indexes, re-indexing has been performed")
+        
+        if not X.index.equals(treatment_copy.index):
+            treatment_copy.index = X.index
+            warnings.warn("Treatment indexes do not match data indexes, re-indexing has been performed")
+
+        X_ctrl, y_ctrl = X[treatment_copy == 0], y_copy[treatment_copy == 0]
+        X_trmnt, y_trmnt = X[treatment_copy == 1], y_copy[treatment_copy == 1]
 
         if estimator_trmnt_fit_params is None:
             estimator_trmnt_fit_params = {}
