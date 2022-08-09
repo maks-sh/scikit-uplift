@@ -17,4 +17,5 @@
    ./response_rate_by_percentile
    ./treatment_balance_curve
    ./average_squared_deviation
+   ./max_prof_uplift
    ./make_uplift_scorer
