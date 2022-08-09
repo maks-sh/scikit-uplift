@@ -8,9 +8,28 @@
 * 🔨 something that previously didn’t work as documented – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
+## Version 0.5.0
+
+### [sklift.models](https://www.uplift-modeling.com/en/v0.5.0/api/models/index.html)
+
+* 🔥 Add [ClassTransformationReg](https://www.uplift-modeling.com/en/v0.5.0/api/models.html#sklift.models.models.TwoModels) model by [@mcullan](https://github.com/mcullan) and [@ElisovaIra](https://github.com/ElisovaIra).
+* 🔨 Add the ability to process a series with different indexes in the [TwoModels](https://www.uplift-modeling.com/en/v0.5.0/api/models.html#sklift.models.models.TwoModels) by [@flashlight101](https://github.com/flashlight101).
+
+### [sklift.metrics](https://www.uplift-modeling.com/en/v0.5.0/api/index/metrics.html)
+
+* 🔥 Add new metric [Maximum profit uplift measure](https://www.uplift-modeling.com/en/v0.5.0/api/metrics/max_prof_uplift.html) by [@rooti123](https://github.com/rooti123).
+
+### [sklift.datasets](https://www.uplift-modeling.com/en/v0.5.0/api/datasets/index.html)
+
+* 💥 Add cheker based on hash for all datasets by [@flashlight101](https://github.com/flashlight101)
+* 📝 Add [scheme](https://www.uplift-modeling.com/en/v0.5.0/api/datasets/fetch_x5.html) of x5 dataframes.
+
+### Miscellaneous
+* 📝 Improve Chinise tags by [@00helloworld](https://github.com/00helloworld)
+
 ## Version 0.4.1
 
-### [sklift.datasets](https://www.uplift-modeling.com/en/v0.4.0/api/datasets/index.html)
+### [sklift.datasets](https://www.uplift-modeling.com/en/v0.4.1/api/datasets/index.html)
 
 * 🔨 Fix bug in dataset links.
 * 📝 Add about a company section
