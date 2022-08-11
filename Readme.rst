@@ -32,6 +32,9 @@
     :align: center
     :alt: scikit-uplift: uplift modeling in scikit-learn style in python
 
+.. |Contribs| image:: https://contrib.rocks/image?repo=maks-sh/scikit-uplift
+   :target: https://github.com/maks-sh/scikit-uplift/graphs/contributors
+   :alt: Contributors
 
 scikit-uplift
 ===============
@@ -198,6 +201,10 @@ We welcome new contributors of all experience levels.
 
 - Please see our `Contributing Guide <https://www.uplift-modeling.com/en/latest/contributing.html>`_ for more details.
 - By participating in this project, you agree to abide by its `Code of Conduct <https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md>`__.
+
+Thanks to all our contributors!
+
+|Contribs|
 
 If you have any questions, please contact us at team@uplift-modeling.com
 
