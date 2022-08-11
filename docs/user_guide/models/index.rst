@@ -16,4 +16,5 @@ Models
    ./classification
    ./solo_model
    ./revert_label
+   ./transformed_outcome
    ./two_models

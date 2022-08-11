@@ -9,4 +9,5 @@ See :ref:`Models <models>` section of the User Guide for further details.
 
    ./SoloModel
    ./ClassTransformation
+   ./ClassTransformationReg
    ./TwoModels
