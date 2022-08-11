@@ -274,7 +274,7 @@ def plot_uplift_curve(y_true, uplift, treatment,
 
 
 def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
-                              kind='line', bins=10, string_percentiles=True):
+                              kind='line', bins=10, string_percentiles=True, show_predicted_uplift: bool=False):
     """Plot uplift score, treatment response rate and control response rate at each percentile.
 
     Treatment response rate ia a target mean in the treatment group.
@@ -304,7 +304,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
 
         bins (int): Determines а number of bins (and the relative percentile) in the test data. Default is 10.
         string_percentiles (bool): type of xticks: float or string to plot. Default is True (string).
-
+        show_predicted_uplift (bool): whether to show predicted uplift in each bin
     Returns:
         Object that stores computed values.
     """
@@ -338,7 +338,8 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
                          f' Invalid value string_percentiles: {string_percentiles}')
 
     df = uplift_by_percentile(y_true, uplift, treatment, strategy=strategy,
-                              std=True, total=True, bins=bins, string_percentiles=False)
+                              std=True, total=True, bins=bins, string_percentiles=False,
+                              add_predicted_uplift=show_predicted_uplift)
 
     percentiles = df.index[:bins].values.astype(float)
 
@@ -350,6 +351,9 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
 
     uplift_score = df.loc[percentiles, 'uplift'].values
     std_uplift = df.loc[percentiles, 'std_uplift'].values
+
+    if show_predicted_uplift:
+        mean_predicted_uplift_score = df.loc[percentiles, 'mean_predicted_uplift'].values
 
     uplift_weighted_avg = df.loc['total', 'uplift']
 
@@ -397,7 +401,11 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
         axes[1].bar(np.array(percentiles) + delta / 6, response_rate_ctrl, delta / 3,
                     yerr=std_ctrl, color='orange', label='control\nresponse rate')
         axes[0].bar(np.array(percentiles), uplift_score, delta / 1.5,
-                    yerr=std_uplift, color='red', label='uplift')
+                    yerr=std_uplift, color='red', label='uplift', alpha=0.5 if show_predicted_uplift else 1)
+
+        if show_predicted_uplift:
+            axes[0].bar(np.array(percentiles), mean_predicted_uplift_score, delta / 1.5,
+                        color='blue', label='avg pred uplift', alpha=0.5)
 
         axes[0].legend(loc='upper right')
         axes[0].tick_params(axis='x', bottom=False)
@@ -420,6 +428,7 @@ def plot_uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
         axes[1].set_title('Response rate by percentile')
 
     return axes
+
 
 
 def plot_treatment_balance_curve(uplift, treatment, random=True, winsize=0.1):
