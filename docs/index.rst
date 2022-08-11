@@ -4,6 +4,10 @@
 .. |Open In Colab4| image:: https://colab.research.google.com/assets/colab-badge.svg
 .. _Open In Colab4: https://colab.research.google.com/github/maks-sh/scikit-uplift/blob/master/notebooks/uplift_model_selection_tutorial.ipynb
 
+.. |Contribs| image:: https://contrib.rocks/image?repo=maks-sh/scikit-uplift
+   :target: https://github.com/maks-sh/scikit-uplift/graphs/contributors
+   :alt: Contributors
+
 **************
 scikit-uplift
 **************
@@ -75,6 +79,10 @@ Sklift is being actively maintained and welcomes new contributors of all experie
 
 - Please see our `Contributing Guide <https://www.uplift-modeling.com/en/latest/contributing.html>`_ for more details.
 - By participating in this project, you agree to abide by its `Code of Conduct <https://github.com/maks-sh/scikit-uplift/blob/master/.github/CODE_OF_CONDUCT.md>`__.
+
+Thanks to all our contributors!
+
+|Contribs|
 
 If you have any questions, please contact us at team@uplift-modeling.com
 
