@@ -8,11 +8,26 @@
 * 🔨 something that previously didn’t work as documented – or according to reasonable expectations – should now work.
 * ❗️ you will need to change your code to have the same effect in the future; or a feature will be removed in the future.
 
+## Version 0.5.1
+
+### [sklift.models](https://www.uplift-modeling.com/en/v0.5.1/api/models/index.html)
+
+* 📝 Add docs page for [ClassTransformationReg](https://www.uplift-modeling.com/en/v0.5.1/api/models/ClassTransformationReg.html) model. 
+
+### [sklift.datasets](https://www.uplift-modeling.com/en/v0.5.1/api/datasets/index.html)
+
+* 🔨 Fix bug in [fetch_x5](https://www.uplift-modeling.com/en/v0.5.1/api/datasets/fetch_x5.html) func.
+
+### [User Guide](https://www.uplift-modeling.com/en/v0.5.1/user_guide/index.html)
+
+* 📝 Add page for [Transformed Outcome](https://www.uplift-modeling.com/en/v0.5.1/user_guide/models/transformed_outcome.html) approach. 
+
+
 ## Version 0.5.0
 
 ### [sklift.models](https://www.uplift-modeling.com/en/v0.5.0/api/models/index.html)
 
-* 🔥 Add [ClassTransformationReg](https://www.uplift-modeling.com/en/v0.5.0/api/models.html#sklift.models.models.TwoModels) model by [@mcullan](https://github.com/mcullan) and [@ElisovaIra](https://github.com/ElisovaIra).
+* 🔥 Add ClassTransformationReg model by [@mcullan](https://github.com/mcullan) and [@ElisovaIra](https://github.com/ElisovaIra).
 * 🔨 Add the ability to process a series with different indexes in the [TwoModels](https://www.uplift-modeling.com/en/v0.5.0/api/models.html#sklift.models.models.TwoModels) by [@flashlight101](https://github.com/flashlight101).
 
 ### [sklift.metrics](https://www.uplift-modeling.com/en/v0.5.0/api/index/metrics.html)
@@ -21,11 +36,11 @@
 
 ### [sklift.datasets](https://www.uplift-modeling.com/en/v0.5.0/api/datasets/index.html)
 
-* 💥 Add cheker based on hash for all datasets by [@flashlight101](https://github.com/flashlight101)
+* 💥 Add checker based on hash for all datasets by [@flashlight101](https://github.com/flashlight101)
 * 📝 Add [scheme](https://www.uplift-modeling.com/en/v0.5.0/api/datasets/fetch_x5.html) of x5 dataframes.
 
 ### Miscellaneous
-* 📝 Improve Chinise tags by [@00helloworld](https://github.com/00helloworld)
+* 📝 Improve Chinese tags by [@00helloworld](https://github.com/00helloworld)
 
 ## Version 0.4.1
 

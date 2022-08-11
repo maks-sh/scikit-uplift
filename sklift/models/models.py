@@ -55,6 +55,7 @@ class SoloModel(BaseEstimator):
         **Other approaches:**
 
         * :class:`.ClassTransformation`: Class Variable Transformation approach.
+        * :class:`.ClassTransformationReg`: Transformed Outcome approach.
         * :class:`.TwoModels`: Double classifier approach.
 
         **Other:**
@@ -220,6 +221,7 @@ class ClassTransformation(BaseEstimator):
 
         **Other approaches:**
 
+        * :class:`.ClassTransformationReg`: Transformed Outcome approach.
         * :class:`.SoloModel`: Single model approach.
         * :class:`.TwoModels`: Double classifier approach.
     """
@@ -271,20 +273,23 @@ class ClassTransformation(BaseEstimator):
 
 
 class ClassTransformationReg(BaseEstimator):
-    """aka CATE (Conditional Average Treatment Effect) generating transformation approach for continuous labels.
+    """aka CATE-generating (Conditional Average Treatment Effect) Transformation of the Outcome.
 
     Redefine target variable, which indicates that treatment make some impact on target or
     did target is negative without treatment: ``Z = Y * (W - p)/(p * (1 - p))``,
-
-    where ``Y`` - target vector, ``W`` - vector of binary communication flags, and ``p`` is a propensity score (the probabilty that each y_i is assigned to the treatment group.).
+    
+    where ``Y`` - target vector, ``W`` - vector of binary communication flags, and ``p`` is a propensity score
+    (the probabilty that each y_i is assigned to the treatment group.).
 
     Then, train a regressor on ``Z`` to predict uplift.
 
     Returns uplift predictions and optionally propensity predictions.
 
-    The propensity score can be a scalar value (e.g. p = 0.5), which would mean that every subject has identical probability of being assigned to the treatment group.
+    The propensity score can be a scalar value (e.g. p = 0.5), which would mean that every subject has identical
+    probability of being assigned to the treatment group.
 
-    Alternatively, the propensity can be learned using a Classifier model. In this case, the model predicts the probability that a given subject would be assigned to the treatment group.
+    Alternatively, the propensity can be learned using a Classifier model.
+    In this case, the model predicts the probability that a given subject would be assigned to the treatment group.
 
     Read more in the :ref:`User Guide <ClassTransformationReg>`.
 
@@ -303,15 +308,15 @@ class ClassTransformationReg(BaseEstimator):
 
 
         # define approach
-        ct = ClassTransformationReg(estimator=LinearRegression, propensity_estimator=LogisticRegression())
+        ct = ClassTransformationReg(estimator=LinearRegression(), propensity_estimator=LogisticRegression())
         # fit the model
         ct = ct.fit(X_train, y_train, treat_train)
         # predict uplift
         uplift_ct = ct.predict(X_val)
 
     References:
-        Maciej Jaskowski and Szymon Jaroszewicz. Uplift modeling for clinical trial data.
-        ICML Workshop on Clinical Data Analysis, 2012.
+        Athey, Susan & Imbens, Guido & Ramachandra, Vikas. (2015).
+        Machine Learning Methods for Estimating Heterogeneous Causal Effects.
 
     See Also:
 
@@ -319,7 +324,7 @@ class ClassTransformationReg(BaseEstimator):
 
         * :class:`.SoloModel`: Single model approach.
         * :class:`.TwoModels`: Double classifier approach.
-        * :classL1`.ClassTransformation`: Binary classifier transformation approach.
+        * :class:`.ClassTransformation`: Binary classifier transformation approach.
     """
 
     def __init__(self, estimator, propensity_val=None, propensity_estimator=None):
@@ -466,6 +471,7 @@ class TwoModels(BaseEstimator):
 
         * :class:`.SoloModel`: Single model approach.
         * :class:`.ClassTransformation`: Class Variable Transformation approach.
+        * :class:`.ClassTransformationReg`: Transformed Outcome approach.
 
         **Other:**
 
