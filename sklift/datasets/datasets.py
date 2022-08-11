@@ -1,6 +1,6 @@
+import hashlib
 import os
 import shutil
-import hashlib
 
 import pandas as pd
 import requests
@@ -17,7 +17,6 @@ def get_data_dir():
 
     Returns:
         string: The path to scikit-uplift data dir.
-
     """
     return os.path.join(os.path.expanduser("~"), "scikit-uplift-data")
 
@@ -27,13 +26,12 @@ def _create_data_dir(path):
 
     Args:
         path (str): The path to scikit-uplift data dir.
-
     """
     if not os.path.isdir(path):
         os.makedirs(path)
 
 
-def _download(url, dest_path, content_length_header_key='Content-Length'):
+def _download(url, dest_path, content_length_header_key='Content-Length', desc=None):
     """Download the file from url and save it locally.
 
     Args:
@@ -48,7 +46,7 @@ def _download(url, dest_path, content_length_header_key='Content-Length'):
 
         with open(dest_path, "wb") as fd:
             total_size_in_bytes = int(req.headers.get(content_length_header_key, 0))
-            progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True)
+            progress_bar = tqdm(desc=desc, total=total_size_in_bytes, unit='iB', unit_scale=True)
             for chunk in req.iter_content(chunk_size=2 ** 20):
                 progress_bar.update(len(chunk))
                 fd.write(chunk)
@@ -57,7 +55,7 @@ def _download(url, dest_path, content_length_header_key='Content-Length'):
 
 
 def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing,
-              content_length_header_key='Content-Length'):
+              content_length_header_key='Content-Length', desc=None):
     """Return the path to the dataset.
 
     Args:
@@ -72,7 +70,6 @@ def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing,
 
     Returns:
         string: The path to the dataset.
-
     """
     if data_home is None:
         if dest_subdir is None:
@@ -91,13 +88,19 @@ def _get_data(data_home, url, dest_subdir, dest_filename, download_if_missing,
 
     if not os.path.isfile(dest_path):
         if download_if_missing:
-            _download(url, dest_path, content_length_header_key)
+            _download(url, dest_path, content_length_header_key, desc)
         else:
             raise IOError("Dataset missing")
     return dest_path
 
-def _get_file_hash(csv_path):
-    with open(csv_path, 'rb') as file_to_check:
+
+def _get_file_hash(path):
+    """Сompute the hash value for a file by using md5 algorithm.
+
+        Args:
+            path (str): The path to file
+    """
+    with open(path, 'rb') as file_to_check:
         data = file_to_check.read()    
         return hashlib.md5(data).hexdigest()
 
@@ -107,7 +110,6 @@ def clear_data_dir(path=None):
 
         Args:
             path (str): The path to scikit-uplift data dir
-
     """
     if path is None:
         path = get_data_dir()
@@ -175,8 +177,8 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
 
         :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification).
     """
-
     lenta_metadata = {
+        'desc': 'Lenta dataset',
         'url': 'https://sklift.s3.eu-west-2.amazonaws.com/lenta_dataset.csv.gz',
         'hash': '6ab28ff0989ed8b8647f530e2e86452f'
     }
@@ -184,11 +186,12 @@ def fetch_lenta(data_home=None, dest_subdir=None, download_if_missing=True, retu
     filename = lenta_metadata['url'].split('/')[-1]
     csv_path = _get_data(data_home=data_home, url=lenta_metadata['url'], dest_subdir=dest_subdir,
                          dest_filename=filename,
-                         download_if_missing=download_if_missing)
+                         download_if_missing=download_if_missing,
+                         desc=lenta_metadata['desc'])
     
     if _get_file_hash(csv_path) != lenta_metadata['hash']:
-        raise ValueError(f"The {filename} file is broken,\
-                            please clean the directory with the clean_data_dir function, and run the function again")
+        raise ValueError(f"The {filename} file is broken, please clean the directory "
+                         f"with the clean_data_dir() function, and run the function again")
 
     target_col = 'response_att'
     treatment_col = 'group'
@@ -276,23 +279,26 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
 
         :func:`.fetch_megafon`: Load and return the MegaFon Uplift Competition dataset (classification).
     """
-
     x5_metadata = {
+        'desc_train': 'Part 1: X5 train',
+        'desc_clients': 'Part 2: X5 clients',
+        'desc_purchases': 'Part 3: X5 purchases',
         'url_train': 'https://sklift.s3.eu-west-2.amazonaws.com/uplift_train.csv.gz',
         'url_clients': 'https://sklift.s3.eu-west-2.amazonaws.com/clients.csv.gz',
         'url_purchases': 'https://sklift.s3.eu-west-2.amazonaws.com/purchases.csv.gz',
-        'uplift_hash': '2720bbb659daa9e0989b2777b6a42d19',
-        'clients_hash': 'b9cdeb2806b732771de03e819b3354c5',
-        'purchases_hash': '48d2de13428e24e8b61d66fef02957a8'
+        'hash_train': '2720bbb659daa9e0989b2777b6a42d19',
+        'hash_clients': 'b9cdeb2806b732771de03e819b3354c5',
+        'hash_purchases': '48d2de13428e24e8b61d66fef02957a8'
     }
     file_train = x5_metadata['url_train'].split('/')[-1]
     csv_train_path = _get_data(data_home=data_home, url=x5_metadata['url_train'], dest_subdir=dest_subdir,
                                dest_filename=file_train,
-                               download_if_missing=download_if_missing)
+                               download_if_missing=download_if_missing,
+                               desc=x5_metadata['desc_train'])
 
-    if _get_file_hash(csv_train_path) != x5_metadata['uplift_hash']:
-        raise ValueError(f"The {file_train} file is broken,\
-                            please clean the directory with the clean_data_dir function, and run the function again")
+    if _get_file_hash(csv_train_path) != x5_metadata['hash_train']:
+        raise ValueError(f"The {file_train} file is broken, please clean the directory "
+                         f"with the clean_data_dir() function, and run the function again")
 
     train = pd.read_csv(csv_train_path)
     train_features = list(train.columns)
@@ -307,11 +313,12 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     file_clients = x5_metadata['url_clients'].split('/')[-1]
     csv_clients_path = _get_data(data_home=data_home, url=x5_metadata['url_clients'], dest_subdir=dest_subdir,
                                  dest_filename=file_clients,
-                                 download_if_missing=download_if_missing)
+                                 download_if_missing=download_if_missing,
+                                 desc=x5_metadata['desc_clients'])
 
-    if _get_file_hash(csv_clients_path) != x5_metadata['clients_hash']:
-        raise ValueError(f"The {file_clients} file is broken,\
-                            please clean the directory with the clean_data_dir function, and run the function again")
+    if _get_file_hash(csv_clients_path) != x5_metadata['hash_clients']:
+        raise ValueError(f"The {file_clients} file is broken, please clean the directory "
+                         f"with the clean_data_dir() function, and run the function again")
 
     clients = pd.read_csv(csv_clients_path)
     clients_features = list(clients.columns)
@@ -319,12 +326,13 @@ def fetch_x5(data_home=None, dest_subdir=None, download_if_missing=True):
     file_purchases = x5_metadata['url_purchases'].split('/')[-1]
     csv_purchases_path = _get_data(data_home=data_home, url=x5_metadata['url_purchases'], dest_subdir=dest_subdir,
                                    dest_filename=file_purchases,
-                                   download_if_missing=download_if_missing)
+                                   download_if_missing=download_if_missing,
+                                   desc=x5_metadata['desc_purchases'])
 
-    if _get_file_hash(csv_clients_path) != x5_metadata['purchases_hash']:
-        raise ValueError(f"The {file_purchases} file is broken,\
-                            please clean the directory with the clean_data_dir function, and run the function again")
-        
+    if _get_file_hash(csv_purchases_path) != x5_metadata['hash_purchases']:
+        raise ValueError(f"The {file_purchases} file is broken, please clean the directory "
+                         f"with the clean_data_dir() function, and run the function again")
+             
     purchases = pd.read_csv(csv_purchases_path)
     purchases_features = list(purchases.columns)
 
@@ -426,26 +434,28 @@ def fetch_criteo(target_col='visit', treatment_col='treatment', data_home=None, 
         raise ValueError(f"The target_col must be an element of {target_cols + ['all']}. "
                          f"Got value target_col={target_col}.")
 
-    criteo_metadata = {
-        'url': '',
-        'criteo_hash': ''
-    }
-
     if percent10:
-        criteo_metadata['url'] = 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo10.csv.gz'
-        criteo_metadata['criteo_hash'] = 'fe159bcee2cea57548e48eb2d7d5d00c'
+        criteo_metadata = {
+            'desc': 'Criteo dataset (10 percent)',
+            'url': 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo10.csv.gz',
+            'hash': 'fe159bcee2cea57548e48eb2d7d5d00c'
+        }
     else:
-        criteo_metadata['url'] = "https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz"
-        criteo_metadata['criteo_hash'] = 'd2236769ef69e9be52556110102911ec'
+        criteo_metadata = {
+            'desc': 'Criteo dataset',
+            'url': 'https://criteo-bucket.s3.eu-central-1.amazonaws.com/criteo.csv.gz',
+            'hash': 'd2236769ef69e9be52556110102911ec'
+        }
 
     filename = criteo_metadata['url'].split('/')[-1]
     csv_path = _get_data(data_home=data_home, url=criteo_metadata['url'], dest_subdir=dest_subdir,
                          dest_filename=filename,
-                         download_if_missing=download_if_missing)
+                         download_if_missing=download_if_missing,
+                         desc=criteo_metadata['desc'])
 
-    if _get_file_hash(csv_path) != criteo_metadata['criteo_hash']:
-        raise ValueError(f"The {filename} file is broken,\
-                            please clean the directory with the clean_data_dir function, and run the function again")
+    if _get_file_hash(csv_path) != criteo_metadata['hash']:
+        raise ValueError(f"The {filename} file is broken, please clean the directory "
+                         f"with the clean_data_dir() function, and run the function again")
 
     dtypes = {
         'exposure': 'Int8',
@@ -544,18 +554,20 @@ def fetch_hillstrom(target_col='visit', data_home=None, dest_subdir=None, downlo
                          f"Got value target_col={target_col}.")
 
     hillstrom_metadata = {
+        'desc': 'Hillstrom dataset',
         'url': 'https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz',
-        'hillstrom_hash': 'a68a81291f53a14f4e29002629803ba3'
+        'hash': 'a68a81291f53a14f4e29002629803ba3'
     }
  
     filename = hillstrom_metadata['url'].split('/')[-1]
     csv_path = _get_data(data_home=data_home, url=hillstrom_metadata['url'], dest_subdir=dest_subdir,
                          dest_filename=filename,
-                         download_if_missing=download_if_missing)
+                         download_if_missing=download_if_missing,
+                         desc=hillstrom_metadata['desc'])
     
-    if _get_file_hash(csv_path) != hillstrom_metadata['hillstrom_hash']:
-        raise ValueError(f"The {filename} file is broken,\
-                            please clean the directory with the clean_data_dir function, and run the function again")
+    if _get_file_hash(csv_path) != hillstrom_metadata['hash']:
+        raise ValueError(f"The {filename} file is broken, please clean the directory "
+                         f"with the clean_data_dir() function, and run the function again")
 
     treatment_col = 'segment'
 
@@ -634,21 +646,22 @@ def fetch_megafon(data_home=None, dest_subdir=None, download_if_missing=True,
         :func:`.fetch_criteo`: Load and return the Criteo Uplift Prediction Dataset (classification).
 
         :func:`.fetch_hillstrom`: Load and return Kevin Hillstrom Dataset MineThatData (classification or regression).
-
     """
     megafon_metadata = {
+        'desc': 'Megafon dataset',
         'url': 'https://sklift.s3.eu-west-2.amazonaws.com/megafon_dataset.csv.gz',
-        'megafon_hash': 'ee8d45a343d4d2cf90bb756c93959ecd'
+        'hash': 'ee8d45a343d4d2cf90bb756c93959ecd'
     }
 
     filename = megafon_metadata['url'].split('/')[-1]
     csv_path = _get_data(data_home=data_home, url=megafon_metadata['url'], dest_subdir=dest_subdir,
-                               dest_filename=filename,
-                               download_if_missing=download_if_missing)
+                         dest_filename=filename,
+                         download_if_missing=download_if_missing,
+                         desc=megafon_metadata['desc'])
     
-    if _get_file_hash(csv_path) != megafon_metadata['megafon_hash']:
-        raise ValueError(f"The {filename} file is broken,\
-                            please clean the directory with the clean_data_dir function, and run the function again")
+    if _get_file_hash(csv_path) != megafon_metadata['hash']:
+        raise ValueError(f"The {filename} file is broken, please clean the directory "
+                         f"with the clean_data_dir() function, and run the function again")
         
     train = pd.read_csv(csv_path)
 
