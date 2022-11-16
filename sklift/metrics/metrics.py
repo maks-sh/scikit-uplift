@@ -713,8 +713,8 @@ def uplift_by_percentile(y_true, uplift, treatment, strategy='overall',
         response_rate_ctrl_total, variance_ctrl_total, n_ctrl_total = response_rate_by_percentile(
             y_true, uplift, treatment, strategy=strategy, group='control', bins=1)
 
-        df.loc[-1, :] = ['total', n_trmnt_total, n_ctrl_total, response_rate_trmnt_total,
-                         response_rate_ctrl_total, response_rate_trmnt_total - response_rate_ctrl_total]
+        df.loc[-1, :] = ['total', n_trmnt_total[0], n_ctrl_total[0], response_rate_trmnt_total[0],
+                         response_rate_ctrl_total[0], response_rate_trmnt_total[0] - response_rate_ctrl_total[0]]
 
     if std:
         std_treatment = np.sqrt(variance_trmnt)
