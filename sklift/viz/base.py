@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.utils.validation import check_consistent_length
-from sklearn.utils import check_matplotlib_support
 
-from ..utils import check_is_binary
+from ..utils import check_is_binary, check_matplotlib_support
 from ..metrics import (
     uplift_curve, perfect_uplift_curve, uplift_auc_score,
     qini_curve, perfect_qini_curve, qini_auc_score,
