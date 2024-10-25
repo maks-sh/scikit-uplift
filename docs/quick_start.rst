@@ -90,12 +90,12 @@ Visualize performance metrics with `sklift.viz  <https://www.uplift-modeling.com
     plot_qini_curve(
         y_test, uplift_slearner, trmnt_test,
         perfect=True, name='Slearner', ax=ax
-    );
+    )
 
     plot_qini_curve(
         y_test, uplift_revert, trmnt_test,
         perfect=False, name='Revert label', ax=ax
-    );
+    )
 
 .. image:: _static/images/quick_start_qini.png
     :alt: Example of some models qini curves, perfect qini curve and random qini curve
@@ -113,12 +113,12 @@ Visualize performance metrics with `sklift.viz  <https://www.uplift-modeling.com
     plot_uplift_curve(
         y_test, uplift_slearner, trmnt_test,
         perfect=True, name='Slearner', ax=ax
-    );
+    )
 
     plot_uplift_curve(
         y_test, uplift_revert, trmnt_test,
         perfect=False, name='Revert label', ax=ax
-    );
+    )
 
 .. image:: _static/images/quick_start_uplift.png
     :alt: Example of some uplift curves, perfect uplift curve and random uplift curve

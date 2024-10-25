@@ -182,12 +182,12 @@ Visualize performance metrics with `sklift.viz  <https://www.uplift-modeling.com
     plot_qini_curve(
         y_test, uplift_slearner, trmnt_test,
         perfect=True, name='Slearner', ax=ax
-    );
+    )
 
     plot_qini_curve(
         y_test, uplift_revert, trmnt_test,
         perfect=False, name='Revert label', ax=ax
-    );
+    )
 
 .. image:: docs/_static/images/quick_start_qini.png
     :width: 514px
