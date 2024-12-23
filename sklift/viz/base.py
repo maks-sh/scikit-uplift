@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.utils.validation import check_consistent_length
-from sklearn.utils import check_matplotlib_support
+# from sklearn.utils import check_matplotlib_support
 
 from ..utils import check_is_binary
 from ..metrics import (
@@ -95,7 +95,7 @@ class UpliftCurveDisplay:
         Returns:
             Object that stores computed values
         """
-        check_matplotlib_support('UpliftCurveDisplay.plot')
+        # check_matplotlib_support('UpliftCurveDisplay.plot')
 
         name = self.estimator_name if name is None else name
 
@@ -174,7 +174,7 @@ def plot_qini_curve(y_true, uplift, treatment,
 
         qini_disp.figure_.suptitle("Qini curve");
     """
-    check_matplotlib_support('plot_qini_curve')
+    # check_matplotlib_support('plot_qini_curve')
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
     check_is_binary(y_true)
@@ -238,7 +238,7 @@ def plot_uplift_curve(y_true, uplift, treatment,
 
         uplift_disp.figure_.suptitle("Uplift curve");
     """
-    check_matplotlib_support('plot_uplift_curve')
+    # check_matplotlib_support('plot_uplift_curve')
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
     check_is_binary(y_true)
