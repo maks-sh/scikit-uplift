@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.utils.validation import check_consistent_length
-from sklearn.utils import check_matplotlib_support
+from sklearn.utils._optional_dependencies import check_matplotlib_support
 
 from ..utils import check_is_binary
 from ..metrics import (
