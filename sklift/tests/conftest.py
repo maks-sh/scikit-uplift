@@ -36,7 +36,7 @@ def random_xy_dataset_regr(request):
     treat = (np.random.normal(0, 2, (n,)) > 0.0).astype(int)
     if dataset_type == 'numpy':
         return X, y, treat
-    return pd.DataFrame(X), pd.Series(y), pd.Series(treat)
+    return pd.DataFrame(X, columns=[f"feat_{i}" for i in range(X.shape[1])]), pd.Series(y), pd.Series(treat)
 
 
 @pytest.fixture(
@@ -65,5 +65,5 @@ def random_xyt_dataset_clf(request):
 
     if dataset_type == 'numpy':
         return X, y, treat
-    return pd.DataFrame(X), pd.Series(y), pd.Series(treat)
+    return pd.DataFrame(X, columns=[f"feat_{i}" for i in range(X.shape[1])]), pd.Series(y), pd.Series(treat)
 

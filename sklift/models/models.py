@@ -142,8 +142,8 @@ class SoloModel(BaseEstimator):
 
         if self.method == 'dummy':
             if isinstance(X, np.ndarray):
-                X_mod_trmnt = np.column_stack((X, np.ones(X.shape[0])))
-                X_mod_ctrl = np.column_stack((X, np.zeros(X.shape[0])))
+                X_mod_trmnt = np.vstack((X, np.ones(X.shape[1])))
+                X_mod_ctrl = np.vstack((X, np.zeros(X.shape[1])))
             elif isinstance(X, pd.DataFrame):
                 X_mod_trmnt = X.assign(treatment=np.ones(X.shape[0]))
                 X_mod_ctrl = X.assign(treatment=np.zeros(X.shape[0]))
