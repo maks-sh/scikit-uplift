@@ -637,8 +637,8 @@ class TwoModels(BaseEstimator):
 
         else:
             if self._type_of_target == 'binary':
-                self.ctrl_preds_ = self.estimator_ctrl.predict_proba(X)[:, 1]
-                self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X)[:, 1]
+                self.ctrl_preds_ = self.estimator_ctrl.predict_proba(X)
+                self.trmnt_preds_ = self.estimator_trmnt.predict_proba(X)
             else:
                 self.ctrl_preds_ = self.estimator_ctrl.predict(X)
                 self.trmnt_preds_ = self.estimator_trmnt.predict(X)

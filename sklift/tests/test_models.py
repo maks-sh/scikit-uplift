@@ -27,7 +27,9 @@ from ..models import (
 )
 def test_shape_classification(model, random_xyt_dataset_clf):
     X, y, treat = random_xyt_dataset_clf
-    assert model.fit(X, y, treat).predict(X).shape[0] == y.shape[0]
+    preds = model.fit(X, y, treat).predict(X)
+    assert preds.shape[0] == y.shape[0], 'different 0 dim'
+    assert pd.DataFrame(preds).shape[1] == pd.DataFrame(y).shape[1], 'different 1 dim'
     pipe = Pipeline(steps=[("scaler", StandardScaler()), ("clf", model)])
     assert pipe.fit(X, y, clf__treatment=treat).predict(X).shape[0] == y.shape[0]
 
