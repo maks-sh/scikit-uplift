@@ -43,7 +43,7 @@ def test_uplift_curve(binary, test_x_actual, test_y_actual):
     y_true, uplift, treatment = make_predictions(binary)
 
     if binary == False:
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
     else:
         x_actual, y_actual = uplift_curve(y_true, uplift, treatment)
@@ -54,7 +54,7 @@ def test_uplift_curve(binary, test_x_actual, test_y_actual):
 
 
 def test_uplift_curve_hard():
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         y_true, uplift, treatment = make_predictions(binary=True)
         y_true = np.zeros(y_true.shape)
 
@@ -81,7 +81,7 @@ def test_uplift_curve_hard():
 def test_perfect_uplift_curve(binary, test_x_actual, test_y_actual):
     y_true, uplift, treatment = make_predictions(binary)
     if binary == False:
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             x_actual, y_actual = perfect_uplift_curve(y_true, treatment)
     else:
         x_actual, y_actual = perfect_uplift_curve(y_true, treatment)
@@ -91,7 +91,7 @@ def test_perfect_uplift_curve(binary, test_x_actual, test_y_actual):
 
 
 def test_perfect_uplift_curve_hard():
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         y_true, uplift, treatment = make_predictions(binary=True)
         y_true = np.zeros(y_true.shape)
 
@@ -119,7 +119,7 @@ def test_uplift_auc_score():
     treatment = [0, 1]
     assert_array_almost_equal(uplift_auc_score(y_true, uplift, treatment), 1.)
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         y_true = [1, 1]
         uplift = [0.1, 0.3]
         treatment = [0, 1]
@@ -152,7 +152,7 @@ def test_qini_curve(binary, test_x_actual, test_y_actual):
     y_true, uplift, treatment = make_predictions(binary)
 
     if binary == False:
-        with pytest.raises(Exception):    
+        with pytest.raises(ValueError):    
             x_actual, y_actual = qini_curve(y_true, uplift, treatment)
     else:
         x_actual, y_actual = qini_curve(y_true, uplift, treatment)
@@ -162,7 +162,7 @@ def test_qini_curve(binary, test_x_actual, test_y_actual):
 
 
 def test_qini_curve_hard():
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         y_true, uplift, treatment = make_predictions(binary=True)
         y_true = np.zeros(y_true.shape)
 
@@ -197,7 +197,7 @@ def test_perfect_qini_curve(binary, negative_effect, test_x_actual, test_y_actua
 
 
 def test_perfect_qini_curve_hard():
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         y_true, uplift, treatment = make_predictions(binary=True)
         y_true = np.zeros(y_true.shape)
 
@@ -241,7 +241,7 @@ def test_qini_auc_score():
     treatment = [0, 1]
     assert_array_almost_equal(qini_auc_score(y_true, uplift, treatment), 1.)
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         y_true = [1, 1]
         uplift = [0.1, 0.3]
         treatment = [0, 1]
