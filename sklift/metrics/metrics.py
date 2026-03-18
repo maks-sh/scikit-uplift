@@ -409,7 +409,6 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
         :func:`.qini_auc_score`: Compute normalized Area Under the Qini Curve from prediction scores.
     """
 
-    # TODO: checker all groups is not empty
     check_consistent_length(y_true, uplift, treatment)
     check_is_binary(treatment)
     check_is_binary(y_true)
@@ -444,9 +443,19 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
         else:
             n_size = k
 
-        # ToDo: _checker_ there are observations among two groups among first k
-        score_ctrl = y_true[order][:n_size][treatment[order][:n_size] == 0].mean()
-        score_trmnt = y_true[order][:n_size][treatment[order][:n_size] == 1].mean()
+        y_top_k = y_true[order][:n_size]
+        treatment_top_k = treatment[order][:n_size]
+
+        ctrl_mask = treatment_top_k == 0
+        trmnt_mask = treatment_top_k == 1
+        if ctrl_mask.sum() == 0 or trmnt_mask.sum() == 0:
+            raise ValueError(
+                f'With strategy={strategy} and k={k}, there are no observations from one of the groups '
+                'in the selected top-k sample. Try another k or use strategy="by_group".'
+            )
+
+        score_ctrl = y_top_k[ctrl_mask].mean()
+        score_trmnt = y_top_k[trmnt_mask].mean()
 
     else:  # strategy == 'by_group':
         if k_type == 'f':
