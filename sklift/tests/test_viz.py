@@ -136,9 +136,20 @@ def test_plot_uplift_preds():
     assert isinstance(viz[0], mpl.axes.Axes)
     assert isinstance(viz[1], mpl.axes.Axes)
     assert isinstance(viz[2], mpl.axes.Axes)
+
+    viz_k = plot_uplift_preds(trmnt_preds, ctrl_preds, log=True, bins=5, k=0.5)
+    assert len(viz_k[0].lines) == 1
+    assert len(viz_k[1].lines) == 1
+    assert len(viz_k[2].lines) == 1
     
     with pytest.raises(ValueError):
     	plot_uplift_preds(trmnt_preds, ctrl_preds, log=True, bins=0)
+    with pytest.raises(ValueError):
+        plot_uplift_preds(trmnt_preds, ctrl_preds, log=True, bins=5, k=0)
+    with pytest.raises(ValueError):
+        plot_uplift_preds(trmnt_preds, ctrl_preds, log=True, bins=5, k=1.0)
+    with pytest.raises(ValueError):
+        plot_uplift_preds(trmnt_preds, ctrl_preds, log=True, bins=5, k=10)
 
 def test_plot_uplift_by_percentile():
     y_true, uplift, treatment = make_predictions()

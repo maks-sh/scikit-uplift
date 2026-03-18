@@ -11,7 +11,7 @@ from ..metrics import (
 )
 
 
-def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
+def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100, k=None):
     """Plot histograms of treatment, control and uplift predictions.
 
     Args:
@@ -22,17 +22,40 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
             If an integer is given, bins + 1 bin edges are calculated and returned.
             If bins is a sequence, gives bin edges, including left edge of first bin and right edge of last bin.
             In this case, bins is returned unmodified. Default is 100.
+        k (float or int, optional): If provided, draw a vertical threshold line for the top-k segment.
+            If float, should be in (0, 1) and represents the sample proportion.
+            If int, should be in [1, n_samples] and represents the number of samples.
 
     Returns:
         Object that stores computed values.
     """
 
-    # TODO: Add k as parameter: vertical line on plots
     check_consistent_length(trmnt_preds, ctrl_preds)
+    trmnt_preds = np.asarray(trmnt_preds)
+    ctrl_preds = np.asarray(ctrl_preds)
 
     if not isinstance(bins, int) or bins <= 0:
         raise ValueError(
             f'Bins should be positive integer. Invalid value for bins: {bins}')
+
+    n_samples = trmnt_preds.shape[0]
+    n_size = None
+    if k is not None:
+        if isinstance(k, bool):
+            raise ValueError(f'Invalid value for k: {k}')
+        k_type = np.asarray(k).dtype.kind
+        if k_type == 'f':
+            if k <= 0 or k >= 1:
+                raise ValueError(f'k={k} should be a float in the (0, 1) range.')
+            n_size = max(int(n_samples * k), 1)
+        elif k_type == 'i':
+            if k <= 0 or k > n_samples:
+                raise ValueError(
+                    f'k={k} should be positive and smaller than or equal to the number of samples {n_samples}.'
+                )
+            n_size = int(k)
+        else:
+            raise ValueError(f'Invalid value for k: {k}')
 
     if log:
         trmnt_preds = np.log(trmnt_preds + 1)
@@ -41,17 +64,27 @@ def plot_uplift_preds(trmnt_preds, ctrl_preds, log=False, bins=100):
     fig, axes = plt.subplots(ncols=3, nrows=1, figsize=(20, 7))
     axes[0].hist(
         trmnt_preds, bins=bins, alpha=0.3, color='b', label='Treated', histtype='stepfilled')
+    if n_size is not None:
+        trmnt_k_threshold = np.sort(trmnt_preds)[::-1][n_size - 1]
+        axes[0].axvline(trmnt_k_threshold, color='r', linestyle='--', linewidth=1.5, label=f'Top-{k} threshold')
     axes[0].set_ylabel('Probability hist')
     axes[0].legend()
     axes[0].set_title('Treatment predictions')
 
     axes[1].hist(
         ctrl_preds, bins=bins, alpha=0.5, color='y', label='Not treated', histtype='stepfilled')
+    if n_size is not None:
+        ctrl_k_threshold = np.sort(ctrl_preds)[::-1][n_size - 1]
+        axes[1].axvline(ctrl_k_threshold, color='r', linestyle='--', linewidth=1.5, label=f'Top-{k} threshold')
     axes[1].legend()
     axes[1].set_title('Control predictions')
 
+    uplift_preds = trmnt_preds - ctrl_preds
     axes[2].hist(
-        trmnt_preds - ctrl_preds, bins=bins, alpha=0.5, color='green', label='Uplift', histtype='stepfilled')
+        uplift_preds, bins=bins, alpha=0.5, color='green', label='Uplift', histtype='stepfilled')
+    if n_size is not None:
+        uplift_k_threshold = np.sort(uplift_preds)[::-1][n_size - 1]
+        axes[2].axvline(uplift_k_threshold, color='r', linestyle='--', linewidth=1.5, label=f'Top-{k} threshold')
     axes[2].legend()
     axes[2].set_title('Uplift predictions')
 
