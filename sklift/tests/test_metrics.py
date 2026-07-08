@@ -276,6 +276,15 @@ def test_uplift_at_k():
     assert_array_almost_equal(uplift_at_k(y_true, uplift, treatment, strategy='by_group', k=1), np.array([0.]))
     #assert_array_almost_equal(uplift_at_k(y_true, uplift, treatment, strategy='overall', k=2), np.array([0.]))
 
+
+def test_uplift_at_k_overall_empty_group_error():
+    y_true = np.array([1, 0, 1, 0])
+    uplift = np.array([0.9, 0.8, 0.2, 0.1])
+    treatment = np.array([1, 1, 0, 0])
+
+    with pytest.raises(ValueError):
+        uplift_at_k(y_true, uplift, treatment, strategy='overall', k=2)
+
 @pytest.mark.parametrize(
     "strategy, k",
     [
