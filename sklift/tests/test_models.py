@@ -10,6 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from ..models import (
     SoloModel,
     ClassTransformation,
+    ClassTransformationReg,
     TwoModels
 )
 
@@ -107,3 +108,32 @@ def test_input_data(X, y, treatment):
     model = TwoModels(LinearRegression(), LinearRegression())
     with pytest.warns(UserWarning):
         model.fit(X, y, treatment)
+
+
+@pytest.mark.parametrize("propensity", ['constant', 'estimated'])
+@pytest.mark.parametrize("array_type", ['list', 'tuple', 'series'])
+def test_classtransformation_reg_array_like(propensity, array_type):
+    X = np.array([[0., 0.], [1., 0.], [0., 1.], [1., 1.],
+                  [2., 0.], [2., 1.], [3., 0.], [3., 1.]])
+    y = np.array([1., 3., 2., 5., 4., 7., 6., 9.])
+    treatment = np.array([0, 1, 0, 1, 1, 0, 1, 0])
+    if propensity == 'constant':
+        kwargs = {'propensity_val': 0.4}
+        p = 0.4
+    else:
+        kwargs = {'propensity_estimator': LogisticRegression()}
+        p = LogisticRegression().fit(X, treatment).predict_proba(X)[:, 1]
+    expected = LinearRegression().fit(X, y * (treatment - p) / (p * (1 - p)))
+
+    if array_type == 'series':
+        y_input = pd.Series(y, index=np.arange(8) + 20)
+        treatment_input = pd.Series(treatment, index=np.arange(8) + 40)
+    else:
+        constructor = list if array_type == 'list' else tuple
+        y_input, treatment_input = constructor(y), constructor(treatment)
+    model = ClassTransformationReg(LinearRegression(), **kwargs)
+    result = model.fit(X, y_input, treatment_input).predict(X)
+
+    np.testing.assert_allclose(result, expected.predict(X))
+    np.testing.assert_array_equal(y_input, y)
+    np.testing.assert_array_equal(treatment_input, treatment)

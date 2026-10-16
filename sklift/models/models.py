@@ -365,7 +365,7 @@ class ClassTransformationReg(BaseEstimator):
             self.propensity_estimator.fit(X, treatment)
             p = self.propensity_estimator.predict_proba(X)[:, 1]
 
-        y_mod = y * ((treatment - p) / (p * (1 - p)))
+        y_mod = np.asarray(y) * ((np.asarray(treatment) - p) / (p * (1 - p)))
 
         if estimator_fit_params is None:
                 estimator_fit_params = {}
