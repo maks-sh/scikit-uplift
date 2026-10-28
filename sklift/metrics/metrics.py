@@ -465,7 +465,7 @@ def uplift_at_k(y_true, uplift, treatment, strategy, k=0.3):
         if n_trmnt > n_samples_trmnt:
             raise ValueError(f'With k={k}, the number of the first k observations'
                              ' bigger than the number of samples'
-                             f'in the treatment group: {n_samples_ctrl}'
+                             f'in the treatment group: {n_samples_trmnt}'
                              )
 
         score_ctrl = y_true[order][treatment[order] == 0][:n_ctrl].mean()
